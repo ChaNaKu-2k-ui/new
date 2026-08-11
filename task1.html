@@ -30,8 +30,40 @@
         .warning-text { color: #ff4757; font-weight: bold; margin-top: 5px; font-size: 13px; }
 
         /* YouTube Video Box */
-        .video-ad-container { position: relative; max-width: 500px; margin: 0 auto 20px auto; border-radius: 12px; overflow: hidden; border: 2px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 25px rgba(0,0,0,0.5); background: #000; }
-        .video-ad-container iframe { width: 100%; height: 280px; border: none; display: block; }
+        .video-ad-container { 
+            position: relative; 
+            max-width: 500px; 
+            margin: 0 auto 20px auto; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            border: 2px solid rgba(255, 255, 255, 0.1); 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5); 
+            background: #000; 
+        }
+        .video-ad-container iframe { 
+            width: 100%; 
+            height: 280px; 
+            border: none; 
+            display: block; 
+        }
+        
+        /* උඩ Title සහ Logo වසන කළු කොටුව */
+        .top-block {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 60px; 
+            background: #000;
+            z-index: 5;
+        }
+
+        /* යට Timeline එක සහ Watch on YouTube වසන කළු කොටුව */
+        .bottom-block {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 50px; 
+            background: #000;
+            z-index: 5;
+        }
     </style>
 </head>
 <body>
@@ -65,7 +97,9 @@
 
                 <!-- 3. Dynamic YouTube Video Player එක -->
                 <div class="video-ad-container">
+                    <div class="top-block"></div>
                     <div id="ytplayer"></div>
+                    <div class="bottom-block"></div>
                 </div>
 
             </div>
@@ -118,7 +152,6 @@
             }
         }
 
-        // YouTube Player නිර්මාණය කිරීම (modestbranding ඇතුළත් කර ඇත)
         function createYTPlayer(vId) {
             player = new YT.Player('ytplayer', {
                 height: '280',
@@ -126,42 +159,44 @@
                 videoId: vId,
                 playerVars: {
                     'playsinline': 1,
-                    'controls': 1,
+                    'controls': 0,
                     'rel': 0,
-                    'modestbranding': 1, // YouTube ලෝගෝ එක ඉවත් කරයි
-                    'showinfo': 0
+                    'modestbranding': 1,
+                    'disablekb': 1
                 },
                 events: {
+                    'onReady': onPlayerReady,
                     'onStateChange': onPlayerStateChange
                 }
             });
         }
 
-        // 4. Timer එක සහ Video State Control (තත්පර 60 යි)
+        function onPlayerReady(event) {
+            // ප්ලේයර් එක සූදානම් වූ වහාම ශබ්දය 1% කරයි
+            event.target.setVolume(1);
+        }
+
+        // 4. Timer එක සහ Video State Control (තත්පර 60)
         const totalTime = 60;
         let timeLeft = totalTime; 
         let isTimerStarted = false; 
         let timerId;
 
-        // වීඩියෝවේ තත්ත්වය වෙනස් වන විට ක්‍රියාත්මක වන කොටස
         function onPlayerStateChange(event) {
-            // වීඩියෝව Pause කළොත් (2) හෝ අවසන් වුණොත් (0), සහ ටයිමරය තාම ඉවර නැත්නම්
             if (isTimerStarted && timeLeft > 0 && (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED)) {
                 resetTimer();
             }
         }
 
-        // ටයිමරය Reset කිරීමේ Function එක
         function resetTimer() {
-            clearInterval(timerId);         // ගණන් කිරීම නතර කරයි
-            isTimerStarted = false;         // නැවත පටන් ගන්න පුළුවන් විදිහට සකසයි
-            timeLeft = totalTime;           // කාලය නැවත තත්පර 60 ට ගෙනෙයි
+            clearInterval(timerId);
+            isTimerStarted = false;
+            timeLeft = totalTime;
             
             const btn = document.getElementById("actionBtn");
-            btn.disabled = false;           // බොත්තම නැවත click කරන්න පුළුවන් කරයි
-            btn.innerText = "🔓 Click to Unlock Image"; // බොත්තමේ නම මුල තත්ත්වයට ගෙනෙයි
+            btn.disabled = false;
+            btn.innerText = "🔓 Click to Unlock Image";
             
-            // පරිශීලකයාට Reset වූ බව දැනුම් දෙන පණිවිඩයක් පෙන්වීම
             document.getElementById("warningText").style.display = "block";
             setTimeout(() => { document.getElementById("warningText").style.display = "none"; }, 4000);
         }
@@ -172,19 +207,17 @@
             
             const btn = document.getElementById("actionBtn");
             btn.disabled = true;
-            document.getElementById("warningText").style.display = "none"; // තිබුණොත් warning එක මකනවා
+            document.getElementById("warningText").style.display = "none";
 
-            // බොත්තම එබූ විට වීඩියෝව Play වේ
             if (player && typeof player.playVideo === 'function') {
+                player.setVolume(1); // ශබ්දය තදින්ම 1% මට්ටමේ තබා Play කරයි
                 player.playVideo();
             }
             
-            // තත්පර 60 ක Countdown එක
             timerId = setInterval(() => {
                 timeLeft--;
                 btn.innerText = `⏳ Unlocking in ${timeLeft}s...`;
                 
-                // වෙලාව ඉවර වුණාම පින්තූරය පැහැදිලි කිරීම
                 if (timeLeft <= 0) {
                     clearInterval(timerId);
                     document.getElementById("taskImage").style.filter = "blur(0px)";
