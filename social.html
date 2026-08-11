@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Social Links</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 50px 20px;
+        }
+        .profile {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .profile img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #333;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .profile h1 {
+            margin: 15px 0 5px;
+            color: #333;
+            font-size: 24px;
+        }
+        .profile p {
+            color: #666;
+            margin: 0;
+            font-size: 14px;
+        }
+        .links-container {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .link-btn {
+            display: block;
+            padding: 15px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .link-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        /* සමාජ මාධ්‍ය සඳහා වර්ණ */
+        .yt { background-color: #FF0000; }
+        .fb { background-color: #1877F2; }
+        .tt { background-color: #000000; }
+        .dc { background-color: #5865F2; }
+        .tg { background-color: #0088cc; }
+    </style>
+</head>
+<body>
+
+    <div class="profile">
+        <!-- ඔබේ Profile පින්තූරයේ ලින්ක් එක පහතින් දමන්න -->
+        <img src="https://via.placeholder.com/120" alt="Profile Picture">
+        <h1>ඔබේ නම (Your Name)</h1>
+        <p>Gaming / Content Creator</p>
+    </div>
+
+    <div class="links-container">
+        <!-- අදාළ ලින්ක් ඇතුළත් කරන්න -->
+        <a href="YOUTUBE_LINK_HERE" class="link-btn yt" target="_blank">YouTube</a>
+        <a href="FACEBOOK_LINK_HERE" class="link-btn fb" target="_blank">Facebook</a>
+        <a href="TIKTOK_LINK_HERE" class="link-btn tt" target="_blank">TikTok</a>
+        <a href="DISCORD_LINK_HERE" class="link-btn dc" target="_blank">Discord</a>
+        <a href="TELEGRAM_LINK_HERE" class="link-btn tg" target="_blank">Telegram</a>
+    </div>
+
+</body>
+</html>
+
