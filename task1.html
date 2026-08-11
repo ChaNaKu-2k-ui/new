@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Verification Portal - DevTools Hub</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://quge5.com/88/tag.min.js" data-zone="243445" async data-cfasync="false"></script>
+
+    <style>
+        /* Description Box එකට අලුත් style එක */
+        .desc-box { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 12px; margin-bottom: 20px; color: #e0e0e0; font-size: 15px; line-height: 1.6; text-align: left; }
+        
+        .image-blur-container { position: relative; max-width: 500px; margin: 25px auto; border-radius: 12px; overflow: hidden; border: 2px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 25px rgba(0,0,0,0.5); background: #111; }
+        .task-img { width: 100%; height: auto; display: block; filter: blur(25px); pointer-events: none; transition: filter 0.8s ease; }
+        .blur-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0, 0, 0, 0.5); transition: opacity 0.5s ease; padding: 20px; box-sizing: border-box; text-align: center; }
+        .timer-btn { background: linear-gradient(135deg, #00ff88 0%, #00b4db 100%); color: #000; border: none; padding: 15px 35px; font-size: 16px; font-weight: bold; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 255, 136, 0.4); transition: all 0.3s ease; }
+        .timer-btn:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(0, 255, 136, 0.6); }
+        .timer-btn:disabled { background: #2c3e50; color: #bdc3c7; cursor: not-allowed; }
+        .hint-text { color: #fff; font-size: 14px; margin-top: 15px; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-link">
+            <img src="logo.png" alt="DevTools Logo" class="site-logo">
+        </a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+        </div>
+    </header>
+
+    <style>
+      .top-ad-box {
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        margin-top: 20px;      /* උඩ මෙනු එකෙන් ටිකක් පහළට වෙන්න */
+        margin-bottom: 15px;   /* යට තියෙන Step-02 කොටුවට ගෑවෙන්නේ නැති වෙන්න */
+        width: 100%; 
+        overflow: hidden;
+      }
+      .top-ad-zoom {
+        transform: scale(1);
+        transform-origin: center top; 
+        transition: transform 0.3s ease;
+      }
+      /* පළල 360px ට වැඩි (සාමාන්‍ය) ෆෝන් වලට */
+      @media (min-width: 360px) {
+        .top-ad-zoom { transform: scale(1.1); } 
+      }
+      /* පළල 390px ට වැඩි (ලොකු ස්ක්‍රීන් තියෙන) ෆෝන් වලට */
+      @media (min-width: 390px) {
+        .top-ad-zoom { transform: scale(1.2); } 
+      }
+    </style>
+
+    <div class="top-ad-box">
+        <div class="top-ad-zoom">
+            <script>
+              atOptions = {
+                'key' : 'b29c03616030374cb929a45e53bc110c',
+                'format' : 'iframe',
+                'height' : 250,
+                'width' : 300,
+                'params' : {}
+              };
+            </script>
+            <script src="https://www.highperformanceformat.com/b29c03616030374cb929a45e53bc110c/invoke.js"></script>
+        </div>
+    </div>
+    <div class="container">
+        <section class="page-section active-section">
+            <div class="content-box" style="margin-top: 20px;">
+                <h2>🎯 Step-02: Content Unlock Verification</h2>
+                
+                <div id="taskDescription" class="desc-box">Loading description...</div>
+
+                <div class="image-blur-container">
+                    <img id="taskImage" alt="Task Guide Image" class="task-img">
+                    
+                    <div class="blur-overlay" id="blurOverlay">
+                        <button class="timer-btn" id="actionBtn" onclick="startTaskTimer()">🔓 Click to Unlock Image</button>
+                        <p class="hint-text" id="statusHint">You must wait 20 seconds to completely clear the image.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <style>
+      .ad-box {
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        margin-top: 10px; /* උඩින් තියෙන හිස්තැන */
+        margin-bottom: -15px; /* යටින් තියෙන හිස්තැන අඩු කරන කෑල්ල */
+        width: 100%; 
+        overflow-x: hidden;
+      }
+      .ad-zoom {
+        transform: scale(1);
+        transform-origin: center;
+        transition: transform 0.3s ease;
+      }
+      /* පළල 360px ට වැඩි (සාමාන්‍ය) ෆෝන් වලට */
+      @media (min-width: 360px) {
+        .ad-zoom { transform: scale(1.12); }
+      }
+      /* පළල 390px ට වැඩි (ලොකු ස්ක්‍රීන් තියෙන) ෆෝන් වලට */
+      @media (min-width: 390px) {
+        .ad-zoom { transform: scale(1.25); }
+      }
+    </style>
+
+    <div class="ad-box">
+        <div class="ad-zoom">
+            <script>
+              atOptions = {
+                'key' : '9073d89804fb20be3dfcdae23247d7a6',
+                'format' : 'iframe',
+                'height' : 50,
+                'width' : 320,
+                'params' : {}
+              };
+            </script>
+            <script src="https://www.highperformanceformat.com/9073d89804fb20be3dfcdae23247d7a6/invoke.js"></script>
+        </div>
+    </div>
+
+    <footer>&copy; 2026 DevTools Hub. All Rights Reserved.</footer>
+
+    <script>
+        // 1. Task description එක text file එකෙන් load කරගන්න
+        fetch('notes/task1.txt')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('taskDescription').innerText = data;
+            })
+            .catch(error => {
+                document.getElementById('taskDescription').innerText = "Description could not be loaded.";
+            });
+
+        // 2. Image එක load කරන්න
+        const imgElement = document.getElementById('taskImage');
+        imgElement.src = 'images/task1.jpg?t=' + new Date().getTime();
+
+        // 3. Timer එක
+        let timeLeft = 20; 
+        let isTimerStarted = false; 
+
+        function startTaskTimer() {
+            if (isTimerStarted) return; 
+            isTimerStarted = true;
+            
+            const btn = document.getElementById("actionBtn");
+            btn.disabled = true;
+            
+            let timerId = setInterval(() => {
+                timeLeft--;
+                btn.innerText = `⏳ Unlocking in ${timeLeft}s...`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerId);
+                    document.getElementById("taskImage").style.filter = "blur(0px)";
+                    document.getElementById("blurOverlay").style.opacity = "0";
+                    
+                    setTimeout(() => {
+                        document.getElementById("blurOverlay").style.display = "none";
+                    }, 800);
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
