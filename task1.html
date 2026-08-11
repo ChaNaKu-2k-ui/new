@@ -27,6 +27,7 @@
         .timer-btn:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(0, 255, 136, 0.6); }
         .timer-btn:disabled { background: #2c3e50; color: #bdc3c7; cursor: not-allowed; }
         .hint-text { color: #fff; font-size: 14px; margin-top: 15px; font-weight: 500; }
+        .warning-text { color: #ff4757; font-weight: bold; margin-top: 5px; font-size: 13px; }
 
         /* YouTube Video Box */
         .video-ad-container { position: relative; max-width: 500px; margin: 0 auto 20px auto; border-radius: 12px; overflow: hidden; border: 2px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 25px rgba(0,0,0,0.5); background: #000; }
@@ -54,7 +55,8 @@
                     <img id="taskImage" alt="Task Guide Image" class="task-img">
                     <div class="blur-overlay" id="blurOverlay">
                         <button class="timer-btn" id="actionBtn" onclick="startTaskTimer()">🔓 Click to Unlock Image</button>
-                        <p class="hint-text" id="statusHint">You must wait 20 seconds to completely clear the image.</p>
+                        <p class="hint-text" id="statusHint">You must wait 60 seconds to completely clear the image.</p>
+                        <p class="warning-text" id="warningText" style="display: none;">Video paused! Timer reset to 60s.</p>
                     </div>
                 </div>
 
@@ -82,12 +84,11 @@
         // 2. Image එක load කිරීම
         document.getElementById('taskImage').src = 'images/task1.jpg?t=' + new Date().getTime();
 
-        // 3. links/task1.txt එකෙන් Video Link/ID එක ලබාගෙන YouTube API සකස් කිරීම
+        // 3. YouTube API & Player සැකසීම
         var player;
         var videoIdFromTxt = '';
         var isApiReady = false;
 
-        // YouTube URL එකකින් Video ID එක විතරක් වෙන් කරගන්නා Helper Function එක
         function extractYouTubeID(url) {
             url = url.trim();
             var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -95,7 +96,6 @@
             return (match && match[2].length === 11) ? match[2] : url;
         }
 
-        // links/task1.txt කියවීම
         fetch('links/task1.txt')
             .then(response => response.text())
             .then(data => {
@@ -104,11 +104,8 @@
                     createYTPlayer(videoIdFromTxt);
                 }
             })
-            .catch(error => {
-                console.error("Video link load කිරීමට නොහැකි විය:", error);
-            });
+            .catch(error => { console.error("Video link load error:", error); });
 
-        // YouTube Iframe API Script එක Load කිරීම
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -121,6 +118,7 @@
             }
         }
 
+        // YouTube Player නිර්මාණය කිරීම (modestbranding ඇතුළත් කර ඇත)
         function createYTPlayer(vId) {
             player = new YT.Player('ytplayer', {
                 height: '280',
@@ -129,14 +127,44 @@
                 playerVars: {
                     'playsinline': 1,
                     'controls': 1,
-                    'rel': 0
+                    'rel': 0,
+                    'modestbranding': 1, // YouTube ලෝගෝ එක ඉවත් කරයි
+                    'showinfo': 0
+                },
+                events: {
+                    'onStateChange': onPlayerStateChange
                 }
             });
         }
 
-        // 4. Timer එක සහ Unlock බොත්තම එබූ විට Video එක Play කිරීම
-        let timeLeft = 20; 
+        // 4. Timer එක සහ Video State Control (තත්පර 60 යි)
+        const totalTime = 60;
+        let timeLeft = totalTime; 
         let isTimerStarted = false; 
+        let timerId;
+
+        // වීඩියෝවේ තත්ත්වය වෙනස් වන විට ක්‍රියාත්මක වන කොටස
+        function onPlayerStateChange(event) {
+            // වීඩියෝව Pause කළොත් (2) හෝ අවසන් වුණොත් (0), සහ ටයිමරය තාම ඉවර නැත්නම්
+            if (isTimerStarted && timeLeft > 0 && (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED)) {
+                resetTimer();
+            }
+        }
+
+        // ටයිමරය Reset කිරීමේ Function එක
+        function resetTimer() {
+            clearInterval(timerId);         // ගණන් කිරීම නතර කරයි
+            isTimerStarted = false;         // නැවත පටන් ගන්න පුළුවන් විදිහට සකසයි
+            timeLeft = totalTime;           // කාලය නැවත තත්පර 60 ට ගෙනෙයි
+            
+            const btn = document.getElementById("actionBtn");
+            btn.disabled = false;           // බොත්තම නැවත click කරන්න පුළුවන් කරයි
+            btn.innerText = "🔓 Click to Unlock Image"; // බොත්තමේ නම මුල තත්ත්වයට ගෙනෙයි
+            
+            // පරිශීලකයාට Reset වූ බව දැනුම් දෙන පණිවිඩයක් පෙන්වීම
+            document.getElementById("warningText").style.display = "block";
+            setTimeout(() => { document.getElementById("warningText").style.display = "none"; }, 4000);
+        }
 
         function startTaskTimer() {
             if (isTimerStarted) return; 
@@ -144,16 +172,19 @@
             
             const btn = document.getElementById("actionBtn");
             btn.disabled = true;
+            document.getElementById("warningText").style.display = "none"; // තිබුණොත් warning එක මකනවා
 
-            // Unlock බොත්තම එබූ විට වීඩියෝව Play වේ
+            // බොත්තම එබූ විට වීඩියෝව Play වේ
             if (player && typeof player.playVideo === 'function') {
                 player.playVideo();
             }
             
-            let timerId = setInterval(() => {
+            // තත්පර 60 ක Countdown එක
+            timerId = setInterval(() => {
                 timeLeft--;
                 btn.innerText = `⏳ Unlocking in ${timeLeft}s...`;
                 
+                // වෙලාව ඉවර වුණාම පින්තූරය පැහැදිලි කිරීම
                 if (timeLeft <= 0) {
                     clearInterval(timerId);
                     document.getElementById("taskImage").style.filter = "blur(0px)";
