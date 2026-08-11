@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevTools Hub - Free Online Mini Tools</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://quge5.com/88/tag.min.js" data-zone="243445" async data-cfasync="false"></script>
+</head>
+<body>
+
+    <header>
+        <a onclick="navigateTo('home')" class="logo-link">
+            <img src="logo.png" alt="DevTools Logo" class="site-logo">
+        </a>
+        <div class="nav-links">
+            <a id="nav-home" onclick="navigateTo('home')">Home</a>
+            <a id="nav-about" onclick="navigateTo('about')">About Us</a>
+            <a id="nav-contact" onclick="navigateTo('contact')">Contact Us</a>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <section id="sec-home" class="page-section active-section">
+            <div class="hero">
+                <h1>Free Online Web Utilities</h1>
+                <p>Fast, secure, and standalone digital mini tools to make your daily tasks easier.</p>
+            </div>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-icon">📝</div>
+                    <h3>Word Counter</h3>
+                    <p>Count your words, sentences, and characters in real-time with our smart text analyzer tool.</p>
+                    <button onclick="navigateTo('word-counter')" class="btn">Open Tool</button>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔒</div>
+                    <h3>Password Generator</h3>
+                    <p>Generate highly secure, randomized passwords instantly to keep your online accounts safe.</p>
+                    <button onclick="navigateTo('password-generator')" class="btn">Open Tool</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-word-counter" class="page-section">
+            <div class="content-box">
+                <h2>📝 Real-Time Word Counter</h2>
+                <p style="color: var(--text-muted); font-size: 14px;">Type or paste your text content below to analyze words and characters.</p>
+                <textarea id="textInput" placeholder="Start typing here..."></textarea>
+                <div class="stats">
+                    <div class="stat-box"><span id="wordCount">0</span> Words</div>
+                    <div class="stat-box"><span id="charCount">0</span> Characters</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-password-generator" class="page-section">
+            <div class="content-box">
+                <h2>🔒 Secure Password Generator</h2>
+                <p style="color: var(--text-muted); font-size: 14px;">Generate strong, highly randomized crypto-secure passwords instantly.</p>
+                <div class="result-box">
+                    <input type="text" id="passwordResult" readonly placeholder="Your Generated Password">
+                </div>
+                <div class="settings-row">
+                    <label>Password Length (<span id="lengthVal">12</span>)</label>
+                    <input type="range" id="passLength" min="6" max="25" value="12">
+                </div>
+                <button class="btn" id="generateBtn">Generate Password</button>
+            </div>
+        </section>
+
+        <section id="sec-about" class="page-section">
+            <div class="content-box">
+                <h2>About Our Platform</h2>
+                <p>Welcome to DevTools Hub, your premier destination for efficient, web-based utility applications. Our mission is to provide clean, fast, and completely secure mini tools that run entirely on the client side, ensuring maximum data privacy.</p>
+                <p>We build our web applications with modern optimization standards, minimizing load times and offering a seamless user experience across all digital devices.</p>
+            </div>
+        </section>
+
+        <section id="sec-contact" class="page-section">
+            <div class="content-box">
+                <h2>Get In Touch</h2>
+                <p>Have questions, feature requests, or business inquiries? Feel free to reach out to our administration team via the communication channels below. We appreciate your feedback.</p>
+                <p style="margin-top: 25px;"><strong>📧 Email Support:</strong> support@devtoolshub.test</p>
+                <p><strong>🌐 Office Hours:</strong> Monday - Friday, 9:00 AM - 5:00 PM (UTC)</p>
+            </div>
+        </section>
+
+        <section id="sec-task1" class="page-section">
+            <div class="content-box">
+                <h2>🎯 Special Registration & Watch Task</h2>
+                <p>Please complete the steps exactly as described below to secure your instant payout approval.</p>
+                
+                <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=500" alt="Video Thumbnail Image" class="thumbnail">
+
+                <ol>
+                    <li>Click the green activation button located below to open the official host portal.</li>
+                    <li>Create a completely new account and successfully verify your identity via email confirmation.</li>
+                    <li>Watch the online content matching the thumbnail shown above for at least 60 seconds.</li>
+                    <li>Submit your exact registered profile username as proof on the task platform for validation.</li>
+                </ol>
+
+                <a href="https://bux.money/earn/" target="_blank" class="btn task-btn">🔗 Click Here to Launch Task</a>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        &copy; 2026 DevTools Hub. All Rights Reserved.
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
