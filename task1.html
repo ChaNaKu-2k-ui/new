@@ -7,16 +7,30 @@
     <link rel="stylesheet" href="style.css">
 
     <style>
-        /* Description Box එකට අලුත් style එක */
+        /* උඩ හිස් ඉඩ ඉවත් කිරීම */
+        body { margin: 0 !important; padding: 0 !important; display: block !important; min-height: 100vh; }
+        header { margin-bottom: 10px !important; padding-bottom: 0 !important; }
+        .container { margin-top: 0 !important; padding-top: 0 !important; }
+        .page-section { padding-top: 0 !important; margin-top: 0 !important; }
+        .content-box { margin-top: 0 !important; }
+
+        /* Description Box style */
         .desc-box { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 12px; margin-bottom: 20px; color: #e0e0e0; font-size: 15px; line-height: 1.6; text-align: left; }
         
+        /* Image Blur style */
         .image-blur-container { position: relative; max-width: 500px; margin: 25px auto; border-radius: 12px; overflow: hidden; border: 2px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 25px rgba(0,0,0,0.5); background: #111; }
         .task-img { width: 100%; height: auto; display: block; filter: blur(25px); pointer-events: none; transition: filter 0.8s ease; }
         .blur-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0, 0, 0, 0.5); transition: opacity 0.5s ease; padding: 20px; box-sizing: border-box; text-align: center; }
+        
+        /* Button style */
         .timer-btn { background: linear-gradient(135deg, #00ff88 0%, #00b4db 100%); color: #000; border: none; padding: 15px 35px; font-size: 16px; font-weight: bold; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 255, 136, 0.4); transition: all 0.3s ease; }
         .timer-btn:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(0, 255, 136, 0.6); }
         .timer-btn:disabled { background: #2c3e50; color: #bdc3c7; cursor: not-allowed; }
         .hint-text { color: #fff; font-size: 14px; margin-top: 15px; font-weight: 500; }
+
+        /* YouTube Video Box */
+        .video-ad-container { position: relative; max-width: 500px; margin: 0 auto 20px auto; border-radius: 12px; overflow: hidden; border: 2px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 25px rgba(0,0,0,0.5); background: #000; }
+        .video-ad-container iframe { width: 100%; height: 280px; border: none; display: block; }
     </style>
 </head>
 <body>
@@ -32,21 +46,25 @@
 
     <div class="container">
         <section class="page-section active-section">
-            <div class="content-box" style="margin-top: 20px;">
+            <div class="content-box">
                 <h2>🎯 Step-02: Content Unlock Verification</h2>
                 
-                <!-- පින්තූරය සහිත කොටුව ඉහළට ගෙන ඇත -->
+                <!-- 1. Blur Image එක -->
                 <div class="image-blur-container">
                     <img id="taskImage" alt="Task Guide Image" class="task-img">
-                    
                     <div class="blur-overlay" id="blurOverlay">
                         <button class="timer-btn" id="actionBtn" onclick="startTaskTimer()">🔓 Click to Unlock Image</button>
                         <p class="hint-text" id="statusHint">You must wait 20 seconds to completely clear the image.</p>
                     </div>
                 </div>
 
-                <!-- විස්තරය පෙන්වන කොටුව පහළට ගෙන ඇත -->
+                <!-- 2. Text File Description එක -->
                 <div id="taskDescription" class="desc-box">Loading description...</div>
+
+                <!-- 3. Dynamic YouTube Video Player එක -->
+                <div class="video-ad-container">
+                    <div id="ytplayer"></div>
+                </div>
 
             </div>
         </section>
@@ -55,21 +73,68 @@
     <footer>&copy; 2026 DevTools Hub. All Rights Reserved.</footer>
 
     <script>
-        // 1. Task description එක text file එකෙන් load කරගන්න
+        // 1. Task description එක load කිරීම
         fetch('notes/task1.txt')
             .then(response => response.text())
+            .then(data => { document.getElementById('taskDescription').innerText = data; })
+            .catch(error => { document.getElementById('taskDescription').innerText = "Description could not be loaded."; });
+
+        // 2. Image එක load කිරීම
+        document.getElementById('taskImage').src = 'images/task1.jpg?t=' + new Date().getTime();
+
+        // 3. links/task1.txt එකෙන් Video Link/ID එක ලබාගෙන YouTube API සකස් කිරීම
+        var player;
+        var videoIdFromTxt = '';
+        var isApiReady = false;
+
+        // YouTube URL එකකින් Video ID එක විතරක් වෙන් කරගන්නා Helper Function එක
+        function extractYouTubeID(url) {
+            url = url.trim();
+            var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            var match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : url;
+        }
+
+        // links/task1.txt කියවීම
+        fetch('links/task1.txt')
+            .then(response => response.text())
             .then(data => {
-                document.getElementById('taskDescription').innerText = data;
+                videoIdFromTxt = extractYouTubeID(data);
+                if (isApiReady && videoIdFromTxt) {
+                    createYTPlayer(videoIdFromTxt);
+                }
             })
             .catch(error => {
-                document.getElementById('taskDescription').innerText = "Description could not be loaded.";
+                console.error("Video link load කිරීමට නොහැකි විය:", error);
             });
 
-        // 2. Image එක load කරන්න
-        const imgElement = document.getElementById('taskImage');
-        imgElement.src = 'images/task1.jpg?t=' + new Date().getTime();
+        // YouTube Iframe API Script එක Load කිරීම
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-        // 3. Timer එක
+        function onYouTubeIframeAPIReady() {
+            isApiReady = true;
+            if (videoIdFromTxt) {
+                createYTPlayer(videoIdFromTxt);
+            }
+        }
+
+        function createYTPlayer(vId) {
+            player = new YT.Player('ytplayer', {
+                height: '280',
+                width: '100%',
+                videoId: vId,
+                playerVars: {
+                    'playsinline': 1,
+                    'controls': 1,
+                    'rel': 0
+                }
+            });
+        }
+
+        // 4. Timer එක සහ Unlock බොත්තම එබූ විට Video එක Play කිරීම
         let timeLeft = 20; 
         let isTimerStarted = false; 
 
@@ -79,6 +144,11 @@
             
             const btn = document.getElementById("actionBtn");
             btn.disabled = true;
+
+            // Unlock බොත්තම එබූ විට වීඩියෝව Play වේ
+            if (player && typeof player.playVideo === 'function') {
+                player.playVideo();
+            }
             
             let timerId = setInterval(() => {
                 timeLeft--;
