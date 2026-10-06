@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YouTube thumbnail grabber: get any video thumbnail | ChaNaKu</title>
+<meta name="description" content="Paste a YouTube link and open its thumbnail in full HD, standard, high and medium sizes. Works with watch, share, Shorts and live links.">
+<link rel="canonical" href="https://chanaku.pages.dev/tools/youtube-thumbnail">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ChaNaKu">
+<meta property="og:title" content="YouTube thumbnail grabber: get any video thumbnail | ChaNaKu">
+<meta property="og:description" content="Paste a YouTube link and open its thumbnail in full HD, standard, high and medium sizes. Works with watch, share, Shorts and live links.">
+<meta property="og:url" content="https://chanaku.pages.dev/tools/youtube-thumbnail">
+<meta property="og:image" content="https://chanaku.pages.dev/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#23272b">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800&display=swap">
+<link rel="stylesheet" href="../css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<main id="main" class="wrap">
+<div class="page-head">
+  <a class="back" href="../index.html#tools">All tools</a>
+  <h1>YouTube thumbnail grabber</h1>
+  <p class="lede">Paste a video link and open its thumbnail in every available size.</p>
+</div>
+<div class="panel stack">
+  <div><label for="url">YouTube video link</label>
+  <div class="row" style="flex-wrap:nowrap"><input id="url" type="url" inputmode="url" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off" spellcheck="false"><button class="btn primary" id="go" type="button" style="white-space:nowrap">Get thumbnails</button></div></div>
+  <div id="status" class="status" role="status"></div>
+  <div id="thumbs" class="thumbs"></div>
+</div>
+<p class="note prose">Thumbnails load from YouTube. Open one at full size, then right-click or long-press it to save. Only sizes that exist for that video are shown, and full HD is missing on some older videos. Only use thumbnails you have the right to use.</p>
+<section id="related" class="related"></section>
+</main>
+<footer id="site-footer"></footer>
+<script src="../js/tools-data.js"></script>
+<script src="../js/layout.js" data-root="../" defer></script>
+<script src="../js/tools/youtube-thumbnail.js" defer></script>
+</body>
+</html>

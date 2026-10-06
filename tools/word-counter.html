@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Word counter: words, characters, sentences, reading time | ChaNaKu</title>
+<meta name="description" content="Free word counter. Count words, characters, sentences and paragraphs and see reading time and the most used words.">
+<link rel="canonical" href="https://chanaku.pages.dev/tools/word-counter">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ChaNaKu">
+<meta property="og:title" content="Word counter: words, characters, sentences, reading time | ChaNaKu">
+<meta property="og:description" content="Free word counter. Count words, characters, sentences and paragraphs and see reading time and the most used words.">
+<meta property="og:url" content="https://chanaku.pages.dev/tools/word-counter">
+<meta property="og:image" content="https://chanaku.pages.dev/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#23272b">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800&display=swap">
+<link rel="stylesheet" href="../css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<main id="main" class="wrap">
+<div class="page-head">
+  <a class="back" href="../index.html#tools">All tools</a>
+  <h1>Word counter</h1>
+  <p class="lede">Count words, characters, sentences and reading time as you type.</p>
+</div>
+<div class="panel stack">
+  <div><label for="text">Your text</label>
+  <textarea id="text" placeholder="Type or paste your text here" spellcheck="false"></textarea></div>
+  <div class="grid2" aria-live="polite">
+    <div class="stat"><b id="w">0</b><span>words</span></div>
+    <div class="stat"><b id="c">0</b><span>characters</span></div>
+    <div class="stat"><b id="cn">0</b><span>characters without spaces</span></div>
+    <div class="stat"><b id="s">0</b><span>sentences</span></div>
+    <div class="stat"><b id="p">0</b><span>paragraphs</span></div>
+    <div class="stat"><b id="rt">0 min</b><span>reading time</span></div>
+  </div>
+  <div id="kw-wrap" hidden><div class="field-label">Most used words</div><ul id="keywords" class="row" style="list-style:none;padding:0;margin:0;gap:8px 18px"></ul></div>
+  <div><button class="btn" id="clear" type="button">Clear text</button></div>
+</div>
+<p class="note prose">Reading time assumes 200 words per minute. Short words and common filler words are left out of the most used list.</p>
+<section id="related" class="related"></section>
+</main>
+<footer id="site-footer"></footer>
+<script src="../js/tools-data.js"></script>
+<script src="../js/layout.js" data-root="../" defer></script>
+<script src="../js/tools/word-counter.js" defer></script>
+</body>
+</html>

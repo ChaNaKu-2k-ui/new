@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Giveaway winner picker: draw random winners | ChaNaKu</title>
+<meta name="description" content="Paste a list of names or comments and draw fair random winners. Uses secure random numbers and can remove duplicate entries.">
+<link rel="canonical" href="https://chanaku.pages.dev/tools/giveaway-picker">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ChaNaKu">
+<meta property="og:title" content="Giveaway winner picker: draw random winners | ChaNaKu">
+<meta property="og:description" content="Paste a list of names or comments and draw fair random winners. Uses secure random numbers and can remove duplicate entries.">
+<meta property="og:url" content="https://chanaku.pages.dev/tools/giveaway-picker">
+<meta property="og:image" content="https://chanaku.pages.dev/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#23272b">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800&display=swap">
+<link rel="stylesheet" href="../css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<main id="main" class="wrap">
+<div class="page-head">
+  <a class="back" href="../index.html#tools">All tools</a>
+  <h1>Giveaway winner picker</h1>
+  <p class="lede">Paste entries and draw fair random winners.</p>
+</div>
+<div class="panel stack">
+  <div><label for="names">Entries (one per line)</label>
+  <textarea id="names" placeholder="Paste usernames or names, one on each line" spellcheck="false"></textarea></div>
+  <div class="row" style="gap:12px 22px">
+    <div style="width:130px"><label for="n">Winners</label><input id="n" type="number" min="1" max="100" value="1"></div>
+    <label class="check" style="margin-top:22px"><input id="dedupe" type="checkbox" checked>Remove duplicate entries</label>
+    <div class="note" style="margin-top:22px"><b id="entries">0</b> entries</div>
+  </div>
+  <div class="row"><button class="btn primary" id="pick" type="button">Pick winners</button><span id="status" class="status" role="status"></span></div>
+  <ol id="winners" class="winners" aria-live="polite"></ol>
+</div>
+<p class="note prose">Each entry has an equal chance and nobody can win twice in one draw. Press the button again for a fresh draw. For a public giveaway, record your screen while you draw.</p>
+<section id="related" class="related"></section>
+</main>
+<footer id="site-footer"></footer>
+<script src="../js/tools-data.js"></script>
+<script src="../js/layout.js" data-root="../" defer></script>
+<script src="../js/tools/giveaway-picker.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YouTube tag cleaner: remove duplicates, check 500 character limit | ChaNaKu</title>
+<meta name="description" content="Clean up YouTube tags. Remove duplicates and # signs, check the 500 character limit and copy tags or hashtags.">
+<link rel="canonical" href="https://chanaku.pages.dev/tools/youtube-tags">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ChaNaKu">
+<meta property="og:title" content="YouTube tag cleaner: remove duplicates, check 500 character limit | ChaNaKu">
+<meta property="og:description" content="Clean up YouTube tags. Remove duplicates and # signs, check the 500 character limit and copy tags or hashtags.">
+<meta property="og:url" content="https://chanaku.pages.dev/tools/youtube-tags">
+<meta property="og:image" content="https://chanaku.pages.dev/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#23272b">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800&display=swap">
+<link rel="stylesheet" href="../css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<main id="main" class="wrap">
+<div class="page-head">
+  <a class="back" href="../index.html#tools">All tools</a>
+  <h1>YouTube tag cleaner</h1>
+  <p class="lede">Clean up tags, remove duplicates and stay inside the 500 character limit.</p>
+</div>
+<div class="panel stack">
+  <div><label for="raw">Paste your tags (commas or one per line)</label>
+  <textarea id="raw" placeholder="pubg mobile, #pubg, PUBG Mobile, gameplay" spellcheck="false"></textarea></div>
+  <label class="check"><input id="lower" type="checkbox">Make all tags lowercase</label>
+  <div class="grid2" aria-live="polite">
+    <div class="stat"><b id="count">0</b><span>tags</span></div>
+    <div class="stat"><b id="chars">0 / 500</b><span>characters used</span></div>
+  </div>
+  <div><div class="field-label">Clean tags</div><div id="tags" class="out"></div></div>
+  <div class="row"><button class="btn primary" id="copy-tags" type="button">Copy tags</button><button class="btn" id="trim" type="button">Trim to fit</button><span id="status" class="status" role="status"></span></div>
+  <div><div class="field-label">Hashtags for your description (first 15)</div><div id="hash" class="out"></div></div>
+  <div><button class="btn" id="copy-hash" type="button">Copy hashtags</button></div>
+</div>
+<p class="note prose">YouTube allows about 500 characters of tags. Commas count, and tags with spaces count two extra for the quotes, so this is a close estimate. YouTube ignores all hashtags in a video if there are more than 15.</p>
+<section id="related" class="related"></section>
+</main>
+<footer id="site-footer"></footer>
+<script src="../js/tools-data.js"></script>
+<script src="../js/layout.js" data-root="../" defer></script>
+<script src="../js/tools/youtube-tags.js" defer></script>
+</body>
+</html>

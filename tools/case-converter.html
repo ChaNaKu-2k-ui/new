@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case converter: upper, lower, title, camel, snake | ChaNaKu</title>
+<meta name="description" content="Change text case online: UPPER, lower, Title Case, Sentence case, camelCase, snake_case and kebab-case.">
+<link rel="canonical" href="https://chanaku.pages.dev/tools/case-converter">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ChaNaKu">
+<meta property="og:title" content="Case converter: upper, lower, title, camel, snake | ChaNaKu">
+<meta property="og:description" content="Change text case online: UPPER, lower, Title Case, Sentence case, camelCase, snake_case and kebab-case.">
+<meta property="og:url" content="https://chanaku.pages.dev/tools/case-converter">
+<meta property="og:image" content="https://chanaku.pages.dev/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#23272b">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800&display=swap">
+<link rel="stylesheet" href="../css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<main id="main" class="wrap">
+<div class="page-head">
+  <a class="back" href="../index.html#tools">All tools</a>
+  <h1>Case converter</h1>
+  <p class="lede">Switch text between upper, lower, title, sentence, camel, snake and kebab case.</p>
+</div>
+<div class="panel stack">
+  <div><label for="text">Your text</label>
+  <textarea id="text" placeholder="Type or paste your text here" spellcheck="false"></textarea></div>
+  <div id="modes" class="row" role="group" aria-label="Choose a case">
+    <button class="btn" type="button" data-mode="upper">UPPER CASE</button>
+    <button class="btn" type="button" data-mode="lower">lower case</button>
+    <button class="btn" type="button" data-mode="title">Title Case</button>
+    <button class="btn" type="button" data-mode="sentence">Sentence case</button>
+    <button class="btn" type="button" data-mode="camel">camelCase</button>
+    <button class="btn" type="button" data-mode="snake">snake_case</button>
+    <button class="btn" type="button" data-mode="kebab">kebab-case</button>
+  </div>
+  <div><div class="field-label">Result</div><div id="out" class="out" aria-live="polite"></div></div>
+  <div class="row"><button class="btn primary" id="copy" type="button">Copy result</button><span id="status" class="status" role="status"></span></div>
+</div>
+<p class="note prose">The result updates as you type. Title Case capitalises every word, so small words like "of" and "the" are capitalised too.</p>
+<section id="related" class="related"></section>
+</main>
+<footer id="site-footer"></footer>
+<script src="../js/tools-data.js"></script>
+<script src="../js/layout.js" data-root="../" defer></script>
+<script src="../js/tools/case-converter.js" defer></script>
+</body>
+</html>

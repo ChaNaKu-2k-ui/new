@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Base64 encode and decode online with UTF-8 | ChaNaKu</title>
+<meta name="description" content="Encode text to Base64 or decode it back. Handles UTF-8 text such as Sinhala and emoji, with a URL-safe option.">
+<link rel="canonical" href="https://chanaku.pages.dev/tools/base64">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ChaNaKu">
+<meta property="og:title" content="Base64 encode and decode online with UTF-8 | ChaNaKu">
+<meta property="og:description" content="Encode text to Base64 or decode it back. Handles UTF-8 text such as Sinhala and emoji, with a URL-safe option.">
+<meta property="og:url" content="https://chanaku.pages.dev/tools/base64">
+<meta property="og:image" content="https://chanaku.pages.dev/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#23272b">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800&display=swap">
+<link rel="stylesheet" href="../css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<main id="main" class="wrap">
+<div class="page-head">
+  <a class="back" href="../index.html#tools">All tools</a>
+  <h1>Base64 encoder</h1>
+  <p class="lede">Encode or decode text as Base64, with proper UTF-8 and URL-safe options.</p>
+</div>
+<div class="panel stack">
+  <div><label for="text">Text or Base64</label>
+  <textarea id="text" class="mono" spellcheck="false" placeholder="Type text to encode, or paste Base64 to decode"></textarea></div>
+  <label class="check"><input id="urlsafe" type="checkbox">URL-safe Base64 when encoding</label>
+  <div class="row"><button class="btn primary" id="encode" type="button">Encode</button><button class="btn primary" id="decode" type="button">Decode</button><button class="btn" id="copy" type="button">Copy result</button></div>
+  <div id="status" class="status" role="status"></div>
+  <div><div class="field-label">Result</div><pre id="out" class="out mono" aria-live="polite"></pre></div>
+</div>
+<p class="note prose">Base64 is an encoding, not encryption. Anyone can decode it, so do not use it to hide secrets.</p>
+<section id="related" class="related"></section>
+</main>
+<footer id="site-footer"></footer>
+<script src="../js/tools-data.js"></script>
+<script src="../js/layout.js" data-root="../" defer></script>
+<script src="../js/tools/base64.js" defer></script>
+</body>
+</html>
