@@ -1,217 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Socials - ChaNaKu</title>
-    
-    <link rel="stylesheet" href="style.css"> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <link rel="icon" type="image/png" href="logo.png">
-
-    <!-- Primary Meta Tags -->
-<meta name="title" content="My Socials - ChaNaKu">
-<meta name="description" content="Follow me on my official social networks and join the community.">
-
-<!-- Open Graph / Facebook / WhatsApp / Telegram -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Socials: follow TX9 and ChaNaKu</title>
+<meta name="description" content="Follow TX9 on YouTube, Facebook, TikTok, Discord and Telegram.">
+<link rel="canonical" href="https://chanaku.pages.dev/socials">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://chanaku.pages.dev/socials.html">
-<meta property="og:title" content="My Socials - ChaNaKu">
-<meta property="og:description" content="Follow me on my official social networks and join the community.">
-<meta property="og:image" content="https://chanaku.pages.dev/banner.png">
-
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://chanaku.pages.dev/socials.html">
-<meta property="twitter:title" content="My Socials - ChaNaKu">
-<meta property="twitter:description" content="Follow me on my official social networks and join the community.">
-<meta property="twitter:image" content="https://chanaku.pages.dev/banner.png">
-
-    <style>
-        body { margin: 0 !important; padding: 0 !important; display: block !important; min-height: 100vh; }
-        header { margin-bottom: 10px !important; padding-bottom: 0 !important; }
-        .container { margin-top: 0 !important; padding-top: 0 !important; }
-        .page-section { padding-top: 0 !important; margin-top: 0 !important; }
-        .content-box { margin-top: 0 !important; text-align: center; padding: 40px 20px; }
-
-        /* Profile සැකසුම් */
-        .profile-container { margin-bottom: 35px; }
-        .profile-pic { 
-            width: 130px; 
-            height: 130px; 
-            border-radius: 50%; 
-            border: 3px solid #00ff88; 
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4); 
-            object-fit: cover; 
-            margin-bottom: 15px; 
-        }
-        .profile-name { 
-            font-size: 28px; 
-            font-weight: bold; 
-            margin: 0; 
-            background: linear-gradient(135deg, #00ff88 0%, #00b4db 100%); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-        }
-        .profile-bio { color: #a0a0a0; font-size: 15px; margin-top: 8px; font-weight: 500; }
-
-        /* Social Links Container */
-        .social-links { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 15px; 
-            max-width: 450px; 
-            margin: 0 auto; 
-        }
-        
-        /* Advanced Button විලාසය */
-        .social-btn { 
-            display: flex; 
-            align-items: center; 
-            background: rgba(255, 255, 255, 0.05); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            color: #e0e0e0; 
-            text-decoration: none; 
-            padding: 12px 15px; 
-            border-radius: 15px; 
-            transition: all 0.3s ease; 
-            position: relative; 
-            overflow: hidden;
-            text-align: left;
-        }
-
-        /* Button එක ඇතුළේ ඇති Profile පින්තූරය */
-        .btn-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* නම සහ Username පෙන්වන කොටස */
-        .btn-info {
-            flex-grow: 1;
-            margin-left: 15px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .btn-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 3px;
-        }
-
-        .btn-stats {
-            font-size: 13px;
-            color: #a0a0a0;
-            font-weight: 500;
-        }
-
-        /* සමාජ මාධ්‍ය Icon එක */
-        .platform-icon {
-            font-size: 24px;
-            opacity: 0.8;
-            transition: all 0.3s ease;
-        }
-
-        /* Hover Effects */
-        .social-btn:hover { transform: translateY(-4px); }
-        .social-btn:hover .platform-icon { opacity: 1; transform: scale(1.1); }
-        
-        .social-btn.yt:hover { border-color: #ff0000; box-shadow: 0 5px 20px rgba(255, 0, 0, 0.3); background: rgba(255, 0, 0, 0.1); }
-        .social-btn.fb:hover { border-color: #1877f2; box-shadow: 0 5px 20px rgba(24, 119, 242, 0.3); background: rgba(24, 119, 242, 0.1); }
-        .social-btn.tt:hover { border-color: #00f2fe; box-shadow: 0 5px 20px rgba(0, 242, 254, 0.3); background: rgba(255, 255, 255, 0.1); } 
-        .social-btn.dc:hover { border-color: #5865F2; box-shadow: 0 5px 20px rgba(88, 101, 242, 0.3); background: rgba(88, 101, 242, 0.1); }
-        .social-btn.tg:hover { border-color: #0088cc; box-shadow: 0 5px 20px rgba(0, 136, 204, 0.3); background: rgba(0, 136, 204, 0.1); }
-    </style>
+<meta property="og:site_name" content="ChaNaKu">
+<meta property="og:title" content="Socials: follow TX9 and ChaNaKu">
+<meta property="og:description" content="Follow TX9 on YouTube, Facebook, TikTok, Discord and Telegram.">
+<meta property="og:url" content="https://chanaku.pages.dev/socials">
+<meta property="og:image" content="https://chanaku.pages.dev/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#23272b">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800&display=swap">
+<link rel="stylesheet" href="css/site.css">
 </head>
 <body>
-
-    <header>
-        <a href="index.html" class="logo-link">
-            <img src="logo.png" alt="DevTools Logo" class="site-logo">
-        </a>
-        <div class="nav-links">
-            <a href="index.html">Home</a>
-        </div>
-    </header>
-
-    <div class="container">
-        <section class="page-section active-section">
-            <div class="content-box">
-                
-                <!-- Main Profile Section (Updated) -->
-                <div class="profile-container">
-                    <img src="logo.png" alt="ChaNaKu Logo" class="profile-pic">
-                    <h1 class="profile-name">ChaNaKu</h1>
-                    <p class="profile-bio">Follow me on my official social networks</p>
-                </div>
-
-                <!-- Advanced Social Links (Unchanged) -->
-                <div class="social-links">
-                    
-                    <!-- YouTube Button -->
-                    <a href="https://www.youtube.com/@TX9_Pubg" class="social-btn yt" target="_blank">
-                        <img src="https://yt3.googleusercontent.com/L0OmxEHApBaAzQ0vXqBNWFWo6GO9Du3N05yIZxDpVutrP-rQa53ZlwQVEVjyBS0sF0t3CYZsBg=s160-c-k-c0x00ffffff-no-rj" alt="YouTube" class="btn-avatar">
-                        <div class="btn-info">
-                            <span class="btn-title">TX9</span>
-                            <span class="btn-stats">@TX9_Pubg</span>
-                        </div>
-                        <i class="fa-brands fa-youtube platform-icon" style="color: #ff0000;"></i>
-                    </a>
-                    
-                    <!-- Facebook Button -->
-                    <a href="https://facebook.com/TX9Pubg" class="social-btn fb" target="_blank">
-                        <img src="https://yt3.googleusercontent.com/L0OmxEHApBaAzQ0vXqBNWFWo6GO9Du3N05yIZxDpVutrP-rQa53ZlwQVEVjyBS0sF0t3CYZsBg=s160-c-k-c0x00ffffff-no-rj" alt="Facebook" class="btn-avatar">
-                        <div class="btn-info">
-                            <span class="btn-title">TX9</span>
-                            <span class="btn-stats">TX9Pubg</span>
-                        </div>
-                        <i class="fa-brands fa-facebook platform-icon" style="color: #1877f2;"></i>
-                    </a>
-                    
-                    <!-- TikTok Button -->
-                    <a href="https://www.tiktok.com/@tx9_pubg" class="social-btn tt" target="_blank">
-                        <img src="https://yt3.googleusercontent.com/L0OmxEHApBaAzQ0vXqBNWFWo6GO9Du3N05yIZxDpVutrP-rQa53ZlwQVEVjyBS0sF0t3CYZsBg=s160-c-k-c0x00ffffff-no-rj" alt="TikTok" class="btn-avatar">
-                        <div class="btn-info">
-                            <span class="btn-title">TX9</span>
-                            <span class="btn-stats">@tx9_pubg</span>
-                        </div>
-                        <i class="fa-brands fa-tiktok platform-icon"></i>
-                    </a>
-                    
-                    <!-- Discord Button -->
-                    <a href="https://discord.gg/YQV8Z6bmq6" class="social-btn dc" target="_blank">
-                        <img src="https://yt3.googleusercontent.com/L0OmxEHApBaAzQ0vXqBNWFWo6GO9Du3N05yIZxDpVutrP-rQa53ZlwQVEVjyBS0sF0t3CYZsBg=s160-c-k-c0x00ffffff-no-rj" alt="Discord" class="btn-avatar">
-                        <div class="btn-info">
-                            <span class="btn-title">TX9</span>
-                            <span class="btn-stats">discord.gg/YQV8Z6bmq6</span>
-                        </div>
-                        <i class="fa-brands fa-discord platform-icon" style="color: #5865F2;"></i>
-                    </a>
-                    
-                    <!-- Telegram Button -->
-                    <a href="https://t.me/TX9_Pubg" class="social-btn tg" target="_blank">
-                        <img src="https://yt3.googleusercontent.com/L0OmxEHApBaAzQ0vXqBNWFWo6GO9Du3N05yIZxDpVutrP-rQa53ZlwQVEVjyBS0sF0t3CYZsBg=s160-c-k-c0x00ffffff-no-rj" alt="Telegram" class="btn-avatar">
-                        <div class="btn-info">
-                            <span class="btn-title">TX9</span>
-                            <span class="btn-stats">@TX9_Pubg</span>
-                        </div>
-                        <i class="fa-brands fa-telegram platform-icon" style="color: #0088cc;"></i>
-                    </a>
-                    
-                </div>
-
-            </div>
-        </section>
-    </div>
-
-    <footer>&copy; 2026 ChaNaKu . All Rights Reserved.</footer>
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<main id="main" class="wrap">
+<div class="page-head">
+  <h1>Socials</h1>
+  <p class="lede">Follow the channels and join the community.</p>
+</div>
+<ul class="social-list">
+  <li><a class="social" href="https://www.youtube.com/@TX9_Pubg" target="_blank" rel="noopener"><span class="badge b-yt" aria-hidden="true">Y</span><span><b>YouTube</b><small>@TX9_Pubg</small></span></a></li>
+  <li><a class="social" href="https://facebook.com/TX9Pubg" target="_blank" rel="noopener"><span class="badge b-fb" aria-hidden="true">f</span><span><b>Facebook</b><small>TX9Pubg</small></span></a></li>
+  <li><a class="social" href="https://www.tiktok.com/@tx9_pubg" target="_blank" rel="noopener"><span class="badge b-tt" aria-hidden="true">T</span><span><b>TikTok</b><small>@tx9_pubg</small></span></a></li>
+  <li><a class="social" href="https://discord.gg/YQV8Z6bmq6" target="_blank" rel="noopener"><span class="badge b-dc" aria-hidden="true">D</span><span><b>Discord</b><small>discord.gg/YQV8Z6bmq6</small></span></a></li>
+  <li><a class="social" href="https://t.me/TX9_Pubg" target="_blank" rel="noopener"><span class="badge b-tg" aria-hidden="true">T</span><span><b>Telegram</b><small>@TX9_Pubg</small></span></a></li>
+</ul>
+</main>
+<footer id="site-footer"></footer>
+<script src="js/tools-data.js"></script>
+<script src="js/layout.js" data-root="" defer></script>
 
 </body>
 </html>

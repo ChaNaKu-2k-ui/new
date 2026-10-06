@@ -1,118 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChaNaKu</title>
-    <link rel="stylesheet" href="style.css">
-
-    <link rel="icon" type="image/png" href="logo.png">
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChaNaKu: free browser tools for creators and gamers</title>
+<meta name="description" content="Free online tools for creators and gamers: word counter, password generator, YouTube thumbnail grabber, giveaway picker, image compressor and more. No sign-up.">
+<link rel="canonical" href="https://chanaku.pages.dev/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ChaNaKu">
+<meta property="og:title" content="ChaNaKu: free browser tools for creators and gamers">
+<meta property="og:description" content="Free online tools for creators and gamers: word counter, password generator, YouTube thumbnail grabber, giveaway picker, image compressor and more. No sign-up.">
+<meta property="og:url" content="https://chanaku.pages.dev/">
+<meta property="og:image" content="https://chanaku.pages.dev/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#23272b">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800&display=swap">
+<link rel="stylesheet" href="css/site.css">
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<main id="main">
+<div class="wrap hero">
+  <div class="hero-img"><img src="assets/banner.webp" width="1228" height="691" alt="A character in fruit-print pajamas waves from a rock above the sea, under the words Come play with us"></div>
+  <div class="hero-copy">
+    <h1>Free tools. No sign-up.</h1>
+    <p class="lede">Small tools for creators and gamers. They run in your browser, so your text, passwords and images never leave your device.</p>
+  </div>
+</div>
 
-    <header>
-        <a onclick="navigateTo('home')" class="logo-link">
-            <img src="logo.png" alt="DevTools Logo" class="site-logo">
-        </a>
-        <div class="nav-links">
-            <a id="nav-home" onclick="navigateTo('home')">Home</a>
-            <a id="nav-about" onclick="navigateTo('about')">About Us</a>
-            <a id="nav-contact" onclick="navigateTo('contact')">Contact Us</a>
-        </div>
-    </header>
+<section class="wrap section" id="tools" aria-labelledby="tools-h">
+  <h2 id="tools-h">Tools</h2>
+  <div class="finder">
+    <div class="search"><input id="tool-search" type="search" aria-label="Search tools" placeholder="Search tools" autocomplete="off"></div>
+    <div id="chips" class="chips" role="group" aria-label="Filter by type"></div>
+  </div>
+  <ul id="tool-grid" class="tool-grid"></ul>
+  <p id="empty" class="empty" hidden>No tool matches that search. Try a shorter word, or choose All tools.</p>
+  <noscript><p>Turn on JavaScript to use the tools. They run in your browser.</p></noscript>
+</section>
 
-    <div class="container">
-
-        <section id="sec-home" class="page-section active-section">
-            <div class="hero">
-                <h1>Free Online Web Utilities</h1>
-                <p>Fast, secure, and standalone digital mini tools to make your daily tasks easier.</p>
-            </div>
-            <div class="grid">
-                <div class="card">
-                    <div class="card-icon">📝</div>
-                    <h3>Word Counter</h3>
-                    <p>Count your words, sentences, and characters in real-time with our smart text analyzer tool.</p>
-                    <button onclick="navigateTo('word-counter')" class="btn">Open Tool</button>
-                </div>
-                <div class="card">
-                    <div class="card-icon">🔒</div>
-                    <h3>Password Generator</h3>
-                    <p>Generate highly secure, randomized passwords instantly to keep your online accounts safe.</p>
-                    <button onclick="navigateTo('password-generator')" class="btn">Open Tool</button>
-                </div>
-            </div>
-        </section>
-
-        <section id="sec-word-counter" class="page-section">
-            <div class="content-box">
-                <h2>📝 Real-Time Word Counter</h2>
-                <p style="color: var(--text-muted); font-size: 14px;">Type or paste your text content below to analyze words and characters.</p>
-                <textarea id="textInput" placeholder="Start typing here..."></textarea>
-                <div class="stats">
-                    <div class="stat-box"><span id="wordCount">0</span> Words</div>
-                    <div class="stat-box"><span id="charCount">0</span> Characters</div>
-                </div>
-            </div>
-        </section>
-
-        <section id="sec-password-generator" class="page-section">
-            <div class="content-box">
-                <h2>🔒 Secure Password Generator</h2>
-                <p style="color: var(--text-muted); font-size: 14px;">Generate strong, highly randomized crypto-secure passwords instantly.</p>
-                <div class="result-box">
-                    <input type="text" id="passwordResult" readonly placeholder="Your Generated Password">
-                </div>
-                <div class="settings-row">
-                    <label>Password Length (<span id="lengthVal">12</span>)</label>
-                    <input type="range" id="passLength" min="6" max="25" value="12">
-                </div>
-                <button class="btn" id="generateBtn">Generate Password</button>
-            </div>
-        </section>
-
-        <section id="sec-about" class="page-section">
-            <div class="content-box">
-                <h2>About Our Platform</h2>
-                <p>Welcome to DevTools Hub, your premier destination for efficient, web-based utility applications. Our mission is to provide clean, fast, and completely secure mini tools that run entirely on the client side, ensuring maximum data privacy.</p>
-                <p>We build our web applications with modern optimization standards, minimizing load times and offering a seamless user experience across all digital devices.</p>
-            </div>
-        </section>
-
-        <section id="sec-contact" class="page-section">
-            <div class="content-box">
-                <h2>Get In Touch</h2>
-                <p>Have questions, feature requests, or business inquiries? Feel free to reach out to our administration team via the communication channels below. We appreciate your feedback.</p>
-                <p style="margin-top: 25px;"><strong>📧 Email Support:</strong> support@devtoolshub.test</p>
-                <p><strong>🌐 Office Hours:</strong> Monday - Friday, 9:00 AM - 5:00 PM (UTC)</p>
-            </div>
-        </section>
-
-        <section id="sec-task1" class="page-section">
-            <div class="content-box">
-                <h2>🎯 Special Registration & Watch Task</h2>
-                <p>Please complete the steps exactly as described below to secure your instant payout approval.</p>
-                
-                <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=500" alt="Video Thumbnail Image" class="thumbnail">
-
-                <ol>
-                    <li>Click the green activation button located below to open the official host portal.</li>
-                    <li>Create a completely new account and successfully verify your identity via email confirmation.</li>
-                    <li>Watch the online content matching the thumbnail shown above for at least 60 seconds.</li>
-                    <li>Submit your exact registered profile username as proof on the task platform for validation.</li>
-                </ol>
-
-                <a href="https://bux.money/earn/" target="_blank" class="btn task-btn">🔗 Click Here to Launch Task</a>
-            </div>
-        </section>
-
-    </div>
-
-    <footer>
-        &copy; 2026 ChaNaKu . All Rights Reserved.
-    </footer>
-
-    <script src="script.js"></script>
+<section class="wrap section" aria-labelledby="follow-h">
+  <h2 id="follow-h">Come play with us</h2>
+  <p class="lede">PUBG videos, streams and the community are on these channels.</p>
+  <ul class="social-list">
+    <li><a class="social" href="https://www.youtube.com/@TX9_Pubg" target="_blank" rel="noopener"><span class="badge b-yt" aria-hidden="true">Y</span><span><b>YouTube</b><small>@TX9_Pubg</small></span></a></li>
+    <li><a class="social" href="socials.html"><span class="badge" style="background:var(--surface-2);color:var(--text)" aria-hidden="true">+</span><span><b>All channels</b><small>Facebook, TikTok, Discord, Telegram</small></span></a></li>
+  </ul>
+</section>
+</main>
+<footer id="site-footer"></footer>
+<script src="js/tools-data.js"></script>
+<script src="js/layout.js" data-root="" defer></script>
+<script src="js/home.js" defer></script>
 </body>
 </html>
