@@ -20,9 +20,9 @@
       var hit = !q || (t.name + " " + t.desc + " " + window.CATEGORIES[t.cat]).toLowerCase().indexOf(q) !== -1;
       return hit && (active === "all" || t.cat === active);
     });
-    grid.innerHTML = shown.map(function (t) {
-      return '<li><a class="tool cat-' + t.cat + '" href="tools/' + t.slug + '.html"><h3>' + t.name + "</h3><p>" + t.desc +
-        '</p><span class="cat">' + window.CATEGORIES[t.cat] + "</span></a></li>";
+    grid.innerHTML = shown.map(function (t, i) {
+      return '<li style="--i:' + i + '"><a class="tool cat-' + t.cat + '" href="tools/' + t.slug + '.html"><span class="ico">' + window.svg(t.icon) + "</span><h3>" + t.name + "</h3><p>" + t.desc +
+        '</p><span class="cat">' + window.CATEGORIES[t.cat] + " " + window.svg(window.UI_ICONS.arrow) + "</span></a></li>";
     }).join("");
     empty.hidden = shown.length > 0;
   }
@@ -38,4 +38,8 @@
   var q = new URLSearchParams(location.search).get("q");
   if (q) input.value = q;
   render();
+  document.addEventListener("keydown", function (e) {
+    var tag = (document.activeElement && document.activeElement.tagName) || "";
+    if (e.key === "/" && !/INPUT|TEXTAREA|SELECT/.test(tag)) { e.preventDefault(); input.focus(); input.select(); }
+  });
 })();

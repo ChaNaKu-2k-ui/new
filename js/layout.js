@@ -14,20 +14,35 @@
 
   var header = document.getElementById("site-header");
   if (header) {
+    var theme = document.documentElement.getAttribute("data-theme") || "dark";
     header.innerHTML =
       '<div class="wrap nav"><a class="brand" href="' + root + 'index.html">' +
       '<img src="' + root + 'assets/logo.webp" alt="" width="38" height="38"><span>ChaNaKu</span></a>' +
-      '<nav class="nav-links" aria-label="Main">' +
+      '<div class="nav-right"><nav class="nav-links" aria-label="Main">' +
       links.map(function (l) {
         return '<a href="' + l[1] + '"' + (l[2] ? ' aria-current="page"' : "") + ">" + l[0] + "</a>";
-      }).join("") + "</nav></div>";
+      }).join("") + '</nav><button class="theme-btn" type="button" id="theme-btn"></button></div></div>';
+    var btn = document.getElementById("theme-btn");
+    var paint = function () {
+      var t = document.documentElement.getAttribute("data-theme");
+      btn.innerHTML = window.svg(t === "dark" ? window.UI_ICONS.sun : window.UI_ICONS.moon);
+      btn.setAttribute("aria-label", t === "dark" ? "Switch to light theme" : "Switch to dark theme");
+    };
+    btn.addEventListener("click", function () {
+      var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      try { localStorage.setItem("cnk-theme", next); } catch (e) {}
+      paint();
+    });
+    paint();
   }
 
   var footer = document.getElementById("site-footer");
   if (footer) {
     footer.innerHTML =
-      '<div class="wrap foot"><div>&copy; ' + new Date().getFullYear() + " ChaNaKu. Text, passwords and images you use in the tools stay in your browser.</div>" +
-      '<nav aria-label="Footer"><a href="' + root + 'socials.html">Socials</a><a href="' + root + 'partners.html">Partners</a><a href="' + root + 'about.html">About</a></nav></div>';
+      '<div class="wrap foot"><div><div class="foot-brand"><img src="' + root + 'assets/logo.webp" alt="" width="28" height="28">ChaNaKu</div>' +
+      "&copy; " + new Date().getFullYear() + " ChaNaKu. Text, passwords and images you use in the tools stay in your browser.</div>" +
+      '<nav aria-label="Footer"><a href="' + root + 'index.html#tools">Tools</a><a href="' + root + 'socials.html">Socials</a><a href="' + root + 'partners.html">Partners</a><a href="' + root + 'about.html">About</a></nav></div>';
   }
 
   /* "More tools" block on tool pages */
@@ -38,7 +53,7 @@
     var others = window.TOOLS.filter(function (t) { return t.slug !== cur; });
     others.sort(function (a, b) { return (b.cat === (me && me.cat)) - (a.cat === (me && me.cat)); });
     related.innerHTML = "<h2>More tools</h2><ul class=\"tool-grid\">" + others.slice(0, 3).map(function (t) {
-      return '<li><a class="tool cat-' + t.cat + '" href="' + t.slug + '.html"><h3>' + t.name + "</h3><p>" + t.desc + "</p></a></li>";
+      return '<li><a class="tool cat-' + t.cat + '" href="' + t.slug + '.html"><span class="ico">' + window.svg(t.icon) + "</span><h3>" + t.name + "</h3><p>" + t.desc + "</p></a></li>";
     }).join("") + "</ul>";
   }
 
