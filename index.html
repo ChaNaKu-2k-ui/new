@@ -20,6 +20,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800&display=swap">
 <link rel="stylesheet" href="css/site.css">
+<script src="js/theme.js"></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -28,15 +29,24 @@
 <div class="wrap hero">
   <div class="hero-img"><img src="assets/banner.webp" width="1228" height="691" alt="A character in fruit-print pajamas waves from a rock above the sea, under the words Come play with us"></div>
   <div class="hero-copy">
-    <h1>Free tools. No sign-up.</h1>
+    <h1>Free tools. <span class="hl">No sign-up.</span></h1>
     <p class="lede">Small tools for creators and gamers. They run in your browser, so your text, passwords and images never leave your device.</p>
+    <div class="search big">
+      <svg class="s-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="tool-search" type="search" aria-label="Search tools" placeholder="Search tools, e.g. password" autocomplete="off">
+      <kbd aria-hidden="true">/</kbd>
+    </div>
   </div>
+  <ul class="perks">
+    <li><span class="ico"><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/></svg></span><div><b>Private</b><span>Your text and files stay on your device.</span></div></li>
+    <li><span class="ico"><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M13 2L3 14h9l-1 8 10-12h-9l1-8z'/></svg></span><div><b>Free, no sign-up</b><span>Open a tool and use it right away.</span></div></li>
+    <li><span class="ico"><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M20 12v10H4V12'/><rect x='2' y='7' width='20' height='5'/><path d='M12 22V7'/><path d='M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z'/><path d='M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z'/></svg></span><div><b>Made for creators</b><span>Thumbnails, tags, giveaways and more.</span></div></li>
+  </ul>
 </div>
 
 <section class="wrap section" id="tools" aria-labelledby="tools-h">
   <h2 id="tools-h">Tools</h2>
   <div class="finder">
-    <div class="search"><input id="tool-search" type="search" aria-label="Search tools" placeholder="Search tools" autocomplete="off"></div>
     <div id="chips" class="chips" role="group" aria-label="Filter by type"></div>
   </div>
   <ul id="tool-grid" class="tool-grid"></ul>
@@ -48,7 +58,7 @@
   <h2 id="follow-h">Come play with us</h2>
   <p class="lede">PUBG videos, streams and the community are on these channels.</p>
   <ul class="social-list">
-    <li><a class="social" href="https://www.youtube.com/@TX9_Pubg" target="_blank" rel="noopener"><span class="badge b-yt" aria-hidden="true">Y</span><span><b>YouTube</b><small>@TX9_Pubg</small></span></a></li>
+    <li><a class="social" href="https://www.youtube.com/@TX9_Pubg" target="_blank" rel="noopener"><span class="badge b-yt" aria-hidden="true"><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><path d="M9.75 15.02V8.48l5.75 3.27z"/></svg></span><span><b>YouTube</b><small>@TX9_Pubg</small></span></a></li>
     <li><a class="social" href="socials.html"><span class="badge" style="background:var(--surface-2);color:var(--text)" aria-hidden="true">+</span><span><b>All channels</b><small>Facebook, TikTok, Discord, Telegram</small></span></a></li>
   </ul>
 </section>
