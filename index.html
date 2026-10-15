@@ -20,6 +20,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800&display=swap">
 <link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/extras.css">
 <script src="js/theme.js"></script>
 </head>
 <body>
@@ -27,7 +28,15 @@
 <header id="site-header"></header>
 <main id="main">
 <div class="wrap hero">
-  <div class="hero-img"><img src="assets/banner.webp" width="1228" height="691" alt="A character in fruit-print pajamas waves from a rock above the sea, under the words Come play with us"></div>
+  <div class="hero-banner" aria-hidden="true">
+    <div class="hb-grid"></div>
+    <img class="hb-logo" src="assets/logo.webp" width="96" height="96" alt="">
+    <i class="hb-tile c-text" style="--x:8%;--y:18%;--d:0s"><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M4 7V4h16v3'/><path d='M9 20h6'/><path d='M12 4v16'/></svg></i>
+    <i class="hb-tile" style="--x:26%;--y:58%;--d:1.4s"><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><rect x='4' y='11' width='16' height='10' rx='2'/><path d='M8 11V7a4 4 0 0 1 8 0v4'/></svg></i>
+    <i class="hb-tile c-creator" style="--x:66%;--y:62%;--d:.7s"><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='9' cy='10' r='1.6'/><path d='M21 16l-5-5-9 9'/></svg></i>
+    <i class="hb-tile c-game" style="--x:84%;--y:16%;--d:2.1s"><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M3 17h4v-4h4V9h4V5h6'/></svg></i>
+    <i class="hb-tile c-image" style="--x:46%;--y:76%;--d:1s"><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M8 3v3a2 2 0 0 1-2 2H3'/><path d='M21 8h-3a2 2 0 0 1-2-2V3'/><path d='M3 16h3a2 2 0 0 1 2 2v3'/><path d='M16 21v-3a2 2 0 0 1 2-2h3'/></svg></i>
+  </div>
   <div class="hero-copy">
     <h1>Free tools. <span class="hl">No sign-up.</span></h1>
     <p class="lede">Small tools for creators and gamers. They run in your browser, so your text, passwords and images never leave your device.</p>
@@ -36,6 +45,15 @@
       <input id="tool-search" type="search" aria-label="Search tools" placeholder="Search tools, e.g. password" autocomplete="off">
       <kbd aria-hidden="true">/</kbd>
     </div>
+    <div class="hero-cta">
+      <a class="btn primary" href="games.html">Play games</a>
+      <a class="btn" href="#tools">Browse tools</a>
+    </div>
+    <p class="hero-stats">
+      <span><b data-count="tools">0</b> tools</span>
+      <span><b data-count="games">0</b> games</span>
+      <span>No sign-up</span>
+    </p>
   </div>
   <ul class="perks">
     <li><span class="ico"><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/></svg></span><div><b>Private</b><span>Your text and files stay on your device.</span></div></li>
@@ -65,6 +83,7 @@
 </main>
 <footer id="site-footer"></footer>
 <script src="js/tools-data.js"></script>
+<script src="js/games-data.js"></script>
 <script src="js/layout.js" data-root="" defer></script>
 <script src="js/home.js" defer></script>
 </body>

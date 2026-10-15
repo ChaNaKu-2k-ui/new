@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Giveaway winner picker: draw random winners | ChaNaKu</title>
-<meta name="description" content="Paste a list of names or comments and draw fair random winners. Uses secure random numbers and can remove duplicate entries.">
+<title>Giveaway winner picker: spin a wheel to draw winners | ChaNaKu</title>
+<meta name="description" content="Type names separated by commas, spin a prize wheel and draw fair random winners. Uses secure random numbers and can remove duplicate entries.">
 <link rel="canonical" href="https://chanaku.pages.dev/tools/giveaway-picker">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ChaNaKu">
-<meta property="og:title" content="Giveaway winner picker: draw random winners | ChaNaKu">
-<meta property="og:description" content="Paste a list of names or comments and draw fair random winners. Uses secure random numbers and can remove duplicate entries.">
+<meta property="og:title" content="Giveaway winner picker: spin a wheel to draw winners | ChaNaKu">
+<meta property="og:description" content="Type names separated by commas, spin a prize wheel and draw fair random winners. Uses secure random numbers.">
 <meta property="og:url" content="https://chanaku.pages.dev/tools/giveaway-picker">
 <meta property="og:image" content="https://chanaku.pages.dev/assets/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -20,6 +20,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800&display=swap">
 <link rel="stylesheet" href="../css/site.css">
+<link rel="stylesheet" href="../css/extras.css">
 <script src="../js/theme.js"></script>
 </head>
 <body>
@@ -30,20 +31,31 @@
   <a class="back" href="../index.html#tools">All tools</a>
   <div class="title-row"><span class="ico big"><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M20 12v10H4V12'/><rect x='2' y='7' width='20' height='5'/><path d='M12 22V7'/><path d='M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z'/><path d='M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z'/></svg></span><h1>Giveaway winner picker</h1></div>
   <span class="catchip">Creator</span>
-  <p class="lede">Paste entries and draw fair random winners.</p>
+  <p class="lede">Type the names separated by commas, spin the wheel and draw fair random winners.</p>
 </div>
 <div class="panel stack">
-  <div><label for="names">Entries (one per line)</label>
-  <textarea id="names" placeholder="Paste usernames or names, one on each line" spellcheck="false"></textarea></div>
+  <div>
+    <label for="names">Entries (separated by commas)</label>
+    <textarea id="names" placeholder="Ayesha, Kasun, Nimal, Sara" spellcheck="false"></textarea>
+    <p class="note" style="margin:6px 0 0">Line breaks work too. Extra spaces and empty entries are ignored.</p>
+  </div>
   <div class="row" style="gap:12px 22px">
     <div style="width:130px"><label for="n">Winners</label><input id="n" type="number" min="1" max="100" value="1"></div>
     <label class="check" style="margin-top:22px"><input id="dedupe" type="checkbox" checked>Remove duplicate entries</label>
     <div class="note" style="margin-top:22px"><b id="entries">0</b> entries</div>
   </div>
-  <div class="row"><button class="btn primary" id="pick" type="button">Pick winners</button><span id="status" class="status" role="status"></span></div>
-  <ol id="winners" class="winners" aria-live="polite"></ol>
+  <div class="wheel-wrap">
+    <canvas id="wheel" width="600" height="600" aria-label="Prize wheel showing the entries"></canvas>
+    <div id="winner" class="winner-banner" aria-live="polite"></div>
+    <div class="wheel-actions">
+      <button class="btn primary" id="spin" type="button">Spin the wheel</button>
+      <button class="btn" id="draw" type="button">Draw without wheel</button>
+    </div>
+    <span id="status" class="status" role="status"></span>
+  </div>
+  <ol id="winners" class="winners"></ol>
 </div>
-<p class="note prose">Each entry has an equal chance and nobody can win twice in one draw. Press the button again for a fresh draw. For a public giveaway, record your screen while you draw.</p>
+<p class="note prose">Each entry has an equal chance, and nobody wins twice in one draw. Spin again for a fresh draw. For a public giveaway, record your screen while you spin.</p>
 <section id="related" class="related"></section>
 </main>
 <footer id="site-footer"></footer>

@@ -5,8 +5,7 @@ window.CATEGORIES = {
   security: "Security",
   creator: "Creator",
   image: "Images",
-  developer: "Developer",
-  game: "Games"
+  developer: "Developer"
 };
 window.TOOLS = [
   { slug: "word-counter", icon: "<path d='M4 7V4h16v3'/><path d='M9 20h6'/><path d='M12 4v16'/>", name: "Word counter", cat: "text", desc: "Count words, characters, sentences and reading time as you type." },
@@ -17,8 +16,7 @@ window.TOOLS = [
   { slug: "giveaway-picker", icon: "<path d='M20 12v10H4V12'/><rect x='2' y='7' width='20' height='5'/><path d='M12 22V7'/><path d='M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z'/><path d='M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z'/>", name: "Giveaway winner picker", cat: "creator", desc: "Paste entries and draw fair random winners." },
   { slug: "image-compressor", icon: "<path d='M8 3v3a2 2 0 0 1-2 2H3'/><path d='M21 8h-3a2 2 0 0 1-2-2V3'/><path d='M3 16h3a2 2 0 0 1 2 2v3'/><path d='M16 21v-3a2 2 0 0 1 2-2h3'/>", name: "Image compressor", cat: "image", desc: "Shrink JPG, PNG and WebP images on your device. Nothing is uploaded." },
   { slug: "json-formatter", icon: "<path d='M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1'/><path d='M16 21h1a2 2 0 0 0 2-2v-5a2 2 0 0 1 2-2 2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1'/>", name: "JSON formatter", cat: "developer", desc: "Format, minify and check JSON, with the error location when it is invalid." },
-  { slug: "base64", icon: "<path d='M16 18l6-6-6-6'/><path d='M8 6l-6 6 6 6'/>", name: "Base64 encoder", cat: "developer", desc: "Encode or decode text as Base64, with proper UTF-8 and URL-safe options." },
-  { slug: "snake", icon: "<path d='M3 17h4v-4h4V9h4V5h6'/>", name: "Snake game", cat: "game", desc: "Classic snake on a retro LCD screen. Steer with arrows, WASD or a swipe." }
+  { slug: "base64", icon: "<path d='M16 18l6-6-6-6'/><path d='M8 6l-6 6 6 6'/>", name: "Base64 encoder", cat: "developer", desc: "Encode or decode text as Base64, with proper UTF-8 and URL-safe options." }
 ];
 
 /* Small icons used by the layout (feather-style, 24px, drawn with currentColor) */

@@ -4,9 +4,11 @@
   var root = (script && script.dataset.root) || "";
   var page = location.pathname.split("/").pop().replace(/\.html$/, "") || "index";
   var inTools = location.pathname.indexOf("/tools/") !== -1;
+  var inGames = location.pathname.indexOf("/games") !== -1;
 
   var links = [
     ["Tools", root + "index.html#tools", inTools],
+    ["Games", root + "games.html", inGames],
     ["Socials", root + "socials.html", page === "socials"],
     ["Partners", root + "partners.html", page === "partners"],
     ["About", root + "about.html", page === "about"]
@@ -42,7 +44,7 @@
     footer.innerHTML =
       '<div class="wrap foot"><div><div class="foot-brand"><img src="' + root + 'assets/logo.webp" alt="" width="28" height="28">ChaNaKu</div>' +
       "&copy; " + new Date().getFullYear() + " ChaNaKu. Text, passwords and images you use in the tools stay in your browser.</div>" +
-      '<nav aria-label="Footer"><a href="' + root + 'index.html#tools">Tools</a><a href="' + root + 'socials.html">Socials</a><a href="' + root + 'partners.html">Partners</a><a href="' + root + 'about.html">About</a></nav></div>';
+      '<nav aria-label="Footer"><a href="' + root + 'index.html#tools">Tools</a><a href="' + root + 'games.html">Games</a><a href="' + root + 'socials.html">Socials</a><a href="' + root + 'partners.html">Partners</a><a href="' + root + 'about.html">About</a></nav></div>';
   }
 
   /* "More tools" block on tool pages */

@@ -1,0 +1,86 @@
+/* Extras: home banner, hero buttons and stats, and the giveaway wheel. Loads after site.css and uses its colour tokens. */
+
+/* Home banner */
+.hero-banner {
+  position: relative;
+  isolation: isolate;
+  aspect-ratio: 16 / 7;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(55% 90% at 50% 0%, color-mix(in srgb, var(--gold) 26%, transparent), transparent 70%),
+    radial-gradient(50% 80% at 100% 100%, color-mix(in srgb, var(--link) 22%, transparent), transparent 70%),
+    linear-gradient(160deg, var(--surface), var(--bg));
+  box-shadow: var(--shadow);
+}
+.hb-grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--text) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--text) 8%, transparent) 1px, transparent 1px);
+  background-size: 32px 32px;
+  -webkit-mask-image: radial-gradient(75% 75% at 50% 50%, #000 30%, transparent);
+          mask-image: radial-gradient(75% 75% at 50% 50%, #000 30%, transparent);
+}
+.hb-logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: clamp(64px, 14vw, 96px);
+  height: auto;
+  transform: translate(-50%, -50%);
+  border-radius: 24px;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--gold) 45%, transparent), 0 20px 44px -14px rgba(0, 0, 0, .7);
+}
+.hb-tile {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  color: var(--cat, var(--gold));
+  background: color-mix(in srgb, var(--surface-2) 88%, transparent);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  animation: hb-float 6s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+.hb-tile svg { width: 26px; height: 26px; }
+.hb-tile.c-text { --cat: var(--c-text); }
+.hb-tile.c-creator { --cat: var(--c-creator); }
+.hb-tile.c-image { --cat: var(--c-image); }
+.hb-tile.c-game { --cat: var(--c-game); }
+@keyframes hb-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@media (max-width: 560px) {
+  .hero-banner { aspect-ratio: 4 / 3; }
+  .hb-tile { width: 40px; height: 40px; border-radius: 12px; }
+  .hb-tile svg { width: 20px; height: 20px; }
+}
+
+/* Hero buttons and live counts */
+.hero-cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.hero-stats { display: flex; flex-wrap: wrap; gap: 6px 20px; margin: 4px 0 0; color: var(--muted); font-size: 15px; }
+.hero-stats b { font-family: var(--font-head); font-size: 24px; color: var(--text); margin-right: 6px; }
+
+/* Giveaway wheel */
+.wheel-wrap { display: grid; justify-items: center; gap: 14px; }
+#wheel { display: block; width: min(100%, 380px); height: auto; aspect-ratio: 1 / 1; touch-action: manipulation; }
+.winner-banner {
+  min-height: 1.4em;
+  font-family: var(--font-head);
+  font-size: clamp(26px, 5vw, 34px);
+  font-weight: 800;
+  color: var(--gold);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.wheel-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }

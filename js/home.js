@@ -38,6 +38,8 @@
   var q = new URLSearchParams(location.search).get("q");
   if (q) input.value = q;
   render();
+  document.querySelectorAll("[data-count='tools']").forEach(function (el) { el.textContent = window.TOOLS.length; });
+  document.querySelectorAll("[data-count='games']").forEach(function (el) { el.textContent = window.GAMES ? window.GAMES.length : 0; });
   document.addEventListener("keydown", function (e) {
     var tag = (document.activeElement && document.activeElement.tagName) || "";
     if (e.key === "/" && !/INPUT|TEXTAREA|SELECT/.test(tag)) { e.preventDefault(); input.focus(); input.select(); }

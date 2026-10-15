@@ -20,6 +20,13 @@ Cloudflare Pages: build command empty, output directory `/`.
 3. `js/tools/<slug>.js` ලියන්න. `CNK.copy`, `CNK.status`, `CNK.randInt` වගේ helpers `js/layout.js` එකේ තියෙනවා.
 4. `sitemap.xml` එකට URL එක (`.html` නැතුව) add කරන්න.
 
+## අලුත් game එකක් add කරන හැටි
+
+1. `js/games-data.js` එකට අලුත් line එකක් දාන්න (`slug`, `name`, `tag`, `desc`, `icon`).
+2. `games/snake.html` copy කරලා `games/<slug>.html` කරන්න. Title, canonical link, script path (`js/games/<slug>.js`) වෙනස් කරන්න.
+3. `js/games/<slug>.js` ලියන්න.
+4. `sitemap.xml` එකට URL එක add කරන්න.
+
 ## Cloudflare files
 
 - `_headers`: security headers සහ caching. අලුත් external site එකකින් script/image load කරනවා නම් මෙතන CSP එකත් update කරන්න.
