@@ -26,17 +26,9 @@ function navigateTo(sectionId) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// 2. SECRET ROUTER LOGIC (ලින්ක් එකෙන් කෙළින්ම ටාස්ක් එකට යවන රහස් කේතය)
+// 2. DEFAULT PAGE (පිටුව පූරණය වෙද්දී හෝම් සෙක්ෂන් එක පෙන්වන්න)
 window.addEventListener('DOMContentLoaded', () => {
-    // URL එකේ ?page=task1 කියලා තියෙනවද බලනවා
-    const urlParams = new URLSearchParams(window.location.search);
-    const pageParam = urlParams.get('page');
-
-    if (pageParam === 'task1') {
-        navigateTo('task1'); // කෙළින්ම ටාස්ක් එක පෙන්වන්න
-    } else {
-        navigateTo('home');  // නැත්නම් සාමාන්‍ය විදිහට හෝම් පේජ් එක
-    }
+    navigateTo('home');
 });
 
 // 3. WORD COUNTER TOOL LOGIC
