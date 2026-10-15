@@ -19,6 +19,7 @@
   --c-creator: #f0806a;
   --c-image: #35c4b3;
   --c-developer: #a898f5;
+  --c-game: #f27bb5;
   --shadow: 0 14px 34px -18px rgba(0,0,0,.7);
 
   --font-head: "Barlow Condensed", "Arial Narrow", Impact, sans-serif;
@@ -47,6 +48,7 @@
     --c-creator: #cc4a30;
     --c-image: #0f8f80;
     --c-developer: #6a58d6;
+    --c-game: #c2427f;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -128,7 +130,7 @@ p { margin: 0 0 1em; }
 .tool-grid > li { animation: rise .45s ease both; animation-delay: calc(var(--i, 0) * 45ms); }
 @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 .cat-text { --cat: var(--c-text); } .cat-security { --cat: var(--c-security); } .cat-creator { --cat: var(--c-creator); }
-.cat-image { --cat: var(--c-image); } .cat-developer { --cat: var(--c-developer); }
+.cat-image { --cat: var(--c-image); } .cat-developer { --cat: var(--c-developer); } .cat-game { --cat: var(--c-game); }
 .empty { margin-top: 20px; color: var(--muted); }
 
 /* Social rows */

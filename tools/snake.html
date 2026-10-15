@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Snake game: free retro browser game | ChaNaKu</title>
+<meta name="description" content="Free snake game in your browser. Steer with arrow keys, WASD or a swipe and track your best score. Nothing is uploaded.">
+<link rel="canonical" href="https://chanaku.pages.dev/tools/snake">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ChaNaKu">
+<meta property="og:title" content="Snake game: free retro browser game | ChaNaKu">
+<meta property="og:description" content="Free snake game in your browser. Steer with arrow keys, WASD or a swipe and track your best score.">
+<meta property="og:url" content="https://chanaku.pages.dev/tools/snake">
+<meta property="og:image" content="https://chanaku.pages.dev/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#23272b">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800&display=swap">
+<link rel="stylesheet" href="../css/site.css">
+<link rel="stylesheet" href="../css/snake.css">
+<script src="../js/theme.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<main id="main" class="wrap">
+<div class="page-head cat-game">
+  <a class="back" href="../index.html#tools">All tools</a>
+  <div class="title-row"><span class="ico big"><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M3 17h4v-4h4V9h4V5h6'/></svg></span><h1>Snake game</h1></div>
+  <span class="catchip">Games</span>
+  <p class="lede">Classic snake on a retro LCD screen. Eat the food, grow longer, and avoid the walls and your own tail.</p>
+</div>
+
+<div class="panel">
+  <div class="grid2 snake-stats" aria-live="polite">
+    <div class="stat"><b id="score">0</b><span>score</span></div>
+    <div class="stat"><b id="best">0</b><span>best</span></div>
+  </div>
+
+  <div class="snake-screen" id="screen">
+    <canvas id="board" width="400" height="400" aria-label="Snake game board"></canvas>
+    <div class="snake-veil" id="veil" role="status">
+      <h2 id="veil-title">Snake</h2>
+      <p id="veil-sub"></p>
+      <button class="btn primary" type="button" id="veil-btn">Start</button>
+    </div>
+  </div>
+
+  <nav class="snake-pad" aria-label="Direction buttons">
+    <button class="btn" type="button" data-dir="up" aria-label="Up">&#9650;</button>
+    <button class="btn" type="button" data-dir="left" aria-label="Left">&#9664;</button>
+    <button class="btn" type="button" data-dir="down" aria-label="Down">&#9660;</button>
+    <button class="btn" type="button" data-dir="right" aria-label="Right">&#9654;</button>
+  </nav>
+
+  <div class="row snake-actions">
+    <button class="btn" type="button" id="pause">Pause</button>
+    <button class="btn" type="button" id="restart">Restart</button>
+  </div>
+</div>
+
+<p class="note prose">Arrow keys or W, A, S and D move the snake. Space or P pauses, and R starts again. On a phone, swipe the board or use the arrow buttons. Your best score is kept in this browser only, and nothing is uploaded.</p>
+<section id="related" class="related"></section>
+</main>
+<footer id="site-footer"></footer>
+<script src="../js/tools-data.js"></script>
+<script src="../js/layout.js" data-root="../" defer></script>
+<script src="../js/tools/snake.js" defer></script>
+</body>
+</html>

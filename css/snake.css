@@ -1,0 +1,53 @@
+/* Snake game styles. The LCD colours are fixed on purpose, so the board looks the same in both themes. */
+:root {
+  --snake-lcd: #c2d09c;
+  --snake-ink: #1c2514;
+  --snake-food: #e0457b;
+}
+
+.snake-stats { margin-bottom: 16px; }
+
+.snake-screen {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  margin-inline: auto;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--snake-lcd);
+  box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--snake-ink) 35%, transparent);
+}
+.snake-screen canvas { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; touch-action: none; }
+
+.snake-veil {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 12px;
+  padding: 18px;
+  text-align: center;
+  color: var(--snake-ink);
+  background: color-mix(in srgb, var(--snake-lcd) 88%, transparent);
+}
+.snake-veil[hidden] { display: none; }
+.snake-veil h2 { font-size: clamp(30px, 6vw, 40px); }
+.snake-veil p { margin: 0; max-width: 28ch; font-size: 16px; }
+
+.snake-pad {
+  width: min(260px, 100%);
+  margin: 18px auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: ". up ." "left . right" ". down .";
+  gap: 8px;
+}
+.snake-pad .btn { height: 56px; padding: 0; font-size: 22px; line-height: 1; display: grid; place-items: center; }
+.snake-pad [data-dir="up"] { grid-area: up; }
+.snake-pad [data-dir="down"] { grid-area: down; }
+.snake-pad [data-dir="left"] { grid-area: left; }
+.snake-pad [data-dir="right"] { grid-area: right; }
+
+.snake-actions { justify-content: center; margin-top: 14px; }
+.snake-actions .btn { min-width: 120px; }
