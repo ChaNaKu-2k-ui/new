@@ -1,11 +1,23 @@
-/* Snake game styles. The LCD colours are fixed on purpose, so the board looks the same in both themes. */
+/* Snake game styles. snake.js sets the board colours for the chosen palette; the rest follows the site theme. */
 :root {
   --snake-lcd: #c2d09c;
   --snake-ink: #1c2514;
   --snake-food: #e0457b;
 }
 
-.snake-stats { margin-bottom: 16px; }
+.snake-game [hidden] { display: none !important; }
+
+/* Score row, with the full-screen button at its corner. */
+.snake-top { display: flex; align-items: stretch; gap: 12px; margin-bottom: 14px; }
+.snake-stats { flex: 1; min-width: 0; grid-template-columns: 1fr 1fr; margin: 0; }
+.snake-fs { flex: none; width: 56px; padding: 0; display: grid; place-items: center; }
+.snake-fs svg { width: 22px; height: 22px; }
+
+/* Chip rows for mode, settings and colours. */
+.snake-choices { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.snake-choices .chip { font-size: 15px; }
+.snake-choices .chip i { box-shadow: 0 0 0 1px var(--line); }
+.snake-modes { margin-bottom: 14px; }
 
 .snake-screen {
   position: relative;
@@ -35,19 +47,43 @@
 .snake-veil h2 { font-size: clamp(30px, 6vw, 40px); }
 .snake-veil p { margin: 0; max-width: 28ch; font-size: 16px; }
 
+/* Arrow buttons: snake.js sets data-pad="on" only on touch screens with the setting switched on. */
 .snake-pad {
-  width: min(260px, 100%);
+  display: none;
+  width: min(300px, 100%);
   margin: 18px auto 0;
-  display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-areas: ". up ." "left . right" ". down .";
-  gap: 8px;
+  gap: 10px;
 }
-.snake-pad .btn { height: 56px; padding: 0; font-size: 22px; line-height: 1; display: grid; place-items: center; }
+.snake-game[data-pad="on"] .snake-pad { display: grid; }
+.snake-pad .btn {
+  height: 74px;
+  padding: 0;
+  font-size: 28px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
 .snake-pad [data-dir="up"] { grid-area: up; }
 .snake-pad [data-dir="down"] { grid-area: down; }
 .snake-pad [data-dir="left"] { grid-area: left; }
 .snake-pad [data-dir="right"] { grid-area: right; }
 
 .snake-actions { justify-content: center; margin-top: 14px; }
-.snake-actions .btn { min-width: 120px; }
+.snake-actions .btn { min-width: 96px; }
+
+.snake-settings {
+  display: grid;
+  gap: 16px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.snake-set .snake-choices { justify-content: flex-start; }
+
+/* Full screen: the panel fills the screen and the rest of the page is hidden by the browser. */
+.snake-game:fullscreen { margin: 0; border: 0; border-radius: 0; box-shadow: none; overflow: auto; }

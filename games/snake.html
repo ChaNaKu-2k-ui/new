@@ -38,10 +38,21 @@
   <p class="lede">Classic snake on a retro LCD screen. Eat the food, grow longer, and avoid the walls and your own tail.</p>
 </div>
 
-<div class="panel">
-  <div class="grid2 snake-stats" aria-live="polite">
-    <div class="stat"><b id="score">0</b><span>score</span></div>
-    <div class="stat"><b id="best">0</b><span>best</span></div>
+<div class="panel snake-game" id="game" data-pad="off">
+  <div class="snake-top">
+    <div class="grid2 snake-stats" aria-live="polite">
+      <div class="stat"><b id="score">0</b><span>score</span></div>
+      <div class="stat"><b id="best">0</b><span>best</span></div>
+    </div>
+    <button class="btn snake-fs" type="button" id="fullscreen" aria-label="Full screen" title="Full screen" hidden>
+      <svg class="ico-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+      <svg class="ico-shrink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
+    </button>
+  </div>
+
+  <div class="snake-choices snake-modes" role="group" aria-label="Game mode">
+    <button class="chip" type="button" data-mode="classic" aria-pressed="true">Classic</button>
+    <button class="chip" type="button" data-mode="endless" aria-pressed="false">Endless</button>
   </div>
 
   <div class="snake-screen" id="screen">
@@ -63,10 +74,43 @@
   <div class="row snake-actions">
     <button class="btn" type="button" id="pause">Pause</button>
     <button class="btn" type="button" id="restart">Restart</button>
+    <button class="btn" type="button" id="settings-toggle" aria-expanded="false" aria-controls="settings">Settings</button>
   </div>
+
+  <section class="snake-settings" id="settings" aria-label="Game settings" hidden>
+    <div class="snake-set">
+      <span class="field-label">Speed</span>
+      <div class="snake-choices" role="group" aria-label="Speed">
+        <button class="chip" type="button" data-speed="slow" aria-pressed="false">Slow</button>
+        <button class="chip" type="button" data-speed="normal" aria-pressed="true">Normal</button>
+        <button class="chip" type="button" data-speed="fast" aria-pressed="false">Fast</button>
+      </div>
+    </div>
+    <div class="snake-set">
+      <span class="field-label">Sound</span>
+      <div class="snake-choices">
+        <button class="chip" type="button" id="sound" aria-pressed="true">On</button>
+      </div>
+    </div>
+    <div class="snake-set">
+      <span class="field-label">Colours</span>
+      <div class="snake-choices" role="group" aria-label="Colours">
+        <button class="chip" type="button" data-palette="green" aria-pressed="true"><i aria-hidden="true"></i>Green</button>
+        <button class="chip" type="button" data-palette="amber" aria-pressed="false"><i aria-hidden="true"></i>Amber</button>
+        <button class="chip" type="button" data-palette="ice" aria-pressed="false"><i aria-hidden="true"></i>Ice</button>
+        <button class="chip" type="button" data-palette="night" aria-pressed="false"><i aria-hidden="true"></i>Night</button>
+      </div>
+    </div>
+    <div class="snake-set" id="pad-setting">
+      <span class="field-label">Arrow buttons (phone only)</span>
+      <div class="snake-choices">
+        <button class="chip" type="button" id="pad-toggle" aria-pressed="true">On</button>
+      </div>
+    </div>
+  </section>
 </div>
 
-<p class="note prose">Arrow keys or W, A, S and D move the snake. Space or P pauses, and R starts again. On a phone, swipe the board or use the arrow buttons. Your best score is kept in this browser only, and nothing is uploaded.</p>
+<p class="note prose">Arrow keys or W, A, S and D move the snake. Space or P pauses, and R starts again. On a phone, swipe the board or use the arrow buttons. Classic ends at the walls, and Endless wraps them. Use Settings for speed, sound and colours. Best scores are kept per mode in this browser only, and nothing is uploaded.</p>
 <section id="related" class="related"></section>
 </main>
 <footer id="site-footer"></footer>
