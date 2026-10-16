@@ -85,5 +85,8 @@
 }
 .snake-set .snake-choices { justify-content: flex-start; }
 
-/* Full screen: the panel fills the screen and the rest of the page is hidden by the browser. */
-.snake-game:fullscreen { margin: 0; border: 0; border-radius: 0; box-shadow: none; overflow: auto; }
+/* Full screen (native, or the fill fallback on phones): the panel covers the screen and the board fits above the arrows. */
+.snake-game:fullscreen, .snake-game.is-fill { margin: 0; border: 0; border-radius: 0; box-shadow: none; overflow: auto; }
+.snake-game.is-fill { position: fixed; inset: 0; z-index: 2000; height: 100vh; height: 100dvh; box-sizing: border-box; }
+.snake-game:fullscreen .snake-screen, .snake-game.is-fill .snake-screen { max-width: min(560px, max(200px, calc(100dvh - 330px))); }
+.snake-game:fullscreen .snake-pad .btn, .snake-game.is-fill .snake-pad .btn { height: 60px; }

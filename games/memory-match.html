@@ -36,10 +36,16 @@
 </div>
 
 <div class="panel gm-game" id="game">
-  <div class="grid2 gm-stats">
-    <div class="stat"><b id="moves">0</b><span>moves</span></div>
-    <div class="stat"><b id="time">0:00</b><span>time</span></div>
-    <div class="stat"><b id="best">–</b><span>best time</span></div>
+  <div class="gm-top">
+    <div class="grid2 gm-stats" aria-live="polite">
+      <div class="stat"><b id="moves">0</b><span>moves</span></div>
+      <div class="stat"><b id="time">0:00</b><span>time</span></div>
+      <div class="stat"><b id="best">–</b><span>best time</span></div>
+    </div>
+    <button class="btn gm-fs" type="button" id="fullscreen" aria-label="Full screen" title="Full screen">
+      <svg class="ico-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+      <svg class="ico-shrink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
+    </button>
   </div>
 
   <div class="gm-choices" role="group" aria-label="Board size">
@@ -50,21 +56,45 @@
 
   <div class="gm-board">
     <div class="mm-grid" id="grid"></div>
+    <div class="gm-veil" id="veil" role="status" hidden>
+      <h2 id="veil-title">Level cleared!</h2>
+      <p id="veil-sub"></p>
+      <button class="btn primary" type="button" id="veil-btn">Next level</button>
+    </div>
   </div>
 
   <p class="gm-status" id="status" role="status"></p>
 
   <div class="row gm-actions">
     <button class="btn primary" type="button" id="new-game">New game</button>
+    <button class="btn" type="button" id="settings-toggle" aria-expanded="false" aria-controls="settings">Settings</button>
   </div>
+
+  <section class="gm-settings" id="settings" aria-label="Game settings" hidden>
+    <div class="gm-set">
+      <span class="field-label">Card faces</span>
+      <div class="gm-choices" role="group" aria-label="Card faces">
+        <button class="chip" type="button" data-faces="fruit" aria-pressed="true">Fruit</button>
+        <button class="chip" type="button" data-faces="animals" aria-pressed="false">Animals</button>
+        <button class="chip" type="button" data-faces="space" aria-pressed="false">Space</button>
+      </div>
+    </div>
+    <div class="gm-set">
+      <span class="field-label">Sound</span>
+      <div class="gm-choices">
+        <button class="chip" type="button" id="sound" aria-pressed="true">On</button>
+      </div>
+    </div>
+  </section>
 </div>
 
-<p class="note prose">Click two cards to flip them. A matching pair stays open, and a mismatch turns back over. Your best time for each board size is kept in this browser only, and nothing is uploaded.</p>
+<p class="note prose">Click two cards to flip them. A matching pair stays open, and a mismatch turns back over. Clear a board size to move on to the next one. Your best time for each board size is kept in this browser only, and nothing is uploaded.</p>
 <section id="related" class="related"></section>
 </main>
 <footer id="site-footer"></footer>
 <script src="../js/tools-data.js"></script>
 <script src="../js/layout.js" data-root="../" defer></script>
+<script src="../js/games/shell.js" defer></script>
 <script src="../js/games/memory-match.js" defer></script>
 </body>
 </html>

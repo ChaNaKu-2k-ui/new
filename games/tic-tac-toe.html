@@ -36,10 +36,16 @@
 </div>
 
 <div class="panel gm-game" id="game">
-  <div class="grid2 gm-stats">
-    <div class="stat"><b id="rec-you">0</b><span>you won</span></div>
-    <div class="stat"><b id="rec-computer">0</b><span>computer won</span></div>
-    <div class="stat"><b id="rec-draws">0</b><span>draws</span></div>
+  <div class="gm-top">
+    <div class="grid2 gm-stats" aria-live="polite">
+      <div class="stat"><b id="rec-you">0</b><span>you won</span></div>
+      <div class="stat"><b id="rec-computer">0</b><span>computer won</span></div>
+      <div class="stat"><b id="rec-draws">0</b><span>draws</span></div>
+    </div>
+    <button class="btn gm-fs" type="button" id="fullscreen" aria-label="Full screen" title="Full screen">
+      <svg class="ico-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+      <svg class="ico-shrink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
+    </button>
   </div>
 
   <div class="gm-choices" role="group" aria-label="Difficulty">
@@ -49,21 +55,44 @@
 
   <div class="gm-board ttt-wrap">
     <div class="ttt-board" id="board" role="group" aria-label="Tic-tac-toe board"></div>
+    <div class="gm-veil" id="veil" role="status" hidden>
+      <h2 id="veil-title">You win!</h2>
+      <p id="veil-sub"></p>
+      <button class="btn primary" type="button" id="veil-btn">Next round</button>
+    </div>
   </div>
 
   <p class="gm-status" id="status" role="status"></p>
 
   <div class="row gm-actions">
     <button class="btn primary" type="button" id="new-round">New round</button>
+    <button class="btn" type="button" id="settings-toggle" aria-expanded="false" aria-controls="settings">Settings</button>
   </div>
+
+  <section class="gm-settings" id="settings" aria-label="Game settings" hidden>
+    <div class="gm-set">
+      <span class="field-label">Who goes first (from the next round)</span>
+      <div class="gm-choices" role="group" aria-label="Who goes first">
+        <button class="chip" type="button" data-first="you" aria-pressed="true">You</button>
+        <button class="chip" type="button" data-first="computer" aria-pressed="false">Computer</button>
+      </div>
+    </div>
+    <div class="gm-set">
+      <span class="field-label">Sound</span>
+      <div class="gm-choices">
+        <button class="chip" type="button" id="sound" aria-pressed="true">On</button>
+      </div>
+    </div>
+  </section>
 </div>
 
-<p class="note prose">You are X and always go first. Easy plays random moves. Hard looks ahead, so it never loses, and the best you can get against it is a draw. Your record is kept in this browser only, and nothing is uploaded.</p>
+<p class="note prose">You play first as X unless you change it in Settings. Easy plays random moves. Hard looks ahead, so it never loses, and the best you can get against it is a draw. Your record is kept in this browser only, and nothing is uploaded.</p>
 <section id="related" class="related"></section>
 </main>
 <footer id="site-footer"></footer>
 <script src="../js/tools-data.js"></script>
 <script src="../js/layout.js" data-root="../" defer></script>
+<script src="../js/games/shell.js" defer></script>
 <script src="../js/games/tic-tac-toe.js" defer></script>
 </body>
 </html>

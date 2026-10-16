@@ -3,13 +3,18 @@
   "use strict";
 
   var SIZE = 4;
-  var BEST_KEY = "cnk-2048-best";
+  var BEST_KEY = "cnk-2048-best", SETTINGS_KEY = "cnk-2048-settings";
   var KEYS = { ArrowUp: "up", w: "up", ArrowDown: "down", s: "down", ArrowLeft: "left", a: "left", ArrowRight: "right", d: "right" };
+  var has = function (obj, key) { return Object.prototype.hasOwnProperty.call(obj, key); };
 
   var $ = function (id) { return document.getElementById(id); };
-  var boardEl = $("board"), scoreEl = $("score"), bestEl = $("best");
+  var $all = function (sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); };
+  var panel = $("game"), boardEl = $("board"), scoreEl = $("score"), bestEl = $("best"), statusEl = $("status");
   var veil = $("veil"), veilTitle = $("veil-title"), veilSub = $("veil-sub"), veilBtn = $("veil-btn"), newBtn = $("new-game");
+  var fsBtn = $("fullscreen"), settingsBtn = $("settings-toggle"), settingsBox = $("settings");
+  var soundBtn = $("sound"), padBtn = $("pad-toggle"), padSetting = $("pad-setting");
 
+  var settings = CNKGame.load(SETTINGS_KEY, { sound: true, pad: true });
   var cells = [];                    /* 16 numbers, row by row. 0 is an empty cell. */
   var cellEls = [];
   var score = 0, best = loadBest();
@@ -22,6 +27,7 @@
   function saveBest() {
     try { localStorage.setItem(BEST_KEY, String(best)); } catch (e) { /* storage blocked: keep playing */ }
   }
+  function sound(freq, ms, type) { CNKGame.beep(settings.sound, freq, ms, type); }
 
   for (var n = 0; n < SIZE * SIZE; n++) {
     var el = document.createElement("div");
@@ -106,10 +112,10 @@
     bestEl.textContent = String(best);
   }
 
-  function showVeil(title, sub, label) {
+  function showVeil(title, sub, buttonText) {
     veilTitle.textContent = title;
     veilSub.textContent = sub;
-    veilBtn.textContent = label;
+    veilBtn.textContent = buttonText;
     veil.hidden = false;
   }
 
@@ -123,13 +129,17 @@
     render(at);
     if (!keptGoing && cells.indexOf(2048) !== -1) {
       blocked = true;
+      sound(880, 240, "triangle");
       showVeil("You reached 2048!", "Keep going to see how far you can get, or start a new game.", "Keep going");
       return;
     }
     if (!canMove()) {
       over = true;
+      sound(196, 360, "sawtooth");
       showVeil("Game over", "Score " + score + ". Press New game to try again.", "New game");
+      return;
     }
+    sound(330, 45, "triangle");
   }
 
   function newGame() {
@@ -142,6 +152,23 @@
     render(at);
   }
 
+  /* The hint under the board says how to play on this screen. */
+  function hint() {
+    if (!CNKGame.touch) return "Use the arrow keys or W, A, S and D, or swipe on the board.";
+    return settings.pad ? "Swipe the board or use the arrow buttons." : "Swipe the board to slide the tiles.";
+  }
+  function markSwitch(btn, on) {
+    btn.textContent = on ? "On" : "Off";
+    btn.setAttribute("aria-pressed", String(on));
+  }
+  function applySettings() {
+    panel.setAttribute("data-pad", settings.pad && CNKGame.touch ? "on" : "off");   /* arrow buttons: touch screens, if switched on */
+    padSetting.hidden = !CNKGame.touch;
+    markSwitch(soundBtn, settings.sound);
+    markSwitch(padBtn, settings.pad);
+    statusEl.textContent = hint();
+  }
+
   veilBtn.addEventListener("click", function () {
     if (over) { newGame(); return; }
     keptGoing = true;
@@ -150,13 +177,36 @@
   });
   newBtn.addEventListener("click", newGame);
 
-  function has(obj, key) { return Object.prototype.hasOwnProperty.call(obj, key); }
+  soundBtn.addEventListener("click", function () {
+    settings.sound = !settings.sound;
+    CNKGame.save(SETTINGS_KEY, settings);
+    applySettings();
+    sound(660, 80, "square");
+  });
+  padBtn.addEventListener("click", function () {
+    settings.pad = !settings.pad;
+    CNKGame.save(SETTINGS_KEY, settings);
+    applySettings();
+  });
+  settingsBtn.addEventListener("click", function () {
+    var open = settingsBox.hidden;
+    settingsBox.hidden = !open;
+    settingsBtn.setAttribute("aria-expanded", String(open));
+    settingsBtn.textContent = open ? "Close settings" : "Settings";
+  });
+
+  CNKGame.fullscreen(panel, fsBtn);
+
   window.addEventListener("keydown", function (e) {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     var key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
     if (!has(KEYS, key)) return;
     e.preventDefault();
     play(KEYS[key]);
+  });
+
+  $all("[data-dir]").forEach(function (btn) {
+    btn.addEventListener("click", function () { play(btn.getAttribute("data-dir")); });
   });
 
   /* Swipe on the board. A short tap does nothing. */
@@ -175,5 +225,6 @@
   }, { passive: true });
   boardEl.addEventListener("touchcancel", function () { swipeFrom = null; });
 
+  applySettings();
   newGame();
 })();

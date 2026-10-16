@@ -21,7 +21,7 @@
   };
   var BEST_KEY = "cnk-snake-best", SETTINGS_KEY = "cnk-snake-settings";
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var touchDevice = window.matchMedia("(pointer: coarse)").matches;
+  var touchDevice = CNKGame.touch;
 
   var $ = function (id) { return document.getElementById(id); };
   var $all = function (sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); };
@@ -302,20 +302,9 @@
   padBtn.addEventListener("click", function () { choose("pad", !settings.pad); });
   settingsBtn.addEventListener("click", function () { openSettings(settingsBox.hidden); });
 
-  /* ---- full screen, where the browser allows it ---- */
+  /* ---- full screen: native where the browser allows it, otherwise the game fills the window ---- */
 
-  fsBtn.hidden = !(panel.requestFullscreen && document.fullscreenEnabled);
-  fsBtn.addEventListener("click", function () {
-    if (document.fullscreenElement) quiet(document.exitFullscreen());
-    else quiet(panel.requestFullscreen());
-  });
-  document.addEventListener("fullscreenchange", function () {
-    var on = document.fullscreenElement === panel;
-    fsBtn.setAttribute("aria-label", on ? "Exit full screen" : "Full screen");
-    fsBtn.title = on ? "Exit full screen" : "Full screen";
-    fsBtn.querySelector(".ico-expand").hidden = on;
-    fsBtn.querySelector(".ico-shrink").hidden = !on;
-  });
+  CNKGame.fullscreen(panel, fsBtn);
 
   /* ---- input ---- */
 

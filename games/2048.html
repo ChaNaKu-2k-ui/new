@@ -35,10 +35,16 @@
   <p class="lede">Slide the number tiles and merge equal ones. Can you reach 2048?</p>
 </div>
 
-<div class="panel gm-game" id="game">
-  <div class="grid2 gm-stats gm-two">
-    <div class="stat"><b id="score">0</b><span>score</span></div>
-    <div class="stat"><b id="best">0</b><span>best</span></div>
+<div class="panel gm-game" id="game" data-pad="off">
+  <div class="gm-top">
+    <div class="grid2 gm-stats gm-two" aria-live="polite">
+      <div class="stat"><b id="score">0</b><span>score</span></div>
+      <div class="stat"><b id="best">0</b><span>best</span></div>
+    </div>
+    <button class="btn gm-fs" type="button" id="fullscreen" aria-label="Full screen" title="Full screen">
+      <svg class="ico-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+      <svg class="ico-shrink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
+    </button>
   </div>
 
   <div class="gm-board">
@@ -50,19 +56,43 @@
     </div>
   </div>
 
-  <p class="gm-status">Use the arrow keys or W, A, S and D, or swipe on the board.</p>
+  <p class="gm-status" id="status" role="status">Use the arrow keys or W, A, S and D, or swipe on the board.</p>
+
+  <nav class="gm-pad" aria-label="Direction buttons">
+    <button class="btn" type="button" data-dir="up" aria-label="Up">&#9650;</button>
+    <button class="btn" type="button" data-dir="left" aria-label="Left">&#9664;</button>
+    <button class="btn" type="button" data-dir="down" aria-label="Down">&#9660;</button>
+    <button class="btn" type="button" data-dir="right" aria-label="Right">&#9654;</button>
+  </nav>
 
   <div class="row gm-actions">
     <button class="btn primary" type="button" id="new-game">New game</button>
+    <button class="btn" type="button" id="settings-toggle" aria-expanded="false" aria-controls="settings">Settings</button>
   </div>
+
+  <section class="gm-settings" id="settings" aria-label="Game settings" hidden>
+    <div class="gm-set">
+      <span class="field-label">Sound</span>
+      <div class="gm-choices">
+        <button class="chip" type="button" id="sound" aria-pressed="true">On</button>
+      </div>
+    </div>
+    <div class="gm-set" id="pad-setting">
+      <span class="field-label">Arrow buttons (phone only)</span>
+      <div class="gm-choices">
+        <button class="chip" type="button" id="pad-toggle" aria-pressed="true">On</button>
+      </div>
+    </div>
+  </section>
 </div>
 
-<p class="note prose">Each move slides every tile in one direction. Two equal tiles that touch merge into one with double the value, and a new tile appears after every move. Your best score is kept in this browser only, and nothing is uploaded.</p>
+<p class="note prose">Each move slides every tile in one direction. Two equal tiles that touch merge into one with double the value, and a new tile appears after every move. On a phone, swipe the board or use the arrow buttons. Your best score is kept in this browser only, and nothing is uploaded.</p>
 <section id="related" class="related"></section>
 </main>
 <footer id="site-footer"></footer>
 <script src="../js/tools-data.js"></script>
 <script src="../js/layout.js" data-root="../" defer></script>
+<script src="../js/games/shell.js" defer></script>
 <script src="../js/games/2048.js" defer></script>
 </body>
 </html>

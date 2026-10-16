@@ -112,3 +112,49 @@
 .ttt-cell.is-x { color: var(--gold); }
 .ttt-cell.is-win { background: color-mix(in srgb, var(--gold) 25%, var(--surface-2)); }
 .ttt-cell:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+/* Top row: the stats, with the full-screen button at its corner. */
+.gm-top { display: flex; align-items: stretch; gap: 12px; margin-bottom: 14px; }
+.gm-top .gm-stats { flex: 1; min-width: 0; margin: 0; }
+.gm-fs { flex: none; width: 56px; padding: 0; display: grid; place-items: center; }
+.gm-fs svg { width: 22px; height: 22px; }
+
+/* Settings, opened from the Settings button under the board. */
+.gm-settings { display: grid; gap: 16px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+.gm-set .gm-choices { justify-content: flex-start; margin: 0; }
+.gm-veil h2 { font-size: clamp(30px, 6vw, 40px); }
+
+/* Arrow buttons (2048): shown only on touch screens with the setting switched on. */
+.gm-pad {
+  display: none;
+  width: min(300px, 100%);
+  margin: 18px auto 0;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: ". up ." "left . right" ". down .";
+  gap: 10px;
+}
+.gm-game[data-pad="on"] .gm-pad { display: grid; }
+.gm-pad .btn {
+  height: 74px;
+  padding: 0;
+  font-size: 28px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.gm-pad [data-dir="up"] { grid-area: up; }
+.gm-pad [data-dir="down"] { grid-area: down; }
+.gm-pad [data-dir="left"] { grid-area: left; }
+.gm-pad [data-dir="right"] { grid-area: right; }
+
+/* Full screen: the native API where the browser has it, otherwise the game fills the window. */
+.gm-game:fullscreen, .gm-game.is-fill { margin: 0; border: 0; border-radius: 0; box-shadow: none; overflow: auto; }
+.gm-game.is-fill { position: fixed; inset: 0; z-index: 2000; height: 100vh; height: 100dvh; box-sizing: border-box; }
+.gm-game:fullscreen .gm-board, .gm-game.is-fill .gm-board { max-width: min(420px, max(200px, calc(100dvh - 330px))); }
+.gm-game:fullscreen .gm-pad .btn, .gm-game.is-fill .gm-pad .btn { height: 60px; }
+
+/* Taps on the cards should not wait for the double-tap zoom. */
+.mm-card, .ttt-cell { touch-action: manipulation; }

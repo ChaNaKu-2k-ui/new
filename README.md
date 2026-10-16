@@ -24,7 +24,7 @@ Cloudflare Pages: build command empty, output directory `/`.
 
 1. `js/games-data.js` එකට අලුත් line එකක් දාන්න (`slug`, `name`, `tag`, `desc`, `icon`).
 2. `games/snake.html` copy කරලා `games/<slug>.html` කරන්න. Title, canonical link, script path (`js/games/<slug>.js`) වෙනස් කරන්න.
-3. `js/games/<slug>.js` ලියන්න.
+3. `js/games/<slug>.js` ලියන්න. Settings, full screen, sound සහ phone arrow buttons වලට `js/games/shell.js` (`window.CNKGame`) use කරන්න. ඒ script එක game script එකට කලින් `<script defer>` කරලා load කරන්න. Settings සහ best scores `localStorage` වල `cnk-<slug>-…` keys යටතේ තියාගන්න.
 4. `sitemap.xml` එකට URL එක add කරන්න.
 
 ## Cloudflare files
