@@ -1,0 +1,114 @@
+/* Shared styles for the board games: Memory match, 2048 and Tic-tac-toe. Snake keeps its own file. */
+.gm-game [hidden] { display: none !important; }
+
+.gm-stats { grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 0 0 14px; }
+.gm-stats .stat { padding: 10px 12px; }
+.gm-stats .stat b { font-size: clamp(22px, 6vw, 30px); }
+.gm-stats.gm-two { grid-template-columns: repeat(2, 1fr); }
+
+.gm-choices { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 14px; }
+.gm-choices .chip { font-size: 15px; }
+
+.gm-board { position: relative; width: 100%; max-width: 420px; margin-inline: auto; }
+.gm-status { min-height: 1.5em; margin: 14px 0 0; text-align: center; color: var(--muted); }
+.gm-actions { justify-content: center; margin-top: 14px; }
+.gm-actions .btn { min-width: 120px; }
+
+.gm-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 12px;
+  padding: 18px;
+  text-align: center;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+}
+.gm-veil p { margin: 0; max-width: 30ch; }
+
+/* Memory match */
+.mm-grid { display: grid; grid-template-columns: repeat(var(--cols, 4), 1fr); gap: 8px; }
+.mm-card {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: clamp(20px, 6vw, 32px);
+  line-height: 1;
+  cursor: pointer;
+  transition: background .2s ease, border-color .2s ease;
+}
+.mm-card:not(.is-open)::before { content: "?"; color: var(--muted); font-family: var(--font-head); font-weight: 800; font-size: 0.8em; }
+.mm-card:not(.is-open):hover { background: var(--line); }
+.mm-card.is-open { background: var(--surface); }
+.mm-card.is-match { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 22%, var(--surface)); cursor: default; }
+.mm-card:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+/* 2048 */
+.t2048-board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  aspect-ratio: 1 / 1;
+  padding: 10px;
+  border-radius: 12px;
+  background: var(--surface-2);
+  touch-action: none;
+}
+.t2048-cell {
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+  color: var(--text);
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: clamp(24px, 8vw, 40px);
+  line-height: 1;
+}
+.t2048-cell.v2 { background: #eee4da; color: #776e65; }
+.t2048-cell.v4 { background: #ede0c8; color: #776e65; }
+.t2048-cell.v8 { background: #f2b179; color: #f9f6f2; }
+.t2048-cell.v16 { background: #f59563; color: #f9f6f2; }
+.t2048-cell.v32 { background: #f67c5f; color: #f9f6f2; }
+.t2048-cell.v64 { background: #f65e3b; color: #f9f6f2; }
+.t2048-cell.v128 { background: #edcf72; color: #f9f6f2; font-size: clamp(20px, 6vw, 32px); }
+.t2048-cell.v256 { background: #edcc61; color: #f9f6f2; font-size: clamp(20px, 6vw, 32px); }
+.t2048-cell.v512 { background: #edc850; color: #f9f6f2; font-size: clamp(20px, 6vw, 32px); }
+.t2048-cell.v1024 { background: #edc53f; color: #f9f6f2; font-size: clamp(16px, 5vw, 26px); }
+.t2048-cell.v2048 { background: #edc22e; color: #f9f6f2; font-size: clamp(16px, 5vw, 26px); }
+.t2048-cell.vbig { background: #3c3a32; color: #f9f6f2; font-size: clamp(14px, 4.4vw, 22px); }
+.t2048-cell.pop { animation: t2048-pop .16s ease-out; }
+@keyframes t2048-pop { from { transform: scale(.7); } to { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .t2048-cell.pop { animation: none; } }
+
+/* Tic-tac-toe */
+.ttt-wrap { max-width: 340px; }
+.ttt-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; aspect-ratio: 1 / 1; }
+.ttt-cell {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--text);
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: clamp(44px, 18vw, 76px);
+  line-height: 1;
+  cursor: pointer;
+}
+.ttt-cell:not(:disabled):hover { background: var(--line); }
+.ttt-cell:disabled { cursor: default; }
+.ttt-cell.is-x { color: var(--gold); }
+.ttt-cell.is-win { background: color-mix(in srgb, var(--gold) 25%, var(--surface-2)); }
+.ttt-cell:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }

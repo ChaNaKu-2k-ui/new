@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tic-tac-toe vs computer: free game | ChaNaKu</title>
+<meta name="description" content="Play tic-tac-toe against the computer in your browser, on easy or hard. Nothing is uploaded.">
+<link rel="canonical" href="https://chanaku.pages.dev/games/tic-tac-toe">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ChaNaKu">
+<meta property="og:title" content="Tic-tac-toe vs computer: free game | ChaNaKu">
+<meta property="og:description" content="Play tic-tac-toe against the computer in your browser, on easy or hard.">
+<meta property="og:url" content="https://chanaku.pages.dev/games/tic-tac-toe">
+<meta property="og:image" content="https://chanaku.pages.dev/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#23272b">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800&display=swap">
+<link rel="stylesheet" href="../css/site.css">
+<link rel="stylesheet" href="../css/games.css">
+<script src="../js/theme.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Tic-tac-toe","url":"https://chanaku.pages.dev/games/tic-tac-toe","genre":"Board","gamePlatform":"Web browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<main id="main" class="wrap">
+<div class="page-head cat-game">
+  <a class="back" href="../games.html">All games</a>
+  <div class="title-row"><span class="ico big"><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M9 3v18M15 3v18M3 9h18M3 15h18'/></svg></span><h1>Tic-tac-toe</h1></div>
+  <span class="catchip">Games</span>
+  <p class="lede">Get three in a row before the computer does.</p>
+</div>
+
+<div class="panel gm-game" id="game">
+  <div class="grid2 gm-stats">
+    <div class="stat"><b id="rec-you">0</b><span>you won</span></div>
+    <div class="stat"><b id="rec-computer">0</b><span>computer won</span></div>
+    <div class="stat"><b id="rec-draws">0</b><span>draws</span></div>
+  </div>
+
+  <div class="gm-choices" role="group" aria-label="Difficulty">
+    <button class="chip" type="button" data-level="easy" aria-pressed="false">Easy</button>
+    <button class="chip" type="button" data-level="hard" aria-pressed="true">Hard</button>
+  </div>
+
+  <div class="gm-board ttt-wrap">
+    <div class="ttt-board" id="board" role="group" aria-label="Tic-tac-toe board"></div>
+  </div>
+
+  <p class="gm-status" id="status" role="status"></p>
+
+  <div class="row gm-actions">
+    <button class="btn primary" type="button" id="new-round">New round</button>
+  </div>
+</div>
+
+<p class="note prose">You are X and always go first. Easy plays random moves. Hard looks ahead, so it never loses, and the best you can get against it is a draw. Your record is kept in this browser only, and nothing is uploaded.</p>
+<section id="related" class="related"></section>
+</main>
+<footer id="site-footer"></footer>
+<script src="../js/tools-data.js"></script>
+<script src="../js/layout.js" data-root="../" defer></script>
+<script src="../js/games/tic-tac-toe.js" defer></script>
+</body>
+</html>
