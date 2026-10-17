@@ -181,20 +181,26 @@
 
     igCurrentUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=${model}&width=${w}&height=${h}&seed=${seed}&nologo=true&safe=false`;
 
-    const tmp = new Image();
-    tmp.onload = () => {
-      img.src = igCurrentUrl;
-      img.classList.add('loaded');
-      status.textContent = '✓ Done';
-      document.getElementById('ig-dl-wrap').classList.add('visible');
-      btn.disabled = false;
-    };
-    tmp.onerror = () => {
-      status.className = 'error';
-      status.textContent = 'Generation failed — try a different prompt or model.';
-      btn.disabled = false;
-    };
-    tmp.src = igCurrentUrl;
+    fetch(igCurrentUrl)
+      .then(res => {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.blob();
+      })
+      .then(blob => {
+        const blobUrl = URL.createObjectURL(blob);
+        img.onload = () => {
+          status.textContent = '✓ Done';
+          document.getElementById('ig-dl-wrap').classList.add('visible');
+          btn.disabled = false;
+        };
+        img.src = blobUrl;
+        img.classList.add('loaded');
+      })
+      .catch(() => {
+        status.className = 'error';
+        status.textContent = 'Generation failed — try a different prompt or model.';
+        btn.disabled = false;
+      });
   }
 
   async function igDownload() {
