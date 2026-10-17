@@ -181,39 +181,26 @@
 
     igCurrentUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=${model}&width=${w}&height=${h}&seed=${seed}&nologo=true&safe=false`;
 
-    fetch(igCurrentUrl)
-      .then(res => {
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        return res.blob();
-      })
-      .then(blob => {
-        const blobUrl = URL.createObjectURL(blob);
-        img.onload = () => {
-          status.textContent = '✓ Done';
-          document.getElementById('ig-dl-wrap').classList.add('visible');
-          btn.disabled = false;
-        };
-        img.src = blobUrl;
-        img.classList.add('loaded');
-      })
-      .catch(() => {
-        status.className = 'error';
-        status.textContent = 'Generation failed — try a different prompt or model.';
-        btn.disabled = false;
-      });
+    img.onload = function() {
+      img.classList.add('loaded');
+      status.textContent = '✓ Done';
+      document.getElementById('ig-dl-wrap').classList.add('visible');
+      btn.disabled = false;
+    };
+    img.onerror = function() {
+      status.className = 'error';
+      status.textContent = 'Generation failed — try a different prompt or model.';
+      btn.disabled = false;
+    };
+    img.src = igCurrentUrl;
   }
 
-  async function igDownload() {
-    try {
-      const res = await fetch(igCurrentUrl);
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = 'chanaku-image.png'; a.click();
-      URL.revokeObjectURL(url);
-    } catch(e) {
-      window.open(igCurrentUrl, '_blank');
-    }
+  function igDownload() {
+    const a = document.createElement('a');
+    a.href = igCurrentUrl;
+    a.download = 'chanaku-image.png';
+    a.target = '_blank';
+    a.click();
   }
 
   document.addEventListener('DOMContentLoaded', () => {
