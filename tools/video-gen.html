@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="https://5gvci.com/act/files/tag.min.js?z=12043134" data-cfasync="false" async></script>
+<script>(function(s){s.dataset.zone='12043137',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<script>(function(s){s.dataset.zone='12043136',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI video generator — free, no sign-up | ChaNaKu</title>
+<meta name="description" content="Type a prompt and generate a free AI video in seconds. Powered by Wan 2.1. No account needed.">
+<link rel="canonical" href="https://chanaku.pages.dev/tools/video-gen">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ChaNaKu">
+<meta property="og:title" content="AI video generator — free, no sign-up | ChaNaKu">
+<meta property="og:description" content="Type a prompt and generate a free AI video in seconds. Powered by Wan 2.1. No account needed.">
+<meta property="og:url" content="https://chanaku.pages.dev/tools/video-gen">
+<meta property="og:image" content="https://chanaku.pages.dev/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#23272b">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800&display=swap">
+<link rel="stylesheet" href="../css/site.css">
+<script src="../js/theme.js"></script>
+<style>
+/* ── video gen page styles ── */
+.vg-wrap { display: flex; flex-direction: column; gap: 20px; }
+
+/* prompt area */
+.vg-prompt-area { display: flex; flex-direction: column; gap: 10px; }
+.vg-prompt-area textarea {
+  min-height: 90px;
+  resize: vertical;
+  font-size: 1rem;
+}
+
+/* options row */
+.vg-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+}
+.vg-options .field { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 140px; }
+.vg-options label { font-size: .8rem; font-weight: 600; color: var(--c-muted); text-transform: uppercase; letter-spacing: .04em; }
+.vg-options select {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--c-border);
+  background: var(--c-surface);
+  color: var(--c-text);
+  font-size: .95rem;
+  cursor: pointer;
+}
+
+/* generate btn */
+.btn-generate {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 28px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #38bdf8, #818cf8);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity .15s, transform .1s;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+.btn-generate:hover { opacity: .9; }
+.btn-generate:active { transform: scale(.97); }
+.btn-generate:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.btn-generate svg { width: 18px; height: 18px; }
+
+/* status block */
+.vg-status {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+}
+.vg-status.active { display: flex; }
+
+.vg-progress-bar {
+  height: 6px;
+  border-radius: 99px;
+  background: var(--c-border);
+  overflow: hidden;
+}
+.vg-progress-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #38bdf8, #818cf8);
+  width: 0%;
+  transition: width .5s ease;
+}
+
+.vg-status-text {
+  font-size: .9rem;
+  color: var(--c-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vg-spinner {
+  width: 14px; height: 14px;
+  border: 2px solid var(--c-border);
+  border-top-color: #38bdf8;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* video output */
+.vg-result { display: none; flex-direction: column; gap: 12px; }
+.vg-result.active { display: flex; }
+.vg-result video {
+  width: 100%;
+  max-width: 700px;
+  border-radius: 12px;
+  background: #000;
+  border: 1px solid var(--c-border);
+}
+.vg-result-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* error */
+.vg-error {
+  display: none;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: rgba(239,68,68,.08);
+  border: 1px solid rgba(239,68,68,.25);
+  color: #f87171;
+  font-size: .9rem;
+}
+.vg-error.active { display: block; }
+
+/* tips chips */
+.prompt-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 4px;
+}
+.chip {
+  padding: 5px 12px;
+  border-radius: 99px;
+  border: 1px solid var(--c-border);
+  background: var(--c-surface);
+  font-size: .8rem;
+  cursor: pointer;
+  color: var(--c-muted);
+  transition: border-color .15s, color .15s;
+  white-space: nowrap;
+}
+.chip:hover { border-color: #38bdf8; color: #38bdf8; }
+
+/* info note */
+.vg-note {
+  font-size: .82rem;
+  color: var(--c-muted);
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  line-height: 1.5;
+}
+.vg-note svg { width: 14px; height: 14px; margin-top: 2px; flex-shrink: 0; color: #38bdf8; }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<main id="main" class="wrap">
+
+<div class="page-head cat-image">
+  <a class="back" href="../index.html#tools">All tools</a>
+  <div class="title-row">
+    <span class="ico big">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polygon points="5 3 19 12 5 21 5 3"/>
+      </svg>
+    </span>
+    <h1>AI video generator</h1>
+  </div>
+  <span class="catchip">Image</span>
+  <p class="lede">Describe a scene and generate a short AI video — free, no account needed.</p>
+</div>
+
+<div class="panel vg-wrap">
+
+  <!-- prompt -->
+  <div class="vg-prompt-area">
+    <label for="vg-prompt">Prompt</label>
+    <textarea id="vg-prompt" placeholder="A cinematic shot of a misty mountain at sunrise, golden light streaming through the clouds, 4K" spellcheck="false" maxlength="500"></textarea>
+    <div class="prompt-chips" id="chips"></div>
+  </div>
+
+  <!-- options -->
+  <div class="vg-options">
+    <div class="field">
+      <label for="vg-size">Resolution</label>
+      <select id="vg-size">
+        <option value="1280*720">1280×720 — Landscape HD</option>
+        <option value="720*1280">720×1280 — Portrait (Reels/TikTok)</option>
+        <option value="960*960">960×960 — Square</option>
+        <option value="1088*832">1088×832 — Widescreen</option>
+        <option value="832*1088">832×1088 — Tall portrait</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="vg-seed">Seed</label>
+      <select id="vg-seed">
+        <option value="-1">Random</option>
+        <option value="42">42</option>
+        <option value="1234">1234</option>
+        <option value="9999">9999</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- generate button -->
+  <button class="btn-generate" id="vg-btn" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+    Generate video
+  </button>
+
+  <!-- status -->
+  <div class="vg-status" id="vg-status">
+    <div class="vg-progress-bar"><div class="vg-progress-fill" id="vg-fill"></div></div>
+    <div class="vg-status-text"><div class="vg-spinner"></div><span id="vg-msg">Connecting to AI model…</span></div>
+  </div>
+
+  <!-- error -->
+  <div class="vg-error" id="vg-error"></div>
+
+  <!-- result -->
+  <div class="vg-result" id="vg-result">
+    <label>Generated video</label>
+    <video id="vg-video" controls playsinline loop></video>
+    <div class="vg-result-actions">
+      <a class="btn" id="vg-download" download="chanaku-video.mp4">Download MP4</a>
+      <button class="btn" id="vg-again" type="button">Generate again</button>
+    </div>
+  </div>
+
+  <!-- note -->
+  <p class="vg-note">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+    Powered by <strong>Wan 2.1</strong> running on Hugging Face. Generation takes 1–5 minutes depending on queue. Videos are ~5 seconds. No data is stored — prompts go directly to the model.
+  </p>
+
+</div>
+
+<section id="related" class="related"></section>
+</main>
+<footer id="site-footer"></footer>
+<script src="../js/tools-data.js"></script>
+<script src="../js/layout.js" data-root="../" defer></script>
+
+<script type="module">
+// ── Wan 2.1 via @gradio/client ──────────────────────────────────────────────
+import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client@1.4.0/dist/index.min.js";
+
+const SPACE = "Wan-AI/Wan2.1";
+
+const promptEl  = document.getElementById("vg-prompt");
+const sizeEl    = document.getElementById("vg-size");
+const seedEl    = document.getElementById("vg-seed");
+const btn       = document.getElementById("vg-btn");
+const statusEl  = document.getElementById("vg-status");
+const fillEl    = document.getElementById("vg-fill");
+const msgEl     = document.getElementById("vg-msg");
+const errorEl   = document.getElementById("vg-error");
+const resultEl  = document.getElementById("vg-result");
+const videoEl   = document.getElementById("vg-video");
+const dlEl      = document.getElementById("vg-download");
+const againBtn  = document.getElementById("vg-again");
+
+// prompt suggestion chips
+const CHIPS = [
+  "Cinematic drone shot over a neon city at night, rain reflections",
+  "Slow motion waves crashing on a tropical beach, golden hour",
+  "A cat sitting on a windowsill watching snowfall outside",
+  "Timelapse of clouds rolling over mountains, sunrise",
+  "Close-up of a campfire crackling, sparks floating upward",
+  "A sports car drifting on a wet road, cinematic slow motion",
+];
+const chipsEl = document.getElementById("chips");
+CHIPS.forEach(c => {
+  const chip = document.createElement("button");
+  chip.className = "chip";
+  chip.type = "button";
+  chip.textContent = c.length > 50 ? c.slice(0, 48) + "…" : c;
+  chip.title = c;
+  chip.onclick = () => { promptEl.value = c; promptEl.focus(); };
+  chipsEl.appendChild(chip);
+});
+
+function setStatus(msg, pct) {
+  statusEl.classList.add("active");
+  msgEl.textContent = msg;
+  fillEl.style.width = pct + "%";
+}
+function showError(msg) {
+  errorEl.textContent = msg;
+  errorEl.classList.add("active");
+  statusEl.classList.remove("active");
+  btn.disabled = false;
+  btn.textContent = "Try again";
+  // re-add icon
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> Try again`;
+}
+function reset() {
+  statusEl.classList.remove("active");
+  resultEl.classList.remove("active");
+  errorEl.classList.remove("active");
+  fillEl.style.width = "0%";
+  btn.disabled = false;
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> Generate video`;
+}
+
+againBtn.onclick = reset;
+
+btn.onclick = async () => {
+  const prompt = promptEl.value.trim();
+  if (!prompt) { promptEl.focus(); return; }
+
+  // reset state
+  errorEl.classList.remove("active");
+  resultEl.classList.remove("active");
+  btn.disabled = true;
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation:spin .7s linear infinite"><polygon points="5 3 19 12 5 21 5 3"/></svg> Generating…`;
+
+  setStatus("Connecting to Wan 2.1…", 5);
+
+  try {
+    const client = await Client.connect(SPACE);
+    setStatus("In queue — waiting for a GPU slot…", 15);
+
+    const result = await client.predict("/t2v_generation_async", {
+      prompt,
+      size: sizeEl.value,
+      watermark_wan: false,
+      seed: parseInt(seedEl.value),
+    });
+
+    const waitSec = result.data[1] ?? 60;
+    setStatus(`Generating… estimated wait: ~${Math.round(waitSec)}s`, 30);
+
+    // poll status_refresh until video arrives
+    let attempts = 0;
+    const maxAttempts = 180; // 15 min max
+    while (attempts < maxAttempts) {
+      await new Promise(r => setTimeout(r, 5000));
+      attempts++;
+
+      const poll = await client.predict("/status_refresh", {});
+      const [videoData, costTime, estWait, progress] = poll.data;
+
+      const pct = Math.min(90, 30 + (progress || 0) * 0.6);
+      const waitLeft = estWait > 0 ? ` (~${Math.round(estWait)}s left)` : "";
+      setStatus(`Generating video${waitLeft}…`, pct);
+
+      if (videoData && videoData.url) {
+        // done
+        setStatus("Done! Loading video…", 98);
+        videoEl.src = videoData.url;
+        dlEl.href = videoData.url;
+        videoEl.onloadeddata = () => {
+          setStatus("", 100);
+          statusEl.classList.remove("active");
+          resultEl.classList.add("active");
+          btn.disabled = false;
+          btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> Generate video`;
+        };
+        break;
+      }
+    }
+    if (attempts >= maxAttempts) showError("Timed out — the model is too busy. Try again in a few minutes.");
+
+  } catch (err) {
+    console.error(err);
+    showError("Could not connect to the AI model. The server may be busy — please try again in a moment.");
+  }
+};
+</script>
+</body>
+</html>
