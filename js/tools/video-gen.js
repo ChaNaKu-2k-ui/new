@@ -1,6 +1,5 @@
-import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client@1.4.0/dist/index.min.js";
-
-const SPACE = "Wan-AI/Wan2.1";
+// AI Video Generator — Wan 2.1 via raw Gradio 4 REST API (no npm package)
+const BASE = "https://wan-ai-wan2-1.hf.space/gradio_api/call";
 
 const promptEl = document.getElementById("vg-prompt");
 const sizeEl   = document.getElementById("vg-size");
@@ -44,7 +43,6 @@ function setStatus(msg, pct) {
   msgEl.textContent = msg;
   fillEl.style.width = pct + "%";
 }
-
 function showError(msg) {
   errorEl.textContent = msg;
   errorEl.classList.add("active");
@@ -52,7 +50,6 @@ function showError(msg) {
   btn.disabled = false;
   btn.innerHTML = PLAY_ICON + " Try again";
 }
-
 function reset() {
   statusEl.classList.remove("active");
   resultEl.classList.remove("active");
@@ -61,8 +58,37 @@ function reset() {
   btn.disabled = false;
   btn.innerHTML = PLAY_ICON + " Generate video";
 }
-
 againBtn.onclick = reset;
+
+// Read one SSE event stream until we get the final "complete" or "error" event
+async function readSSE(url) {
+  const resp = await fetch(url, { headers: { Accept: "text/event-stream" } });
+  if (!resp.ok) throw new Error("SSE fetch failed: " + resp.status);
+  const reader = resp.body.getReader();
+  const dec = new TextDecoder();
+  let buf = "";
+  let lastEvent = null;
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    const lines = buf.split("\n");
+    buf = lines.pop(); // keep incomplete last line
+    let curEvent = null;
+    for (const line of lines) {
+      if (line.startsWith("event: ")) curEvent = line.slice(7).trim();
+      if (line.startsWith("data: ") && curEvent) {
+        try { lastEvent = { event: curEvent, data: JSON.parse(line.slice(6)) }; } catch (_) {}
+        if (curEvent === "complete" || curEvent === "error") {
+          reader.cancel();
+          return lastEvent;
+        }
+        curEvent = null;
+      }
+    }
+  }
+  return lastEvent;
+}
 
 btn.onclick = async () => {
   const prompt = promptEl.value.trim();
@@ -72,52 +98,64 @@ btn.onclick = async () => {
   resultEl.classList.remove("active");
   btn.disabled = true;
   btn.innerHTML = PLAY_ICON + " Generating…";
-
   setStatus("Connecting to Wan 2.1…", 5);
 
   try {
-    const client = await Client.connect(SPACE);
-    setStatus("In queue — waiting for a GPU slot…", 15);
+    // Step 1: kick off generation
+    const kickResp = await fetch(`${BASE}/t2v_generation_async`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ data: [prompt, sizeEl.value, false, parseInt(seedEl.value)] }),
+    });
+    if (!kickResp.ok) throw new Error("Start failed: " + kickResp.status);
+    const { event_id } = await kickResp.json();
+    if (!event_id) throw new Error("No event_id returned");
 
-    // kick off generation — returns estimated wait, not the video
-    const kickoff = await client.predict("/t2v_generation_async", [
-      prompt,
-      sizeEl.value,
-      false,                      // watermark off
-      parseInt(seedEl.value),
-    ]);
+    setStatus("In queue — waiting for a GPU…", 15);
 
-    const estWait = kickoff.data ? (kickoff.data[1] ?? 60) : 60;
-    setStatus(`Generating… estimated wait ~${Math.round(estWait)}s`, 30);
+    // Step 2: read the SSE stream for t2v_generation_async (returns wait estimate)
+    const kickResult = await readSSE(`${BASE}/t2v_generation_async/${event_id}`);
+    const estWait = kickResult?.data?.[1] ?? 60;
+    setStatus(`Generating… (~${Math.round(estWait)}s estimated)`, 30);
 
-    // poll status_refresh until video arrives
-    const MAX = 180;
-    for (let i = 0; i < MAX; i++) {
+    // Step 3: poll status_refresh until video is ready
+    let found = false;
+    for (let i = 0; i < 180 && !found; i++) {
       await new Promise(r => setTimeout(r, 5000));
 
-      const poll = await client.predict("/status_refresh", []);
-      const [videoData, costTime, estLeft, progress] = poll.data ?? [];
+      const pollResp = await fetch(`${BASE}/status_refresh`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: [] }),
+      });
+      if (!pollResp.ok) continue;
+      const { event_id: pollId } = await pollResp.json();
 
+      const pollResult = await readSSE(`${BASE}/status_refresh/${pollId}`);
+      if (!pollResult || pollResult.event !== "complete") continue;
+
+      const [videoData, , estLeft, progress] = pollResult.data ?? [];
       const pct = Math.min(90, 30 + ((progress ?? 0) * 0.6));
       const leftTxt = estLeft > 0 ? ` (~${Math.round(estLeft)}s left)` : "";
       setStatus(`Generating${leftTxt}…`, pct);
 
       if (videoData && (videoData.url || videoData.path)) {
         const src = videoData.url || videoData.path;
-        setStatus("Finishing up…", 98);
+        setStatus("Almost done…", 98);
         videoEl.src = src;
         dlEl.href = src;
-        await new Promise(r => { videoEl.onloadeddata = r; videoEl.onerror = r; });
+        await new Promise(r => { videoEl.onloadeddata = r; videoEl.onerror = r; setTimeout(r, 5000); });
         statusEl.classList.remove("active");
         resultEl.classList.add("active");
         btn.disabled = false;
         btn.innerHTML = PLAY_ICON + " Generate video";
-        return;
+        found = true;
       }
     }
-    showError("Timed out — the model is very busy. Try again in a few minutes.");
+    if (!found) showError("Timed out — the model is very busy right now. Try again in a few minutes.");
+
   } catch (err) {
-    console.error(err);
-    showError("Could not connect to the AI model. Server may be busy — please try again shortly.");
+    console.error("[video-gen]", err);
+    showError("Connection failed: " + (err.message || "unknown error") + ". Try again shortly.");
   }
 };
