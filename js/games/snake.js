@@ -32,7 +32,7 @@
   var ctx = canvas.getContext("2d");
   var panel = $("game"), screenEl = $("screen");
   var veil = $("veil"), veilTitle = $("veil-title"), veilSub = $("veil-sub"), veilBtn = $("veil-btn");
-  var pauseBtn = $("pause"), settingsBtn = $("settings-toggle"), settingsBox = $("settings");
+  var pauseBtn = $("pause"), pauseFloat = $("pause-float"), settingsBtn = $("settings-toggle"), settingsBox = $("settings");
   var fsBtn = $("fullscreen"), soundBtn = $("sound"), padBtn = $("pad-toggle"), padSetting = $("pad-setting");
   var scoreEl = $("score"), bestEl = $("best");
 
@@ -150,8 +150,12 @@
     showVeil("Snake", how + " " + MODE_HINT[settings.mode], "Start");
   }
   function syncPause() {
-    pauseBtn.textContent = state === "paused" ? "Resume" : "Pause";
+    var playing = state === "playing", paused = state === "paused";
+    pauseBtn.textContent = paused ? "Resume" : "Pause";
     pauseBtn.disabled = state === "ready" || state === "over";
+    pauseFloat.hidden = !(playing || paused);
+    pauseFloat.textContent = paused ? "▶" : "⏸";
+    pauseFloat.setAttribute("aria-label", paused ? "Resume" : "Pause");
   }
 
   function start() {
@@ -160,6 +164,7 @@
     reset();
     state = "playing";
     veil.hidden = true;
+    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
     syncPause();
     schedule();
   }
@@ -332,6 +337,7 @@
   });
   veilBtn.addEventListener("click", function () { if (state === "paused") togglePause(); else start(); });
   pauseBtn.addEventListener("click", function () { togglePause(); });
+  pauseFloat.addEventListener("click", function () { togglePause(); });
   $("restart").addEventListener("click", function () { start(); });
   document.addEventListener("visibilitychange", function () {
     if (document.hidden && state === "playing") togglePause();
