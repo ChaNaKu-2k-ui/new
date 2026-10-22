@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="https://5gvci.com/act/files/tag.min.js?z=12043134" data-cfasync="false" async></script>
+<script>(function(s){s.dataset.zone='12043137',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<script>(function(s){s.dataset.zone='12043136',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tap cricket: free browser cricket game | ChaNaKu</title>
+<meta name="description" content="Free tap cricket game in your browser. Watch the ball, time your shot and score sixes and fours. No download or sign-up.">
+<link rel="canonical" href="https://chanaku.pages.dev/games/cricket">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ChaNaKu">
+<meta property="og:title" content="Tap cricket: free browser cricket game | ChaNaKu">
+<meta property="og:description" content="Watch the ball and tap to bat. Time your shot for sixes and fours. No download needed.">
+<meta property="og:url" content="https://chanaku.pages.dev/games/cricket">
+<meta property="og:image" content="https://chanaku.pages.dev/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#23272b">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800&display=swap">
+<link rel="stylesheet" href="../css/site.css">
+<link rel="stylesheet" href="../css/cricket.css">
+<script src="../js/theme.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Tap cricket","url":"https://chanaku.pages.dev/games/cricket","genre":"Sports","gamePlatform":"Web browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<main id="main" class="wrap">
+<div class="page-head cat-game">
+  <a class="back" href="../games.html">All games</a>
+  <div class="title-row"><span class="ico big"><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M3 21l9-9'/><path d='M12.2 6.2l3.6-3.6a1 1 0 0 1 1.4 0l4.2 4.2a1 1 0 0 1 0 1.4L18 11.4'/><path d='M6 15l-3 6 6-3'/></svg></span><h1>Tap cricket</h1></div>
+  <span class="catchip">Games</span>
+  <p class="lede">Watch the ball travel from the bowler and tap at the right moment to score runs.</p>
+</div>
+
+<div class="panel ckt-game" id="game">
+  <div class="ckt-top">
+    <div class="ckt-stats" aria-live="polite">
+      <div class="stat"><b id="runs">0</b><span>runs</span></div>
+      <div class="stat"><b id="wickets">0/10</b><span>wkts</span></div>
+      <div class="stat"><b id="balls">30</b><span>balls</span></div>
+      <div class="stat"><b id="best">0</b><span>best</span></div>
+    </div>
+    <button class="btn ckt-fs" type="button" id="fullscreen" aria-label="Full screen" title="Full screen">
+      <svg class="ico-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+      <svg class="ico-shrink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
+    </button>
+  </div>
+
+  <div class="ckt-screen" id="screen">
+    <canvas id="board" width="440" height="260" aria-label="Cricket game board"></canvas>
+    <div class="ckt-veil" id="veil" role="status">
+      <h2 id="veil-title">Tap Cricket</h2>
+      <p id="veil-sub">5 overs · 10 wickets. Watch for the green zone and tap to bat.</p>
+      <button class="btn primary" type="button" id="veil-btn">Start batting</button>
+    </div>
+  </div>
+
+  <div class="row ckt-actions">
+    <button class="btn primary ckt-hit" type="button" id="hit-btn" disabled>🏏 Hit</button>
+    <button class="btn" type="button" id="restart">Restart</button>
+    <button class="btn" type="button" id="settings-toggle" aria-expanded="false" aria-controls="settings">Settings</button>
+  </div>
+
+  <section class="ckt-settings" id="settings" aria-label="Game settings" hidden>
+    <div class="ckt-set">
+      <span class="field-label">Bowling speed</span>
+      <div class="ckt-choices" role="group" aria-label="Speed">
+        <button class="chip" type="button" data-speed="slow" aria-pressed="false">Slow</button>
+        <button class="chip" type="button" data-speed="normal" aria-pressed="true">Normal</button>
+        <button class="chip" type="button" data-speed="fast" aria-pressed="false">Fast</button>
+      </div>
+    </div>
+    <div class="ckt-set">
+      <span class="field-label">Sound</span>
+      <div class="ckt-choices">
+        <button class="chip" type="button" id="sound" aria-pressed="true">On</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<p class="note prose">The green zone on the pitch shows where to hit — tap, click the board, or press Space. Tap too early or too late and you might miss. Miss the ball entirely and you're out bowled. 5 overs (30 balls) per innings. Scores are kept in this browser only, and nothing is uploaded.</p>
+<section id="related" class="related"></section>
+</main>
+<footer id="site-footer"></footer>
+<script src="../js/tools-data.js"></script>
+<script src="../js/layout.js" data-root="../" defer></script>
+<script src="../js/games/shell.js" defer></script>
+<script src="../js/games/cricket.js" defer></script>
+</body>
+</html>

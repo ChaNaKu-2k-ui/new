@@ -1,0 +1,74 @@
+/* Tap cricket game styles. */
+.ckt-game [hidden] { display: none !important; }
+
+/* Top row: 4-column stats grid + fullscreen button */
+.ckt-top { display: flex; align-items: stretch; gap: 12px; margin-bottom: 14px; }
+.ckt-stats {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 0;
+}
+.ckt-stats .stat { padding: 10px 8px; }
+.ckt-stats .stat b { font-size: clamp(20px, 5vw, 30px); }
+.ckt-fs { flex: none; width: 56px; padding: 0; display: grid; place-items: center; }
+.ckt-fs svg { width: 22px; height: 22px; }
+
+/* Game canvas */
+.ckt-screen {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin-inline: auto;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #42a5f5;
+  box-shadow: inset 0 0 0 3px rgba(0,0,0,0.2);
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.ckt-screen canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 440 / 260;
+}
+
+/* Veil overlay */
+.ckt-veil {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 12px;
+  padding: 18px;
+  text-align: center;
+  color: #fff;
+  background: rgba(0, 60, 120, 0.82);
+}
+.ckt-veil h2 { font-size: clamp(28px, 6vw, 40px); }
+.ckt-veil p { margin: 0; max-width: 30ch; font-size: 16px; }
+
+/* Actions row */
+.ckt-actions { justify-content: center; margin-top: 14px; }
+.ckt-actions .btn { min-width: 90px; }
+.ckt-hit { min-width: 110px; font-size: 16px; }
+.ckt-hit:disabled { opacity: 0.45; }
+
+/* Settings panel */
+.ckt-settings { display: grid; gap: 16px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+.ckt-set .ckt-choices { justify-content: flex-start; }
+.ckt-choices { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 0; }
+.ckt-choices .chip { font-size: 15px; }
+
+/* Full screen */
+.ckt-game:fullscreen,
+.ckt-game.is-fill { margin: 0; border: 0; border-radius: 0; box-shadow: none; overflow: auto; }
+.ckt-game.is-fill { position: fixed; inset: 0; z-index: 2000; height: 100vh; height: 100dvh; box-sizing: border-box; }
+.ckt-game:fullscreen .ckt-screen,
+.ckt-game.is-fill .ckt-screen { max-width: min(600px, max(240px, calc(100dvh - 280px))); }
