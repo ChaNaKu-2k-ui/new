@@ -40,42 +40,46 @@
 
 <div class="panel ckt-game" id="game">
 
-  <!-- Nokia phone frame -->
-  <div class="ckt-phone" id="phone">
-    <div class="ckt-brand">NOKIA</div>
-    <div class="ckt-screen" id="screen">
-      <canvas id="board" width="272" height="272" aria-label="Cricket Cup game screen"></canvas>
+  <!-- Stats bar + fullscreen -->
+  <div class="ckt-top">
+    <div class="ckt-stats" aria-live="polite">
+      <div class="stat"><b id="ckt-runs">0</b><span>runs</span></div>
+      <div class="stat"><b id="ckt-wkt">0</b><span>wkts</span></div>
+      <div class="stat"><b id="ckt-balls">0</b><span>balls</span></div>
+      <div class="stat"><b id="ckt-best">0</b><span>best</span></div>
     </div>
-    <div class="ckt-keys" id="keypad" aria-label="Game controls">
-      <button class="ckt-key" type="button" data-k="L" aria-label="Left">◄</button>
-      <button class="ckt-key" type="button" data-k="U" aria-label="Up">▲</button>
-      <button class="ckt-key" type="button" data-k="R" aria-label="Right">►</button>
-      <button class="ckt-key" type="button" data-k="1" aria-label="1">1</button>
-      <button class="ckt-key ckt-key-hit" type="button" data-k="H" aria-label="Hit / Select">HIT</button>
-      <button class="ckt-key" type="button" data-k="3" aria-label="3">3</button>
-      <button class="ckt-key" type="button" data-k="D" aria-label="Down">▼</button>
-      <button class="ckt-key" type="button" data-k="M" aria-label="Menu">MENU</button>
-      <button class="ckt-key" type="button" data-k="N" aria-label="Run">RUN</button>
-    </div>
-  </div>
-
-  <!-- Controls row below phone -->
-  <div class="row ckt-actions">
-    <button class="btn" type="button" id="restart">Restart</button>
-    <button class="btn" type="button" id="settings-toggle" aria-expanded="false" aria-controls="settings">Settings</button>
     <button class="btn ckt-fs" type="button" id="fullscreen" aria-label="Full screen" title="Full screen">
       <svg class="ico-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
       <svg class="ico-shrink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
     </button>
   </div>
 
+  <!-- Game canvas -->
+  <div class="ckt-screen" id="screen">
+    <canvas id="board" width="272" height="272" aria-label="Cricket Cup game screen"></canvas>
+  </div>
+
+  <!-- Hit pad: aim left / HIT / aim right -->
+  <nav class="ckt-pad" aria-label="Game controls">
+    <button class="btn ckt-aim" type="button" id="aim-left"  aria-label="Aim left">&#9664;</button>
+    <button class="btn primary ckt-hit" type="button" id="hit-btn" aria-label="Hit / Select">&#127959; HIT</button>
+    <button class="btn ckt-aim" type="button" id="aim-right" aria-label="Aim right">&#9654;</button>
+  </nav>
+
+  <!-- Secondary actions -->
+  <div class="row ckt-actions">
+    <button class="btn" type="button" id="restart">Restart</button>
+    <button class="btn" type="button" id="settings-toggle" aria-expanded="false" aria-controls="settings">Settings</button>
+  </div>
+
+  <!-- Settings -->
   <section class="ckt-settings" id="settings" aria-label="Game settings" hidden>
     <div class="ckt-set">
       <span class="field-label">Bowling speed</span>
       <div class="ckt-choices" role="group" aria-label="Speed">
-        <button class="chip" type="button" data-speed="slow" aria-pressed="false">Slow</button>
+        <button class="chip" type="button" data-speed="slow"   aria-pressed="false">Slow</button>
         <button class="chip" type="button" data-speed="normal" aria-pressed="true">Normal</button>
-        <button class="chip" type="button" data-speed="fast" aria-pressed="false">Fast</button>
+        <button class="chip" type="button" data-speed="fast"   aria-pressed="false">Fast</button>
       </div>
     </div>
     <div class="ckt-set">
@@ -85,9 +89,10 @@
       </div>
     </div>
   </section>
+
 </div>
 
-<p class="note prose">Press <strong>HIT</strong> or Space at the right moment — watch the timing bar fill. Use ◄ ► to aim your shot. After batting, the CPU chases your total. Select overs from the menu.</p>
+<p class="note prose">Tap <strong>HIT</strong> or press Space at the right moment — watch the timing bar fill into the bright zone. Use ◄ ► to aim your shot left or right. After your innings, the CPU chases your total. Select overs from the in-game menu.</p>
 <section id="related" class="related"></section>
 </main>
 <footer id="site-footer"></footer>

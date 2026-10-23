@@ -38,13 +38,21 @@
   /* ---- DOM ---- */
   var $ = function (id) { return document.getElementById(id); };
   var $all = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
-  var canvas = $("board");
-  var ctx    = canvas.getContext("2d");
-  var panel  = $("game");
+  var canvas      = $("board");
+  var ctx         = canvas.getContext("2d");
+  var panel       = $("game");
   var settingsBtn = $("settings-toggle");
   var settingsBox = $("settings");
   var soundBtn    = $("sound");
   var fsBtn       = $("fullscreen");
+  var hitBtn      = $("hit-btn");
+  var aimLeft     = $("aim-left");
+  var aimRight    = $("aim-right");
+  /* stat display elements */
+  var elRuns  = $("ckt-runs");
+  var elWkt   = $("ckt-wkt");
+  var elBalls = $("ckt-balls");
+  var elBest  = $("ckt-best");
 
   /* ---- game state ---- */
   /* States: MENU | BATTING | SHOT | BOWLING | INNINGS | RESULT */
@@ -87,6 +95,21 @@
     };
   }
 
+  /* ---- sync DOM stats bar ---- */
+  function syncStats() {
+    if (S === "BOWLING" || S === "INNINGS" || S === "RESULT") {
+      /* show cpu score during cpu innings */
+      elRuns.textContent  = (S === "BOWLING") ? cScore : pScore;
+      elWkt.textContent   = (S === "BOWLING") ? cWkt   : pWkt;
+      elBalls.textContent = (S === "BOWLING") ? cBalls : pBalls;
+    } else {
+      elRuns.textContent  = pScore;
+      elWkt.textContent   = pWkt;
+      elBalls.textContent = pBalls;
+    }
+    elBest.textContent = best;
+  }
+
   function resetAll() {
     pScore = 0; pWkt = 0; pBalls = 0;
     cScore = 0; cWkt = 0; cBalls = 0;
@@ -96,6 +119,7 @@
     arcProgress = 0; arcType = 0; arcDir = 1;
     runProgress = 0; showResult = false; resultMsg = "";
     bowlTimer = 0; shotDir = 0;
+    syncStats();
   }
 
   function advBall() {
@@ -107,7 +131,6 @@
   function checkInningsEnd() {
     if (curOver >= overs || pWkt >= TOTAL_WICKETS) {
       target = pScore + 1;
-      var self = this;
       setTimeout(function () { S = "INNINGS"; }, 1800);
       return true;
     }
@@ -174,6 +197,7 @@
     advBall();
     arcProgress = 0; runProgress = 0; showResult = false;
     S = "SHOT";
+    syncStats();
     checkInningsEnd();
   }
 
@@ -204,6 +228,8 @@
     curBall++;
     if (curBall >= 6) { curBall = 0; curOver++; }
 
+    syncStats();
+
     /* check end */
     var done = curOver >= overs || cWkt >= TOTAL_WICKETS || cScore >= target;
     if (done) {
@@ -213,7 +239,7 @@
     }
   }
 
-  /* ---- menu key handler ---- */
+  /* ---- key/action handler ---- */
   function handleKey(k) {
     CNKGame.unlockAudio();
 
@@ -236,6 +262,7 @@
         curOver = 0; curBall = 0; lastMsg = "";
         bowlTimer = 0; cpuDelay = 1200;
         S = "BOWLING";
+        syncStats();
       }
       return;
     }
@@ -255,8 +282,8 @@
     }
 
     if (S === "BATTING") {
-      if (k === "L") shotDir = -1;
-      if (k === "R") shotDir =  1;
+      if (k === "L") { shotDir = -1; }
+      if (k === "R") { shotDir =  1; }
       if (k === "H" || k === "N") doHit();
     }
   }
@@ -289,17 +316,27 @@
     if (settings.sound) CNKGame.beep(true, 660, 80, "square");
   });
   settingsBtn.addEventListener("click", function () { openSettings(settingsBox.hidden); });
-  $("restart").addEventListener("click", function () { resetAll(); menuSel = 0; S = "MENU"; });
+  $("restart").addEventListener("click", function () {
+    CNKGame.unlockAudio();
+    resetAll();
+    menuSel = 0;
+    S = "MENU";
+  });
 
-  /* keypad buttons */
-  $all(".ckt-key").forEach(function (el) {
-    el.addEventListener("pointerdown", function (e) {
-      e.preventDefault();
-      el.classList.add("pressed");
-      handleKey(el.dataset.k);
-    });
-    el.addEventListener("pointerup",    function () { el.classList.remove("pressed"); });
-    el.addEventListener("pointerleave", function () { el.classList.remove("pressed"); });
+  /* HIT button */
+  hitBtn.addEventListener("pointerdown", function (e) {
+    e.preventDefault();
+    handleKey("H");
+  });
+
+  /* Aim buttons */
+  aimLeft.addEventListener("pointerdown", function (e) {
+    e.preventDefault();
+    handleKey("L");
+  });
+  aimRight.addEventListener("pointerdown", function (e) {
+    e.preventDefault();
+    handleKey("R");
   });
 
   /* keyboard */
@@ -317,7 +354,7 @@
     }
   });
 
-  /* canvas tap */
+  /* canvas tap — HIT */
   canvas.addEventListener("click", function () { handleKey("H"); });
   canvas.addEventListener("touchstart", function (e) { e.preventDefault(); handleKey("H"); }, { passive: false });
 
@@ -382,7 +419,7 @@
     ctx.beginPath(); ctx.arc(x, y, r || 3, 0, Math.PI * 2); ctx.fill();
   }
 
-  /* ---- scoreboard (top-left bar) ---- */
+  /* ---- scoreboard (top-left bar on canvas) ---- */
   function drawScoreboard(score, wkt, over, ball) {
     ctx.fillStyle = C.scbg;
     ctx.fillRect(0, 0, 90, 52);
@@ -448,7 +485,7 @@
     ctx.restore();
     drawBall(W/2 + 52, 78, 7);
 
-    /* nav arrows */
+    /* nav arrows hint */
     ctx.fillStyle = C.dark;
     ctx.font = "bold 14px monospace";
     ctx.textAlign = "left";
@@ -477,7 +514,7 @@
     ctx.fillStyle = C.sctxt;
     ctx.font = "bold 13px sans-serif";
     ctx.textAlign = "left";
-    ctx.fillText("Select", 18, H - 10);
+    ctx.fillText("HIT to start", 18, H - 10);
     ctx.textAlign = "right";
     ctx.fillText("Best: " + best, W - 14, H - 10);
     ctx.textAlign = "left";
@@ -555,6 +592,15 @@
       /* cursor */
       ctx.fillStyle = C.light;
       ctx.fillRect(bx + bw * ballProgress - 1, by, 3, bh);
+    }
+
+    /* shot direction indicator */
+    if (shotDir !== 0) {
+      ctx.fillStyle = C.dark;
+      ctx.font = "bold 11px monospace";
+      ctx.textAlign = "right";
+      ctx.fillText(shotDir < 0 ? "◄ AIM" : "AIM ►", W - 6, H - 22);
+      ctx.textAlign = "left";
     }
   }
 
@@ -688,8 +734,8 @@
     /* CPU ball anim */
     if (bowlTimer > 20 && bowlTimer < 70) {
       var t = (bowlTimer - 20) / 50;
-      var by3 = lerp(82, H - 52, t);
-      drawBall(W/2 + (Math.random() * 2 - 1) * 0.4, by3, lerp(2, 3.5, t));
+      var byy = lerp(82, H - 52, t);
+      drawBall(W/2 + (Math.random() * 2 - 1) * 0.4, byy, lerp(2, 3.5, t));
     }
 
     drawScoreboard(cScore, cWkt, curOver, curBall);
@@ -808,6 +854,7 @@
         CNKGame.beep(settings.sound, 180, 280, "sawtooth");
         advBall();
         S = "SHOT";
+        syncStats();
         checkInningsEnd();
       }
     }
@@ -851,5 +898,6 @@
   menuSel = 0;
   overs = 5;
   S = "MENU";
+  syncStats();
   requestAnimationFrame(frame);
 })();
