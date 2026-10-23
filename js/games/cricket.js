@@ -1,22 +1,29 @@
-/* Tap cricket. Watch the ball, tap at the right moment. Nothing leaves the browser. */
+/* Tap cricket — Nokia LCD style. Watch the ball, tap at the right moment. */
 (function () {
   "use strict";
 
   /* ---- constants ---- */
   var W = 440, H = 260;
   var PITCH_TOP = 98, PITCH_BOT = 162, PITCH_MID = 130;
-  var BAT_X = 74;             /* batsman contact x */
-  var BOWL_X = 392;           /* ball starts here */
-  var DEAD_X = 24;            /* ball reaches this = bowled out */
-  var EARLY_IGNORE = 158;     /* taps above this x are silently ignored (too early) */
-  var HIT_MIN = 56, HIT_MAX = 114;   /* hit window — gives runs */
-  var PERFECT_MIN = 68, PERFECT_MAX = 92; /* sweet spot = 4 or 6 */
-  var TOTAL_BALLS = 30;       /* 5 overs */
+  var BAT_X = 74;
+  var BOWL_X = 392;
+  var DEAD_X = 24;
+  var EARLY_IGNORE = 158;
+  var HIT_MIN = 56, HIT_MAX = 114;
+  var PERFECT_MIN = 68, PERFECT_MAX = 92;
+  var TOTAL_BALLS = 30;
   var TOTAL_WICKETS = 10;
 
   var SPEEDS = { slow: 2.0, normal: 3.2, fast: 4.8 };
   var SETTINGS_KEY = "cnk-cricket-s";
   var BEST_KEY = "cnk-cricket-best";
+
+  /* Nokia LCD green palette */
+  var C_BG    = "#9bbc0f";   /* screen background */
+  var C_DARK  = "#0f380f";   /* darkest — outlines, text, figures */
+  var C_MID   = "#306230";   /* mid green — field, pitch fill */
+  var C_FIELD = "#8bac0f";   /* slightly darker than BG — outer field */
+  var C_CREAM = "#c4cfa1";   /* off-white — stumps, zone hint */
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -38,14 +45,14 @@
   function saveBest(v) { try { localStorage.setItem(BEST_KEY, v); } catch (e) {} }
 
   /* ---- game state ---- */
-  var state = "ready";   /* ready | bowling | result | done */
+  var state = "ready";
   var runs, wickets, ballsBowled;
   var ballX, ballY, ballSpinAmp;
-  var tapped;            /* player used their shot this ball */
-  var result;            /* { runs, label, color, out } or null */
-  var resultTick;        /* frames until result clears */
-  var batAngle;          /* 0 = ready, 1 = full swing */
-  var glowPulse;         /* 0..1 oscillation for hit zone glow */
+  var tapped;
+  var result;
+  var resultTick;
+  var batAngle;
+  var glowPulse;
 
   /* ---- helpers ---- */
   function showVeil(title, sub, label) {
@@ -99,18 +106,17 @@
     if (bx >= HIT_MIN && bx <= HIT_MAX) {
       if (bx >= PERFECT_MIN && bx <= PERFECT_MAX) {
         var r = Math.random() < 0.55 ? 6 : 4;
-        return { runs: r, label: r === 6 ? "SIX!" : "FOUR!", color: r === 6 ? "#ffd600" : "#ff9800", out: false };
+        return { runs: r, label: r === 6 ? "SIX!" : "FOUR!", out: false };
       }
       var dist = Math.min(Math.abs(bx - PERFECT_MIN), Math.abs(bx - PERFECT_MAX));
       var scored = dist < 12 ? (Math.random() < 0.5 ? 3 : 2) : 1;
-      return { runs: scored, label: scored + (scored === 1 ? " run" : " runs"), color: "#8bc34a", out: false };
+      return { runs: scored, label: scored + (scored === 1 ? " RUN" : " RUNS"), out: false };
     }
-    /* miss zone: 50% dot, 50% edge-out */
     if (Math.random() < 0.5) {
-      return { runs: 0, label: "Missed!", color: "#90a4ae", out: false };
+      return { runs: 0, label: "MISSED", out: false };
     }
-    var outs = ["Caught!", "Edged out!"];
-    return { runs: 0, label: outs[Math.floor(Math.random() * outs.length)], color: "#ef5350", out: true };
+    var outs = ["CAUGHT!", "EDGED OUT!"];
+    return { runs: 0, label: outs[Math.floor(Math.random() * outs.length)], out: true };
   }
 
   function applyResult(r) {
@@ -119,7 +125,7 @@
       CNKGame.beep(settings.sound, 200, 280, "sawtooth");
     } else if (r.runs > 0) {
       runs += r.runs;
-      batAngle = 0.05;  /* trigger swing anim */
+      batAngle = 0.05;
       CNKGame.beep(settings.sound, r.runs >= 4 ? 900 : 660, r.runs >= 4 ? 220 : 110, "square");
       if (runs > best) { best = runs; saveBest(best); }
     } else {
@@ -136,7 +142,7 @@
   function handleTap() {
     if (state === "ready" || state === "done") { startGame(); return; }
     if (state !== "bowling" || tapped) return;
-    if (ballX > EARLY_IGNORE) return;   /* too early — silently ignored, can tap again */
+    if (ballX > EARLY_IGNORE) return;
     tapped = true;
     applyResult(computeShot(ballX));
   }
@@ -146,7 +152,7 @@
     tapped = true;
     wickets++;
     ballsBowled++;
-    result = { runs: 0, label: "Bowled!", color: "#ef5350", out: true };
+    result = { runs: 0, label: "BOWLED!", out: true };
     resultTick = 120;
     CNKGame.beep(settings.sound, 180, 300, "sawtooth");
     syncStats();
@@ -215,7 +221,12 @@
 
   CNKGame.fullscreen(panel, fsBtn);
 
-  /* ---- drawing ---- */
+  /* ================================================================
+     DRAWING — Nokia LCD style
+     Field layout (landscape): V-shape apex at right (bowler end),
+     base at left. Pitch strip horizontal center. Batsman left, bowler right.
+  ================================================================ */
+
   function setupCanvas() {
     var dpr = Math.min(window.devicePixelRatio || 1, 3);
     canvas.width = W * dpr;
@@ -223,140 +234,213 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
+  /* Pixel-style rect helper */
+  function pxRect(x, y, w, h, fill) {
+    ctx.fillStyle = fill;
+    ctx.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h));
+  }
+
   function drawField() {
-    /* sky */
-    var sky = ctx.createLinearGradient(0, 0, 0, H * 0.56);
-    sky.addColorStop(0, "#42a5f5");
-    sky.addColorStop(1, "#90caf9");
-    ctx.fillStyle = sky;
-    ctx.fillRect(0, 0, W, H * 0.56);
-    /* grass */
-    ctx.fillStyle = "#388e3c";
-    ctx.fillRect(0, H * 0.56, W, H * 0.44 + 1);
-    /* outfield circle */
+    /* ---- background ---- */
+    ctx.fillStyle = C_BG;
+    ctx.fillRect(0, 0, W, H);
+
+    /* ---- outer field (V-shape triangle, apex at right-center) ---- */
+    ctx.fillStyle = C_FIELD;
+    ctx.beginPath();
+    ctx.moveTo(W - 28, H / 2);   /* right apex — bowler end */
+    ctx.lineTo(14, 12);           /* top-left corner */
+    ctx.lineTo(14, H - 12);       /* bottom-left corner */
+    ctx.closePath();
+    ctx.fill();
+
+    /* field outline */
+    ctx.strokeStyle = C_DARK;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    /* ---- infield (smaller inner ellipse feel — second V slightly smaller) ---- */
+    ctx.fillStyle = C_BG;
+    ctx.beginPath();
+    ctx.moveTo(W - 52, H / 2);
+    ctx.lineTo(36, 34);
+    ctx.lineTo(36, H - 34);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = C_DARK;
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    /* ---- pitch strip ---- */
+    ctx.fillStyle = C_MID;
+    ctx.fillRect(BAT_X - 14, PITCH_TOP, (BOWL_X - 14) - (BAT_X - 14), PITCH_BOT - PITCH_TOP);
+    ctx.strokeStyle = C_DARK;
+    ctx.lineWidth = 1;
+    ctx.strokeRect(BAT_X - 14, PITCH_TOP, (BOWL_X - 14) - (BAT_X - 14), PITCH_BOT - PITCH_TOP);
+
+    /* ---- crease lines on pitch ---- */
+    ctx.strokeStyle = C_CREAM;
+    ctx.lineWidth = 1.5;
+    /* batting crease */
+    ctx.beginPath(); ctx.moveTo(BAT_X + 6, PITCH_TOP); ctx.lineTo(BAT_X + 6, PITCH_BOT); ctx.stroke();
+    /* bowling crease */
+    ctx.beginPath(); ctx.moveTo(BOWL_X - 20, PITCH_TOP); ctx.lineTo(BOWL_X - 20, PITCH_BOT); ctx.stroke();
+
+    /* ---- score bar at top (Nokia black strip) ---- */
+    pxRect(0, 0, W, 19, C_DARK);
+    /* pixel-dots border bottom */
+    ctx.fillStyle = C_MID;
+    for (var px = 0; px < W; px += 4) ctx.fillRect(px, 18, 2, 1);
+  }
+
+  function drawScoreBar() {
+    var over = Math.floor(ballsBowled / 6) + "." + (ballsBowled % 6);
+    var ballsLeft = TOTAL_BALLS - ballsBowled;
+
     ctx.save();
-    ctx.globalAlpha = 0.1;
-    ctx.strokeStyle = "#fff";
+    ctx.font = "bold 11px 'Courier New', monospace";
+    ctx.fillStyle = C_BG;
+    ctx.textBaseline = "middle";
+
+    /* left: score */
+    ctx.textAlign = "left";
+    ctx.fillText(runs + " / " + wickets, 7, 9);
+
+    /* center: overs */
+    ctx.textAlign = "center";
+    ctx.fillText(over + " ov", W / 2, 9);
+
+    /* right: balls left */
+    ctx.textAlign = "right";
+    ctx.fillText(ballsLeft + "b", W - 7, 9);
+
+    ctx.restore();
+  }
+
+  function drawStumps(x) {
+    /* three vertical lines */
+    ctx.strokeStyle = C_CREAM;
+    ctx.lineWidth = 2;
+    [-5, 0, 5].forEach(function (dx) {
+      ctx.beginPath();
+      ctx.moveTo(x + dx, PITCH_TOP - 2);
+      ctx.lineTo(x + dx, PITCH_BOT + 14);
+      ctx.stroke();
+    });
+    /* bails (two short horizontal pieces) */
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(x - 6, PITCH_TOP + 2);
+    ctx.lineTo(x - 1, PITCH_TOP + 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x + 1, PITCH_TOP + 2);
+    ctx.lineTo(x + 6, PITCH_TOP + 2);
+    ctx.stroke();
+  }
+
+  function drawBatsman(angle) {
+    var bx = Math.round(BAT_X - 22), by = PITCH_MID;
+    ctx.save();
+    ctx.strokeStyle = C_DARK;
+    ctx.fillStyle = C_DARK;
+    ctx.lineCap = "round";
+
+    /* head */
+    ctx.beginPath(); ctx.arc(bx, by - 21, 5, 0, Math.PI * 2); ctx.fill();
+    /* helmet peak */
+    pxRect(bx - 6, by - 24, 4, 4, C_DARK);
+
+    /* body */
+    ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(bx, by - 16); ctx.lineTo(bx, by + 10); ctx.stroke();
+
+    /* legs */
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.ellipse(W / 2, PITCH_MID + 18, 182, 82, 0, 0, Math.PI * 2);
+    ctx.moveTo(bx, by + 10); ctx.lineTo(bx - 6, by + 28);
+    ctx.moveTo(bx, by + 10); ctx.lineTo(bx + 5, by + 28);
     ctx.stroke();
+
+    /* bat arm + bat */
+    ctx.save();
+    ctx.translate(bx, by - 4);
+    ctx.rotate(-0.15 + angle * (-Math.PI * 0.62));
+    ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(18, 8); ctx.stroke();
+    /* bat blade */
+    pxRect(16, 6, 14, 5, C_DARK);
     ctx.restore();
-    /* pitch strip */
-    ctx.fillStyle = "#c8a96e";
+
+    ctx.restore();
+  }
+
+  function drawBowler() {
+    var bx = Math.round(BOWL_X + 18), by = PITCH_MID;
+    ctx.save();
+    ctx.globalAlpha = 0.75;
+    ctx.strokeStyle = C_DARK;
+    ctx.fillStyle = C_DARK;
+    ctx.lineCap = "round";
+
+    /* head */
+    ctx.beginPath(); ctx.arc(bx, by - 19, 4, 0, Math.PI * 2); ctx.fill();
+
+    /* body */
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(bx, by - 15); ctx.lineTo(bx, by + 8); ctx.stroke();
+
+    /* legs */
     ctx.beginPath();
-    ctx.rect(42, PITCH_TOP, W - 88, PITCH_BOT - PITCH_TOP);
-    ctx.fill();
-    /* crease lines */
-    ctx.strokeStyle = "rgba(255,255,255,0.85)";
-    ctx.lineWidth = 1.5;
-    /* batting */
-    var cr = [BAT_X - 10, BAT_X + 10, 372];
-    cr.forEach(function (x) {
-      ctx.beginPath(); ctx.moveTo(x, PITCH_TOP - 1); ctx.lineTo(x, PITCH_BOT + 1); ctx.stroke();
-    });
+    ctx.moveTo(bx, by + 8); ctx.lineTo(bx - 4, by + 22);
+    ctx.moveTo(bx, by + 8); ctx.lineTo(bx + 4, by + 22);
+    ctx.stroke();
+
+    /* bowling arm raised */
+    ctx.beginPath(); ctx.moveTo(bx, by - 6); ctx.lineTo(bx - 14, by - 16); ctx.stroke();
+
+    ctx.restore();
   }
 
   function drawHitZone(alpha) {
     if (alpha <= 0) return;
     ctx.save();
-    /* green zone */
-    ctx.globalAlpha = alpha * 0.38;
-    ctx.fillStyle = "#8bc34a";
+    /* zone overlay on pitch */
+    ctx.globalAlpha = alpha * 0.28;
+    ctx.fillStyle = C_CREAM;
     ctx.fillRect(HIT_MIN, PITCH_TOP, HIT_MAX - HIT_MIN, PITCH_BOT - PITCH_TOP);
-    /* gold sweet spot */
-    ctx.globalAlpha = alpha * 0.55;
-    ctx.fillStyle = "#ffd600";
+    /* sweet spot slightly brighter */
+    ctx.globalAlpha = alpha * 0.38;
+    ctx.fillStyle = C_CREAM;
     ctx.fillRect(PERFECT_MIN, PITCH_TOP, PERFECT_MAX - PERFECT_MIN, PITCH_BOT - PITCH_TOP);
-    ctx.restore();
-  }
-
-  function drawStumps(x) {
-    ctx.strokeStyle = "#f5e6c8";
-    ctx.lineWidth = 2.2;
-    [-5, 0, 5].forEach(function (dx) {
-      ctx.beginPath(); ctx.moveTo(x + dx, PITCH_BOT); ctx.lineTo(x + dx, PITCH_BOT + 18); ctx.stroke();
-    });
-    ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.moveTo(x - 5, PITCH_BOT + 1); ctx.lineTo(x + 5, PITCH_BOT + 1); ctx.stroke();
-  }
-
-  function drawBatsman(angle) {
-    var bx = BAT_X - 18, by = PITCH_MID;
-    ctx.save();
-    /* helmet */
-    ctx.fillStyle = "#1565c0";
-    ctx.beginPath(); ctx.arc(bx, by - 22, 7, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = "#0d47a1";
-    ctx.fillRect(bx - 7, by - 21, 4, 5); /* peak */
-    /* body */
-    ctx.strokeStyle = "#fff";
-    ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(bx, by - 15); ctx.lineTo(bx, by + 12); ctx.stroke();
-    /* legs */
-    ctx.beginPath();
-    ctx.moveTo(bx, by + 12);
-    ctx.lineTo(bx - 6, by + 30);
-    ctx.moveTo(bx, by + 12);
-    ctx.lineTo(bx + 4, by + 30);
-    ctx.stroke();
-    /* bat arm + bat */
-    ctx.save();
-    ctx.translate(bx, by - 4);
-    var readyAngle = -0.15;
-    var swingDelta = -Math.PI * 0.62;
-    ctx.rotate(readyAngle + angle * swingDelta);
-    ctx.strokeStyle = "#8d6e63";
-    ctx.lineWidth = 2.5;
-    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(22, 10); ctx.stroke();
-    ctx.fillStyle = "#a1887f";
-    ctx.strokeStyle = "#6d4c41";
+    /* dashed border */
+    ctx.globalAlpha = alpha * 0.6;
+    ctx.strokeStyle = C_CREAM;
     ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.rect(20, 7, 15, 6);
-    ctx.fill(); ctx.stroke();
-    ctx.restore();
-    ctx.restore();
-  }
-
-  function drawBowler() {
-    var bx = 382, by = PITCH_MID;
-    ctx.save();
-    ctx.globalAlpha = 0.6;
-    ctx.fillStyle = "#fff";
-    ctx.beginPath(); ctx.arc(bx, by - 22, 6, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = "#fff";
-    ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(bx, by - 16); ctx.lineTo(bx, by + 10); ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(bx, by + 10); ctx.lineTo(bx - 5, by + 28);
-    ctx.moveTo(bx, by + 10); ctx.lineTo(bx + 5, by + 28);
-    ctx.stroke();
-    /* bowling arm */
-    ctx.beginPath(); ctx.moveTo(bx, by - 6); ctx.lineTo(bx - 16, by - 2); ctx.stroke();
+    ctx.setLineDash([3, 3]);
+    ctx.strokeRect(HIT_MIN + 0.5, PITCH_TOP + 0.5, HIT_MAX - HIT_MIN - 1, PITCH_BOT - PITCH_TOP - 1);
     ctx.restore();
   }
 
   function drawBall(bx, by) {
-    /* shadow on pitch */
+    /* shadow */
     ctx.save();
-    ctx.globalAlpha = 0.22;
-    ctx.fillStyle = "#000";
+    ctx.globalAlpha = 0.3;
+    ctx.fillStyle = C_DARK;
     ctx.beginPath();
-    ctx.ellipse(bx, PITCH_BOT + 2, 6, 2.5, 0, 0, Math.PI * 2);
+    ctx.ellipse(bx, PITCH_BOT + 3, 5, 2, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
-    /* ball */
-    var g = ctx.createRadialGradient(bx - 2, by - 2, 0.5, bx, by, 8);
-    g.addColorStop(0, "#ef5350");
-    g.addColorStop(1, "#b71c1c");
-    ctx.fillStyle = g;
-    ctx.beginPath(); ctx.arc(bx, by, 8, 0, Math.PI * 2); ctx.fill();
-    /* seam */
-    ctx.strokeStyle = "rgba(255,255,255,0.4)";
+
+    /* ball — dark filled circle on green field */
+    ctx.fillStyle = C_DARK;
+    ctx.beginPath(); ctx.arc(bx, by, 7, 0, Math.PI * 2); ctx.fill();
+
+    /* seam highlight */
+    ctx.strokeStyle = C_BG;
     ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.arc(bx, by, 5.5, -0.45, 0.45); ctx.stroke();
-    ctx.beginPath(); ctx.arc(bx, by, 5.5, Math.PI - 0.45, Math.PI + 0.45); ctx.stroke();
+    ctx.beginPath(); ctx.arc(bx, by, 4.5, -0.4, 0.4); ctx.stroke();
+    ctx.beginPath(); ctx.arc(bx, by, 4.5, Math.PI - 0.4, Math.PI + 0.4); ctx.stroke();
   }
 
   function drawResult(r) {
@@ -364,50 +448,44 @@
     var alpha = Math.min(1, resultTick / 18);
     ctx.save();
     ctx.globalAlpha = alpha;
-    ctx.shadowColor = "rgba(0,0,0,0.7)";
-    ctx.shadowBlur = 10;
-    ctx.font = "bold 40px 'Barlow Condensed', sans-serif";
-    ctx.fillStyle = r.color;
+    ctx.font = "bold 36px 'Barlow Condensed', 'Courier New', monospace";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(r.label, W / 2, H / 2 - 10);
-    ctx.restore();
-  }
 
-  function drawOverCounter() {
-    var over = Math.floor(ballsBowled / 6);
-    var ball = ballsBowled % 6;
-    var txt = "Over " + over + "." + ball + "  |  " + (TOTAL_BALLS - ballsBowled) + " balls left";
-    ctx.save();
-    ctx.fillStyle = "rgba(0,0,0,0.38)";
-    var tw = ctx.measureText(txt).width + 14;
-    ctx.fillRect(W - tw - 4, 3, tw + 4, 20);
-    ctx.fillStyle = "#fff";
-    ctx.font = "11px 'Barlow', sans-serif";
-    ctx.textAlign = "right";
-    ctx.textBaseline = "middle";
-    ctx.fillText(txt, W - 8, 13);
+    var tw = ctx.measureText(r.label).width + 20;
+    var th = 42;
+    var tx = W / 2, ty = H / 2;
+
+    /* box */
+    ctx.fillStyle = C_DARK;
+    ctx.fillRect(Math.round(tx - tw / 2), Math.round(ty - th / 2), Math.round(tw), th);
+    /* border */
+    ctx.strokeStyle = C_BG;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(Math.round(tx - tw / 2) + 3, Math.round(ty - th / 2) + 3, Math.round(tw) - 6, th - 6);
+    /* text */
+    ctx.fillStyle = C_BG;
+    ctx.fillText(r.label, tx, ty);
     ctx.restore();
   }
 
   function draw() {
     ctx.clearRect(0, 0, W, H);
     drawField();
+    drawScoreBar();
     drawHitZone(glowPulse);
-    drawStumps(BAT_X);
-    drawStumps(376);
+    drawStumps(BAT_X + 8);
+    drawStumps(BOWL_X - 16);
     drawBowler();
-    if (ballX > 0 && (state === "bowling" || state === "result")) {
+    if (state === "bowling" || state === "result") {
       drawBall(ballX, ballY);
     }
     drawBatsman(batAngle);
     drawResult(result);
-    drawOverCounter();
   }
 
   /* ---- game loop ---- */
   var lastTime = 0;
-  var frameAcc = 0;
   var FRAME_MS = 1000 / 60;
 
   function tick(dt) {
@@ -416,26 +494,22 @@
     if (state === "bowling") {
       ballX -= speed * dt;
       if (!reduceMotion) ballY = PITCH_MID + ballSpinAmp * Math.sin((BOWL_X - ballX) * 0.055);
-      /* glow: ramp up as ball enters approach zone */
       var approachDist = EARLY_IGNORE - ballX;
       glowPulse = approachDist > 0 ? Math.min(0.9, approachDist / 80) : 0;
       if (ballX <= DEAD_X) onBowled();
 
     } else if (state === "result") {
-      /* ball rolls on slowly after shot or miss */
       ballX -= speed * 0.35 * dt;
       glowPulse = Math.max(0, glowPulse - 0.04 * dt);
-      /* bat swing */
       if (batAngle > 0 && batAngle < 1) batAngle = Math.min(1, batAngle + 0.08 * dt);
       else if (batAngle >= 1) batAngle = Math.max(0, batAngle - 0.05 * dt);
-      /* countdown */
       resultTick -= dt;
       if (resultTick <= 0) afterResult();
     }
   }
 
   function frame(now) {
-    var dt = Math.min((now - lastTime) / FRAME_MS, 4); /* cap at 4 frames */
+    var dt = Math.min((now - lastTime) / FRAME_MS, 4);
     lastTime = now;
     tick(dt);
     draw();
@@ -447,6 +521,6 @@
   applySettings();
   reset();
   syncStats();
-  showVeil("Tap Cricket", "5 overs · 10 wickets. Watch for the green zone and tap to bat.", "Start batting");
+  showVeil("Tap Cricket", "5 overs · 10 wickets. Watch for the timing zone and tap to bat.", "Start batting");
   requestAnimationFrame(function (now) { lastTime = now; requestAnimationFrame(frame); });
 })();

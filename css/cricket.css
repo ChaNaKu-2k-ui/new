@@ -24,7 +24,7 @@
   margin-inline: auto;
   border-radius: 10px;
   overflow: hidden;
-  background: #42a5f5;
+  background: #0f380f;
   box-shadow: inset 0 0 0 3px rgba(0,0,0,0.2);
   cursor: pointer;
   touch-action: manipulation;
@@ -49,7 +49,7 @@
   padding: 18px;
   text-align: center;
   color: #fff;
-  background: rgba(0, 60, 120, 0.82);
+  background: rgba(15, 56, 15, 0.90);
 }
 .ckt-veil h2 { font-size: clamp(28px, 6vw, 40px); }
 .ckt-veil p { margin: 0; max-width: 30ch; font-size: 16px; }
