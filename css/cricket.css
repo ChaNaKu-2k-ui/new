@@ -1,74 +1,113 @@
-/* Tap cricket game styles. */
+/* Cricket Cup — Nokia phone frame style. */
 .ckt-game [hidden] { display: none !important; }
 
-/* Top row: 4-column stats grid + fullscreen button */
-.ckt-top { display: flex; align-items: stretch; gap: 12px; margin-bottom: 14px; }
-.ckt-stats {
-  flex: 1;
-  min-width: 0;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin: 0;
-}
-.ckt-stats .stat { padding: 10px 8px; }
-.ckt-stats .stat b { font-size: clamp(20px, 5vw, 30px); }
-.ckt-fs { flex: none; width: 56px; padding: 0; display: grid; place-items: center; }
-.ckt-fs svg { width: 22px; height: 22px; }
-
-/* Game canvas */
-.ckt-screen {
-  position: relative;
-  width: 100%;
-  max-width: 480px;
+/* ---- Nokia phone frame ---- */
+.ckt-phone {
+  width: min(300px, 100%);
   margin-inline: auto;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #0f380f;
-  box-shadow: inset 0 0 0 3px rgba(0,0,0,0.2);
-  cursor: pointer;
-  touch-action: manipulation;
+  background: #1a1a1a;
+  border-radius: 28px;
+  padding: 14px 14px 20px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.04);
+  border: 2px solid #2a2a2a;
   user-select: none;
   -webkit-user-select: none;
+}
+
+.ckt-brand {
+  color: #444;
+  font-size: 11px;
+  letter-spacing: 5px;
+  text-align: center;
+  margin-bottom: 8px;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+}
+
+/* ---- Screen ---- */
+.ckt-screen {
+  background: #0f380f;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 3px solid #0a0a0a;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.45);
+  position: relative;
+  cursor: pointer;
+  touch-action: manipulation;
 }
 .ckt-screen canvas {
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 440 / 260;
+  aspect-ratio: 1 / 1;
 }
 
-/* Veil overlay */
-.ckt-veil {
-  position: absolute;
-  inset: 0;
+/* ---- Keypad ---- */
+.ckt-keys {
+  margin-top: 14px;
   display: grid;
-  place-content: center;
-  justify-items: center;
-  gap: 12px;
-  padding: 18px;
-  text-align: center;
-  color: #fff;
-  background: rgba(15, 56, 15, 0.90);
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 7px;
 }
-.ckt-veil h2 { font-size: clamp(28px, 6vw, 40px); }
-.ckt-veil p { margin: 0; max-width: 30ch; font-size: 16px; }
+.ckt-key {
+  background: #252525;
+  border: 1px solid #333;
+  border-bottom: 3px solid #111;
+  border-radius: 8px;
+  color: #777;
+  font-size: 11px;
+  padding: 9px 4px;
+  cursor: pointer;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  transition: background 0.05s, transform 0.05s, border-bottom-width 0.05s, color 0.05s;
+  -webkit-tap-highlight-color: transparent;
+  line-height: 1;
+}
+.ckt-key:active,
+.ckt-key.pressed {
+  background: #333;
+  border-bottom-width: 1px;
+  transform: translateY(2px);
+  color: #8BC34A;
+}
+.ckt-key-hit {
+  background: #1a2e0a;
+  border-color: #3a5a1a;
+  color: #8BC34A;
+  font-size: 12px;
+}
+.ckt-key-hit:active,
+.ckt-key-hit.pressed {
+  background: #0d1f06;
+}
 
-/* Actions row */
-.ckt-actions { justify-content: center; margin-top: 14px; }
-.ckt-actions .btn { min-width: 90px; }
-.ckt-hit { min-width: 110px; font-size: 16px; }
-.ckt-hit:disabled { opacity: 0.45; }
+/* ---- Controls row below phone ---- */
+.ckt-actions {
+  justify-content: center;
+  margin-top: 16px;
+  gap: 10px;
+}
+.ckt-actions .btn { min-width: 80px; }
+.ckt-fs { width: 46px; min-width: 0; padding: 0; display: grid; place-items: center; }
+.ckt-fs svg { width: 20px; height: 20px; }
 
-/* Settings panel */
+/* ---- Settings panel ---- */
 .ckt-settings { display: grid; gap: 16px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
 .ckt-set .ckt-choices { justify-content: flex-start; }
-.ckt-choices { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 0; }
+.ckt-choices { display: flex; flex-wrap: wrap; gap: 8px; }
 .ckt-choices .chip { font-size: 15px; }
 
-/* Full screen */
+/* ---- Fullscreen ---- */
 .ckt-game:fullscreen,
-.ckt-game.is-fill { margin: 0; border: 0; border-radius: 0; box-shadow: none; overflow: auto; }
-.ckt-game.is-fill { position: fixed; inset: 0; z-index: 2000; height: 100vh; height: 100dvh; box-sizing: border-box; }
-.ckt-game:fullscreen .ckt-screen,
-.ckt-game.is-fill .ckt-screen { max-width: min(600px, max(240px, calc(100dvh - 280px))); }
+.ckt-game.is-fill {
+  margin: 0; border: 0; border-radius: 0; box-shadow: none; overflow: auto;
+}
+.ckt-game.is-fill {
+  position: fixed; inset: 0; z-index: 2000; height: 100vh; height: 100dvh; box-sizing: border-box;
+}
+.ckt-game:fullscreen .ckt-phone,
+.ckt-game.is-fill .ckt-phone {
+  max-width: min(340px, max(240px, calc(100dvh - 200px)));
+}
