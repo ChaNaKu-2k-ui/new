@@ -1,8 +1,9 @@
-/* Cricket game styles. nokia-style cricket with top-down and side-on views. */
+/* Cricket Legends — styles for the ChaNaKu site shell + in-canvas overlays.
+   Prefixes: .ck-* = site chrome   .cg-* = in-game overlays                 */
 
 .ck-game [hidden] { display: none !important; }
 
-/* ---- top stats row ---- */
+/* ── top stats row ────────────────────────────────────────────────────────── */
 .ck-top {
   display: flex;
   align-items: stretch;
@@ -26,32 +27,38 @@
 }
 .ck-fs svg { width: 22px; height: 22px; }
 
-/* ---- canvas wrapper ---- */
+/* ── canvas wrapper ───────────────────────────────────────────────────────── */
 .ck-screen {
   position: relative;
   width: 100%;
-  max-width: 440px;
+  max-width: 480px;
   margin-inline: auto;
   border-radius: 10px;
   overflow: hidden;
-  background: #111418;
+  background: #0a140a;
   box-shadow: 0 0 0 3px rgba(0,0,0,0.6), 0 8px 32px rgba(0,0,0,0.5);
+  font-family: 'Courier New', Courier, monospace;
+  color: #c8e6c0;
+  user-select: none;
+  -webkit-user-select: none;
 }
 .ck-screen canvas {
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 400 / 500;
+  aspect-ratio: 1 / 1;
   touch-action: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
-/* ---- mobile control pad ---- */
+/* ── mobile control pad ───────────────────────────────────────────────────── */
 .ck-pad {
-  display: none;    /* shown only on touch devices via JS data-pad */
-  width: min(360px, 100%);
+  display: none;
+  width: min(400px, 100%);
   margin: 16px auto 0;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 10px;
+  grid-template-columns: 1fr 1fr auto 1fr;
+  gap: 8px;
   align-items: center;
 }
 .ck-game[data-pad="on"] .ck-pad { display: grid; }
@@ -59,7 +66,7 @@
 .ck-pad .btn {
   height: 72px;
   padding: 0;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   display: grid;
   place-items: center;
@@ -69,15 +76,16 @@
   letter-spacing: 0.02em;
 }
 #ck-hit {
-  min-width: 92px;
+  min-width: 88px;
   font-size: 16px;
   background: var(--accent);
   color: #fff;
   border-color: var(--accent);
 }
 #ck-hit:active { opacity: 0.85; }
+#ck-up { font-size: 13px; }
 
-/* ---- action row (below pad) ---- */
+/* ── action row (below pad) ───────────────────────────────────────────────── */
 .ck-actions {
   display: flex;
   justify-content: center;
@@ -87,7 +95,7 @@
 }
 .ck-actions .btn { min-width: 110px; }
 
-/* ---- full screen (native + fill fallback) ---- */
+/* ── full screen ──────────────────────────────────────────────────────────── */
 .ck-game:fullscreen,
 .ck-game.is-fill {
   margin: 0;
@@ -106,9 +114,214 @@
 }
 .ck-game:fullscreen .ck-screen,
 .ck-game.is-fill .ck-screen {
-  max-width: min(500px, max(200px, calc(100dvh - 280px)));
+  max-width: min(480px, max(200px, 100dvh - 260px));
 }
 .ck-game:fullscreen .ck-pad .btn,
-.ck-game.is-fill .ck-pad .btn {
-  height: 60px;
+.ck-game.is-fill .ck-pad .btn { height: 60px; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   IN-GAME OVERLAYS  (position: absolute inside .ck-screen)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* hidden class used by JS */
+.hidden { display: none !important; }
+
+/* ── HUD top bar ──────────────────────────────────────────────────────────── */
+.cg-hud {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 10px;
+  pointer-events: none;
+  z-index: 10;
 }
+.cg-hud-box {
+  background: rgba(8,16,8,0.88);
+  border: 2px solid #3a5a3a;
+  border-radius: 3px;
+  padding: 5px 9px;
+  min-width: 80px;
+}
+.cg-hud-right { text-align: right; min-width: 140px; }
+.cg-hud-team  { font-size: 8px; letter-spacing: 1px; color: #7ec850; font-weight: bold; margin-bottom: 2px; }
+.cg-hud-score { font-size: 20px; font-weight: bold; color: #eaf6e0; line-height: 1; }
+.cg-hud-overs { font-size: 9px; color: #8aa888; margin-top: 2px; }
+.cg-hud-comm  { font-size: 9px; line-height: 1.4; color: #c8e6c0; max-width: 140px; }
+.cg-hud-target{ font-size: 9px; color: #e8c840; font-weight: bold; margin-top: 3px; }
+
+/* ── Timing bar ───────────────────────────────────────────────────────────── */
+.cg-timing {
+  position: absolute;
+  bottom: 28px; left: 50%;
+  transform: translateX(-50%);
+  width: 68%;
+  z-index: 10;
+  pointer-events: none;
+}
+.cg-timing-label {
+  text-align: center;
+  font-size: 7px; letter-spacing: 2px; color: #7ec850;
+  margin-bottom: 3px; font-weight: bold;
+}
+.cg-timing-track {
+  position: relative; height: 18px;
+  background: #142014;
+  border: 2px solid #3a5a3a;
+  border-radius: 2px;
+  display: flex; overflow: hidden;
+}
+.cg-tz-edge    { flex: 1; background: #6a2020; }
+.cg-tz-ok      { flex: 1; background: #b8a030; }
+.cg-tz-perfect { flex: 0.6; background: #3a9a3a; }
+.cg-tm {
+  position: absolute; top: -2px; bottom: -2px; width: 3px;
+  background: #fff;
+  box-shadow: 0 0 6px #fff;
+  transform: translateX(-50%);
+  left: 0;
+}
+.cg-dir-hint {
+  text-align: center; font-size: 7px; color: #8aa888;
+  margin-top: 3px; letter-spacing: 0.5px;
+}
+
+/* ── Controls hint ────────────────────────────────────────────────────────── */
+.cg-controls {
+  position: absolute; bottom: 5px; left: 0; right: 0;
+  display: flex; justify-content: center; gap: 14px;
+  font-size: 7px; color: #4a6a4a; letter-spacing: 0.5px;
+  z-index: 10; pointer-events: none;
+}
+
+/* ── Full-canvas screens ──────────────────────────────────────────────────── */
+.cg-lscreen {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(6,12,6,0.94);
+  z-index: 20;
+  padding: 14px;
+}
+
+.cg-logo {
+  position: absolute; top: 10%;
+  font-size: clamp(26px, 6vw, 40px);
+  font-weight: bold; letter-spacing: 4px;
+  text-align: center; line-height: 1.1;
+  color: #7ec850;
+  text-shadow: 3px 3px 0 #1a3a1a, 0 0 18px rgba(126,200,80,0.3);
+  pointer-events: none;
+}
+
+.cg-menu-list {
+  display: flex; flex-direction: column; gap: 9px;
+  margin-top: 28%;
+}
+.cg-menu-item {
+  padding: 9px 22px;
+  font-size: clamp(10px, 2.4vw, 13px);
+  letter-spacing: 2px; font-weight: bold;
+  color: #6a8a6a;
+  border: 2px solid transparent;
+  text-align: center;
+  cursor: pointer;
+}
+.cg-menu-item.selected {
+  color: #eaf6e0;
+  border-color: #7ec850;
+  background: rgba(126,200,80,0.10);
+}
+.cg-menu-item.selected::before { content: '▶ '; color: #7ec850; }
+
+/* ── Panels ───────────────────────────────────────────────────────────────── */
+.cg-panel {
+  background: #0a140a;
+  border: 3px solid #3a5a3a;
+  border-radius: 4px;
+  padding: 16px 18px;
+  max-width: 340px; width: 100%;
+  box-shadow: 0 0 0 2px #0a140a, 0 0 0 4px #2a3a2a;
+}
+.cg-panel-wide { max-width: 460px; }
+.cg-panel-title {
+  font-size: 11px; letter-spacing: 3px; color: #7ec850;
+  font-weight: bold; text-align: center;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #2a3a2a; padding-bottom: 7px;
+}
+.cg-panel-foot {
+  margin-top: 12px; font-size: 7px; color: #4a6a4a;
+  text-align: center; letter-spacing: 1px;
+}
+
+/* ── Team grid ────────────────────────────────────────────────────────────── */
+.cg-team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  max-height: 42vh; overflow-y: auto;
+}
+.team-cell {
+  padding: 7px 4px;
+  border: 2px solid #2a3a2a;
+  background: #0f1a0f;
+  text-align: center; cursor: pointer;
+  border-radius: 3px;
+}
+.team-cell.selected { border-color: #7ec850; background: rgba(126,200,80,0.12); }
+.team-cell.disabled { opacity: 0.25; pointer-events: none; }
+.team-flag { font-size: 16px; line-height: 1; }
+.team-name { font-size: 7px; letter-spacing: 0.5px; color: #8aa888; margin-top: 3px; font-weight: bold; }
+.team-cell.selected .team-name { color: #eaf6e0; }
+
+/* ── Toss ─────────────────────────────────────────────────────────────────── */
+.cg-toss-result {
+  text-align: center; font-size: 13px; color: #e8c840;
+  font-weight: bold; padding: 12px 0; min-height: 46px;
+}
+.cg-toss-choices { display: flex; flex-direction: column; gap: 7px; }
+
+/* ── Break / Result ───────────────────────────────────────────────────────── */
+.cg-break-score {
+  font-size: clamp(28px, 7vw, 44px); font-weight: bold;
+  text-align: center; color: #eaf6e0;
+  letter-spacing: -1px; line-height: 1;
+  margin: 7px 0;
+}
+.cg-break-detail { text-align: center; font-size: 9px; color: #8aa888; margin-bottom: 7px; }
+.cg-break-target { text-align: center; font-size: 11px; color: #e8c840; font-weight: bold; }
+
+/* ── Tournament bracket ───────────────────────────────────────────────────── */
+.cg-bracket {
+  display: flex; gap: 8px; justify-content: center;
+  align-items: center; flex-wrap: wrap;
+  max-height: 42vh; overflow-y: auto;
+}
+.round-col { display: flex; flex-direction: column; gap: 5px; }
+.round-label { font-size: 6px; color: #4a6a4a; letter-spacing: 1px; text-align: center; margin-bottom: 2px; }
+.match-box {
+  background: #0f1a0f; border: 1px solid #2a3a2a;
+  border-radius: 2px; padding: 3px 5px;
+  font-size: 7px; min-width: 82px;
+}
+.match-box.mine { border-color: #7ec850; background: rgba(126,200,80,0.08); }
+.match-line { display: flex; justify-content: space-between; gap: 5px; padding: 1px 0; color: #6a8a6a; }
+.match-line.win  { color: #7ec850; font-weight: bold; }
+.match-line.lose { color: #3a4a3a; }
+
+/* ── Help text ────────────────────────────────────────────────────────────── */
+.cg-help-body p { font-size: 9px; line-height: 1.6; color: #a8c8a0; margin-bottom: 9px; }
+.cg-help-body b { color: #7ec850; }
+
+/* ── Toast ────────────────────────────────────────────────────────────────── */
+.cg-toast {
+  position: absolute; top: 42%; left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  font-size: clamp(26px, 6.5vw, 44px);
+  font-weight: bold; letter-spacing: 2px;
+  color: #fff; pointer-events: none; z-index: 15;
+  opacity: 0;
+  text-shadow: 3px 3px 0 #000;
+  transition: opacity 0.12s, transform 0.12s;
+}
+.cg-toast.on { opacity: 1; transform: translate(-50%, -50%) scale(1); }
