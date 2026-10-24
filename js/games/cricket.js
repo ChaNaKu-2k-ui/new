@@ -328,7 +328,7 @@
     }
 
     /* --- Menu --- */
-    function menuItems() { return Array.from(document.querySelectorAll('#menu-list .menu-item')); }
+    function menuItems() { return Array.from(document.querySelectorAll('#menu-list .cg-menu-item')); }
     function refreshMenu() {
       menuItems().forEach(function(el,i){ el.classList.toggle('selected', i===S.menuIndex); });
     }
@@ -415,7 +415,7 @@
       },800);
     }
     function refreshTossChoices() {
-      document.querySelectorAll('#toss-choices .menu-item').forEach(function(el,i){
+      document.querySelectorAll('#toss-choices .cg-menu-item').forEach(function(el,i){
         el.classList.toggle('selected', i===S.tossIndex);
       });
     }
