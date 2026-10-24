@@ -8,12 +8,14 @@
      ══════════════════════════════════════════════════════════════════════ */
   var Audio = (function () {
     var ctx = null;
+    var muted = false;
+    try { muted = localStorage.getItem('cnk-cricket-muted') === '1'; } catch(e) {}
     function init() {
       if (ctx) return;
       try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
     }
     function beep(freq, dur, type, vol) {
-      if (!ctx) return;
+      if (!ctx || muted) return;
       type = type || 'square'; vol = vol || 0.08;
       try {
         if (ctx.state === 'suspended') ctx.resume();
@@ -25,8 +27,15 @@
         o.start(); o.stop(ctx.currentTime + dur);
       } catch (e) {}
     }
+    function toggleMute() {
+      muted = !muted;
+      try { localStorage.setItem('cnk-cricket-muted', muted ? '1' : '0'); } catch(e) {}
+      return muted;
+    }
     return {
       init: init,
+      toggleMute: toggleMute,
+      isMuted: function(){ return muted; },
       move:   function(){ beep(660, 0.04, 'square',   0.04); },
       select: function(){ beep(880, 0.08, 'square',   0.06); },
       back:   function(){ beep(440, 0.06, 'square',   0.05); },
@@ -730,6 +739,7 @@
       if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space','Enter'].includes(k)) e.preventDefault();
       if(!down) return;
       Audio.init();
+      if(k==='KeyM'){ var m=Audio.toggleMute(); updateSoundBtn(m); return; }
       if(k==='Escape'){ if(S.screen==='help'||S.screen==='teams'){ Audio.back(); toMenu(); } return; }
       if(S.screen==='menu'){
         if(k==='ArrowUp'){ S.menuIndex=(S.menuIndex-1+menuItems().length)%menuItems().length; Audio.move(); refreshMenu(); }
@@ -817,7 +827,7 @@
     /* expose mobile helpers */
     function mobileAction() {
       Audio.init();
-      if(S.screen==='menu'){ S.menuIndex=0; menuActivate(); return; }
+      if(S.screen==='menu'){ menuActivate(); return; }
       if(S.screen==='help'){ Audio.back(); toMenu(); return; }
       if(S.screen==='teams'){ teamConfirm(); return; }
       if(S.screen==='toss'){ tossConfirm(); return; }
@@ -830,22 +840,35 @@
       }
     }
     function mobileLeft(down) {
+      if(S.screen==='teams'){ if(down) teamMove(-1,0); return; }
       if(S.screen!=='match') return;
       if(S.batting==='player') B.direction=down?-1:0;
       else if(down) B.cursor.x=Math.max(0.1,B.cursor.x-0.08);
     }
     function mobileRight(down) {
+      if(S.screen==='teams'){ if(down) teamMove(1,0); return; }
       if(S.screen!=='match') return;
       if(S.batting==='player') B.direction=down?1:0;
       else if(down) B.cursor.x=Math.min(0.9,B.cursor.x+0.08);
     }
     function mobileUp(down) {
+      if(S.screen==='menu'){ if(down){ S.menuIndex=(S.menuIndex-1+menuItems().length)%menuItems().length; Audio.move(); refreshMenu(); } return; }
+      if(S.screen==='toss'){ if(down){ S.tossIndex=S.tossIndex===0?1:0; Audio.move(); refreshTossChoices(); } return; }
+      if(S.screen==='teams'){ if(down) teamMove(0,-1); return; }
       if(S.screen!=='match') return;
       if(S.batting==='player') B.directionY=down?1:0;
       else if(down) B.cursor.y=Math.max(0.1,B.cursor.y-0.08);
     }
+    function mobileDown(down) {
+      if(S.screen==='menu'){ if(down){ S.menuIndex=(S.menuIndex+1)%menuItems().length; Audio.move(); refreshMenu(); } return; }
+      if(S.screen==='toss'){ if(down){ S.tossIndex=S.tossIndex===0?1:0; Audio.move(); refreshTossChoices(); } return; }
+      if(S.screen==='teams'){ if(down) teamMove(0,1); return; }
+      if(S.screen!=='match') return;
+      if(S.batting==='player') B.directionY=down?-1:0;
+      else if(down) B.cursor.y=Math.min(0.9,B.cursor.y+0.08);
+    }
 
-    return { init:init, loop:loop, resize:resize, mobileAction:mobileAction, mobileLeft:mobileLeft, mobileRight:mobileRight, mobileUp:mobileUp, _S:S, _B:B };
+    return { init:init, loop:loop, resize:resize, mobileAction:mobileAction, mobileLeft:mobileLeft, mobileRight:mobileRight, mobileUp:mobileUp, mobileDown:mobileDown, toggleMute:function(){ return Audio.toggleMute(); }, isMuted:function(){ return Audio.isMuted(); }, _S:S, _B:B };
   })();
 
   /* ══════════════════════════════════════════════════════════════════════
@@ -873,10 +896,26 @@
     bindBtn('ck-left',  function(){ Game.mobileLeft(true);  }, function(){ Game.mobileLeft(false);  }, null);
     bindBtn('ck-right', function(){ Game.mobileRight(true); }, function(){ Game.mobileRight(false); }, null);
     bindBtn('ck-up',    function(){ Game.mobileUp(true);    }, function(){ Game.mobileUp(false);    }, null);
+    bindBtn('ck-down',  function(){ Game.mobileDown(true);  }, function(){ Game.mobileDown(false);  }, null);
     bindBtn('ck-hit',   null, null, function(){ Game.mobileAction(); });
 
+    /* sound toggle */
     var sndBtn = document.getElementById('ck-sound');
-    if (sndBtn) sndBtn.addEventListener('click', function(){ Audio.init(); });
+    if (sndBtn) {
+      updateSoundBtn(Audio.isMuted());
+      sndBtn.addEventListener('click', function(){
+        Audio.init();
+        var m = Game.toggleMute();
+        updateSoundBtn(m);
+      });
+    }
+  }
+
+  function updateSoundBtn(muted) {
+    var btn = document.getElementById('ck-sound');
+    if (!btn) return;
+    btn.textContent = muted ? '🔇 Sound off' : '🔊 Sound on';
+    btn.title = muted ? 'Unmute (M)' : 'Mute (M)';
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);

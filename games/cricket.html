@@ -55,6 +55,7 @@
       <div class="stat"><b id="ck-score-disp">—</b><span>player score</span></div>
       <div class="stat"><b id="ck-best-disp">—</b><span>last match</span></div>
     </div>
+    <button class="btn ck-sound-top" type="button" id="ck-sound" aria-label="Toggle sound" title="Mute (M)">&#128266; Sound on</button>
     <button class="btn ck-fs" type="button" id="ck-fs" aria-label="Full screen" title="Full screen">
       <svg class="ico-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
       <svg class="ico-shrink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
@@ -173,16 +174,18 @@
   <!-- end .ck-screen -->
 
   <nav class="ck-pad" aria-label="Cricket controls">
-    <button class="btn" type="button" id="ck-left"  aria-label="Left / off-side">&#9664; LEFT</button>
-    <button class="btn" type="button" id="ck-up"    aria-label="Lofted shot / up">&#9650; LOFT</button>
-    <button class="btn primary" type="button" id="ck-hit" aria-label="Swing / select / bowl">&#127953; HIT</button>
-    <button class="btn" type="button" id="ck-right" aria-label="Right / on-side">RIGHT &#9654;</button>
+    <div class="ck-dpad">
+      <div class="ck-dpad-up">
+        <button class="btn" type="button" id="ck-up" aria-label="Up / lofted shot">&#9650;</button>
+      </div>
+      <div class="ck-dpad-mid">
+        <button class="btn" type="button" id="ck-left"  aria-label="Left / off-side">&#9664;</button>
+        <button class="btn" type="button" id="ck-down"  aria-label="Down">&#9660;</button>
+        <button class="btn" type="button" id="ck-right" aria-label="Right / on-side">&#9654;</button>
+      </div>
+    </div>
+    <button class="btn primary" type="button" id="ck-hit" aria-label="Swing / select / bowl">&#127953;<br>HIT</button>
   </nav>
-
-  <div class="ck-actions row">
-    <button class="btn" type="button" id="ck-sound">&#128266; Sound</button>
-    <button class="btn" type="button" id="ck-fs2">&#x26F6; Full screen</button>
-  </div>
 
 </div>
 
