@@ -40,6 +40,20 @@
   };
 
   /* ══════════════════════════════════════════════════════════
+     TEAMS
+  ══════════════════════════════════════════════════════════ */
+  var TEAMS = [
+    { id:'SL',  name:'Sri Lanka',   kitA:'#1133DD', kitB:'#FFDD00' },
+    { id:'IN',  name:'India',       kitA:'#003399', kitB:'#FF9900' },
+    { id:'AUS', name:'Australia',   kitA:'#006633', kitB:'#FFD700' },
+    { id:'ENG', name:'England',     kitA:'#003388', kitB:'#FFFFFF' },
+    { id:'WI',  name:'W. Indies',   kitA:'#880011', kitB:'#FFD700' },
+    { id:'PAK', name:'Pakistan',    kitA:'#005500', kitB:'#FFFFFF' },
+    { id:'SA',  name:'S. Africa',   kitA:'#007A4D', kitB:'#FFB612' },
+    { id:'NZ',  name:'N. Zealand',  kitA:'#000077', kitB:'#DDDDDD' },
+  ];
+
+  /* ══════════════════════════════════════════════════════════
      AUDIO
   ══════════════════════════════════════════════════════════ */
   var SFX = (function () {
@@ -144,52 +158,90 @@
      SPRITES
   ══════════════════════════════════════════════════════════ */
 
-  /* Batsman — near end, facing camera */
-  function spriteBatsman(cx, cy) {
-    var x = rnd(cx), y = rnd(cy); // cy = bottom of sprite
-    fr(x - 4, y - 1, 9, 2, 'rgba(0,0,0,0.25)');  // shadow
-    fr(x - 3, y - 7, 3, 7, C.bLegs);              // left leg
-    fr(x,     y - 7, 3, 7, C.bLegs);              // right leg
-    fr(x - 3, y - 12, 7, 6, C.bBody);             // torso
-    fr(x + 3, y - 11, 2, 5, C.bSkin);             // arm
-    fr(x - 2, y - 16, 6, 5, C.bHelmet);           // helmet
-    fr(x - 2, y - 18, 6, 3, C.bHelmet);           // helmet top
-    fr(x + 4, y - 11, 2, 13, C.bat);              // bat handle+blade
-    fr(x + 5, y - 2, 3, 2, C.bat);                // bat toe
+  /* Batsman — near end, facing camera (slim Nokia pixel style) */
+  function spriteBatsman(cx, cy, kitBody, kitLegs) {
+    kitBody = kitBody || C.bBody; kitLegs = kitLegs || C.bLegs;
+    var x = rnd(cx - 2), y = rnd(cy);
+    var pad = '#E8DEB8';
+    fr(x - 1, y,     9, 1, 'rgba(0,0,0,0.25)');  // shadow
+    // boots
+    fr(x,     y - 1, 2, 1, kitLegs);
+    fr(x + 4, y - 1, 2, 1, kitLegs);
+    // lower legs (separated for slim look)
+    fr(x,     y - 5, 2, 4, kitLegs);
+    fr(x + 4, y - 5, 2, 4, kitLegs);
+    // pads (light strip front of each leg)
+    fr(x + 1, y - 4, 1, 3, pad);
+    fr(x + 5, y - 4, 1, 3, pad);
+    // torso (5px wide)
+    fr(x,     y - 9, 5, 4, kitBody);
+    // arms
+    fr(x - 1, y - 9, 1, 3, C.bSkin);             // left arm
+    fr(x + 5, y - 8, 1, 2, C.bSkin);             // right arm
+    // bat (blade extends right of body)
+    fr(x + 6, y - 13, 2, 13, C.bat);
+    fr(x + 7, y - 1,  2, 2,  C.bat);             // bat toe
+    // neck
+    fr(x + 2, y - 11, 1, 2, C.bSkin);
+    // helmet
+    fr(x + 1, y - 17, 3,  1, C.bHelmet);         // ridge
+    fr(x + 1, y - 16, 4,  5, C.bHelmet);         // main
+    // face peek
+    fr(x + 2, y - 14, 1, 2, C.bSkin);
   }
 
-  /* Batsman swing animation — bat raised */
-  function spriteBatsmanSwing(cx, cy, t) {
-    var x = rnd(cx), y = rnd(cy);
-    var rise = rnd(t * 10);
-    fr(x - 4, y - 1, 9, 2, 'rgba(0,0,0,0.25)');
-    fr(x - 3, y - 7, 3, 7, C.bLegs);
-    fr(x,     y - 7, 3, 7, C.bLegs);
-    fr(x - 3, y - 12, 7, 6, C.bBody);
-    fr(x + 3, y - 12 - rise, 2, 5, C.bSkin);
-    fr(x - 2, y - 16, 6, 5, C.bHelmet);
-    fr(x - 2, y - 18, 6, 3, C.bHelmet);
-    // bat sweeping: diagonal
-    var bx = rnd(x + 4 - t * 8);
+  /* Batsman swing — bat swept */
+  function spriteBatsmanSwing(cx, cy, t, kitBody, kitLegs) {
+    kitBody = kitBody || C.bBody; kitLegs = kitLegs || C.bLegs;
+    var x = rnd(cx - 2), y = rnd(cy);
+    var pad = '#E8DEB8';
+    var rise = rnd(t * 8);
+    fr(x - 1, y,     9, 1, 'rgba(0,0,0,0.25)');
+    fr(x,     y - 1, 2, 1, kitLegs);
+    fr(x + 4, y - 1, 2, 1, kitLegs);
+    fr(x,     y - 5, 2, 4, kitLegs);
+    fr(x + 4, y - 5, 2, 4, kitLegs);
+    fr(x + 1, y - 4, 1, 3, pad);
+    fr(x + 5, y - 4, 1, 3, pad);
+    fr(x,     y - 9, 5, 4, kitBody);
+    fr(x - 1, y - 9 - rise, 1, 3, C.bSkin);      // left arm rising
+    fr(x + 2, y - 11,       1, 2, C.bSkin);
+    fr(x + 1, y - 17, 3, 1, C.bHelmet);
+    fr(x + 1, y - 16, 4, 5, C.bHelmet);
+    fr(x + 2, y - 14, 1, 2, C.bSkin);
+    // bat diagonal sweep
+    var bx = rnd(x + 6 - t * 9);
     var by = rnd(y - 10 - rise);
-    fr(bx,     by,    2, 2, C.bat);
+    fr(bx,     by,     2, 2, C.bat);
     fr(bx - 2, by - 2, 2, 2, C.bat);
     fr(bx - 4, by - 4, 2, 2, C.bat);
     fr(bx - 5, by - 7, 2, 2, C.bat);
-    fr(bx - 4, by - 10, 2, 2, C.bat);
   }
 
-  /* Bowler — far end, smaller scale */
-  function spriteBowler(cx, cy, phase) {
+  /* Bowler — far end (slim, perspective-small) */
+  function spriteBowler(cx, cy, phase, kitBody) {
+    kitBody = kitBody || C.wBody;
     var x = rnd(cx), y = rnd(cy);
-    var legWobble = (phase > 0 && phase < 0.8) ? rnd(Math.sin(phase * 18) * 1.2) : 0;
-    fr(x - 1, y - 1, 4, 1, 'rgba(0,0,0,0.2)');
-    fr(x - 1, y - 5, 2, 5, C.wLegs);
-    fr(x + 1, y - 5 - legWobble, 2, 5, C.wLegs);
-    fr(x - 1, y - 9, 4, 4, C.wBody);
-    fr(x + 2, y - 8, 2, phase > 0.85 ? 10 : 3, C.wBody); // arm up at release
-    fr(x - 1, y - 12, 3, 3, C.wSkin);
-    fr(x - 1, y - 13, 3, 2, C.wCap);
+    var stride = (phase > 0.2 && phase < 0.7) ? 1 : 0;
+    var armUp  = phase > 0.82;
+    fr(x - 1, y, 5, 1, 'rgba(0,0,0,0.18)');
+    // feet
+    fr(x - 1, y - 1, 2, 1, C.wLegs);
+    fr(x + 1 + stride, y - 1, 2, 1, C.wLegs);
+    // legs
+    fr(x - 1, y - 4, 2, 3, C.wLegs);
+    fr(x + 1 + stride, y - 4 - stride, 2, 3, C.wLegs);
+    // body (3px wide)
+    fr(x - 1, y - 7, 3, 3, kitBody);
+    // arm
+    if (armUp) {
+      fr(x + 1, y - 11, 1, 4, kitBody);           // arm raised
+    } else {
+      fr(x + 1, y - 7,  2, 3, kitBody);
+    }
+    // head + cap
+    fr(x,     y - 9, 2, 2, C.wSkin);
+    fr(x - 1, y - 10, 4, 1, C.wCap);
   }
 
   /* Stumps at (cx, cy=top of bails) — w = total width */
@@ -283,6 +335,14 @@
 
     // result
     matchResult: null,   // 'win'|'lose'|'tie'
+
+    // tournament
+    tourMode: false,
+    tourStep: 0,         // 0=QF 1=SF 2=Final
+    tourOpps: [],        // shuffled opponent array (7 teams)
+    playerTeam: null,    // ref to TEAMS entry
+    oppTeam: null,       // current opponent TEAMS entry
+    teamSel: 0,          // cursor on team select screen
   };
 
   /* ══════════════════════════════════════════════════════════
@@ -306,8 +366,9 @@
     // near stumps (batsman's end)
     spriteStumps(64, PT.nearY - 5, 12, 5);
 
-    // bowler
-    spriteBowler(64, PT.farY + 13, S.bowlerPhase);
+    // bowler (opponent kit color)
+    var oKitA = (S.oppTeam    || {}).kitA || C.wBody;
+    spriteBowler(64, PT.farY + 13, S.bowlerPhase, oKitA);
 
     // ball
     if (S.ballActive) {
@@ -315,12 +376,14 @@
       fr(rnd(S.ballX),     rnd(S.ballY) - 1, 1, 1, C.white);
     }
 
-    // batsman
+    // batsman (player kit color)
+    var pKitA = (S.playerTeam || {}).kitA || C.bBody;
+    var pKitB = (S.playerTeam || {}).kitB || C.bLegs;
     var bcy = PT.nearY - 6;
     if (S.shotFired) {
-      spriteBatsmanSwing(54, bcy, S.swingT);
+      spriteBatsmanSwing(54, bcy, S.swingT, pKitA, pKitB);
     } else {
-      spriteBatsman(54, bcy);
+      spriteBatsman(54, bcy, pKitA, pKitB);
     }
 
     // HUD strip
@@ -344,12 +407,18 @@
 
   function drawBatHUD() {
     fr(0, 0, VW, 20, C.hudBg);
-    // team blobs
-    fr(2, 3, 8, 8, '#CC2222');
-    fr(11, 3, 8, 8, '#2244AA');
+    // team color chips + IDs
+    var pC = (S.playerTeam || {}).kitA || '#CC2222';
+    var oC = (S.oppTeam    || {}).kitA || '#2244AA';
+    fr(2, 2, 9, 9, pC);
+    fr(12, 2, 9, 9, oC);
+    var pId = (S.playerTeam || {}).id || 'YU';
+    var oId = (S.oppTeam    || {}).id || 'OP';
+    tx(pId.slice(0,2), 6,  3, '#FFFFFF', 3, 'center');
+    tx(oId.slice(0,2), 16, 3, '#FFFFFF', 3, 'center');
     // score
     var sc = S.runs + '/' + S.wkts;
-    tx(sc, 22, 2, C.white, 6);
+    tx(sc, 24, 2, C.white, 6);
     // overs
     tx(S.overs + ':' + S.balls, 22, 12, C.yellow, 4);
     // right: overs remaining / need
@@ -474,13 +543,13 @@
     fr(46, 44, 11, 1, C.bail);
     fr(70, 44, 11, 1, C.bail);
 
-    // menu items
-    var items = ['QUICK MATCH', 'HOW TO PLAY'];
+    // menu items (3 options)
+    var items = ['QUICK MATCH', 'TOURNAMENT', 'HOW TO PLAY'];
     items.forEach(function (label, i) {
-      var iy = 68 + i * 20;
+      var iy = 58 + i * 18;
       var sel = S.menuSel === i;
       if (sel) {
-        fr(8, iy - 2, VW - 16, 14, C.menuSel);
+        fr(8, iy - 2, VW - 16, 13, C.menuSel);
         tx('▶ ' + label, VW / 2, iy + 1, C.menuSelTxt, 5, 'center');
       } else {
         tx(label, VW / 2, iy + 1, C.menuTxt, 5, 'center');
@@ -630,18 +699,184 @@
   }
 
   /* ══════════════════════════════════════════════════════════
+     DRAW — TEAM SELECTION
+  ══════════════════════════════════════════════════════════ */
+  function drawTeamSel() {
+    fr(0, 0, VW, VH, C.menuBg);
+    tx('SELECT TEAM', VW / 2, 6, '#00FF44', 6, 'center');
+
+    // 8 position dots
+    for (var i = 0; i < TEAMS.length; i++) {
+      fr(VW / 2 - 15 + i * 4, 17, 3, 3, i === S.teamSel ? C.yellow : '#224422');
+    }
+
+    var t = TEAMS[S.teamSel];
+    // Kit color block
+    fr(16, 26, VW - 32, 30, t.kitA);
+    fr(16, 26, VW - 32,  5, t.kitB);     // accent stripe
+    fr(16, 26, 1, 30, '#002200');
+    fr(VW - 17, 26, 1, 30, '#002200');
+
+    // ID large
+    tx(t.id, VW / 2, 37, '#FFFFFF', 9, 'center');
+    // Team name
+    tx(t.name, VW / 2, 53, '#FFFFFF', 4, 'center');
+
+    // Nav arrows
+    tx('◄', 6,  38, '#00CC44', 6);
+    tx('►', VW - 9, 38, '#00CC44', 6);
+
+    // Position counter
+    tx((S.teamSel + 1) + '/8', VW / 2, 63, '#669966', 4, 'center');
+
+    fr(0, VH - 15, VW, 1, '#224422');
+    tx('L/R: change', 4, VH - 11, '#336633', 4);
+    tx('HIT: ok', VW - 4, VH - 11, '#00FF44', 4, 'right');
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     DRAW — TOURNAMENT BRACKET
+  ══════════════════════════════════════════════════════════ */
+  function drawTourBracket() {
+    fr(0, 0, VW, VH, C.menuBg);
+    tx('TOURNAMENT', VW / 2, 5, '#00FF44', 7, 'center');
+
+    var roundNames = ['QUARTER-FINAL', 'SEMI-FINAL', 'FINAL!'];
+    tx(roundNames[S.tourStep], VW / 2, 16, C.yellow, 4, 'center');
+    fr(10, 24, VW - 20, 1, '#224422');
+
+    var p = S.playerTeam, o = S.oppTeam;
+    // Player block (left half)
+    fr(6, 30, 50, 24, '#002200');
+    fr(6, 30, 50,  4, p.kitA);
+    tx('YOU', 8, 31, p.kitB, 3);
+    tx(p.id, 31, 37, '#FFFFFF', 7, 'center');
+    tx(p.name.slice(0, 8), 31, 50, '#669966', 3, 'center');
+
+    // VS
+    tx('VS', VW / 2, 38, C.yellow, 5, 'center');
+
+    // Opp block (right half)
+    fr(72, 30, 50, 24, '#002200');
+    fr(72, 30, 50,  4, o.kitA);
+    tx('CPU', 74, 31, o.kitB, 3);
+    tx(o.id, 97, 37, '#FFFFFF', 7, 'center');
+    tx(o.name.slice(0, 8), 97, 50, '#669966', 3, 'center');
+
+    fr(10, 59, VW - 20, 1, '#224422');
+
+    // Progress bar (3 rounds)
+    var pLabels = ['QF', 'SF', 'FIN'];
+    for (var i = 0; i < 3; i++) {
+      var px2 = 10 + i * 36;
+      var done = i < S.tourStep, curr = i === S.tourStep;
+      fr(px2, 64, 32, 14, done ? '#003300' : (curr ? '#004400' : '#001100'));
+      if (curr) fr(px2, 64, 32, 14, C.menuSel);
+      tx(pLabels[i], px2 + 16, 68, done ? C.yellow : (curr ? '#00FF44' : '#335533'), 4, 'center');
+      if (done) tx('✓', px2 + 26, 64, C.yellow, 4);
+    }
+
+    fr(10, 82, VW - 20, 1, '#224422');
+    tx('Round ' + (S.tourStep + 1) + ' of 3', VW / 2, 86, '#669966', 4, 'center');
+    tx('HIT: play match', VW / 2, VH - 7, '#335533', 4, 'center');
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     DRAW — TOURNAMENT ADVANCE (won a round)
+  ══════════════════════════════════════════════════════════ */
+  function drawTourAdvance() {
+    fr(0, 0, VW, VH, C.menuBg);
+    tx('ROUND WON!', VW / 2, 10, '#00FF44', 8, 'center');
+
+    var prevRound = ['QF', 'SF', 'FINAL'][S.tourStep - 1] || 'QF';
+    tx(prevRound + ' COMPLETE', VW / 2, 23, C.yellow, 5, 'center');
+    fr(14, 32, VW - 28, 1, '#224422');
+
+    if (S.tourStep < 3) {
+      var nextNames = ['', 'SEMI-FINAL', 'THE FINAL!'];
+      tx('Next up:', VW / 2, 38, C.white, 5, 'center');
+      tx(nextNames[S.tourStep], VW / 2, 50, '#00FF44', 7, 'center');
+      var opp = S.tourOpps[S.tourStep];
+      fr(VW / 2 - 24, 60, 48, 18, '#002200');
+      fr(VW / 2 - 24, 60, 48,  4, opp.kitA);
+      tx('vs ' + opp.id, VW / 2, 66, '#FFFFFF', 5, 'center');
+      tx(opp.name, VW / 2, 74, '#669966', 3, 'center');
+    }
+
+    tx('HIT: continue', VW / 2, VH - 7, '#335533', 4, 'center');
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     DRAW — TOURNAMENT ELIMINATED
+  ══════════════════════════════════════════════════════════ */
+  function drawTourElim() {
+    fr(0, 0, VW, VH, C.menuBg);
+    tx('ELIMINATED', VW / 2, 14, C.red, 9, 'center');
+
+    var rName = ['Quarter-Final', 'Semi-Final', 'Final'][S.tourStep];
+    tx('Out in ' + rName, VW / 2, 30, C.orange, 4, 'center');
+    fr(14, 38, VW - 28, 1, '#224422');
+
+    if (S.batting === 'player') {
+      tx('You: ' + S.runs + '  Need: ' + S.target, VW / 2, 46, C.white, 4, 'center');
+    } else {
+      tx('You: ' + S.firstScore, VW / 2, 46, C.white, 4, 'center');
+      tx('Opp: ' + S.oppScore, VW / 2, 56, C.white, 4, 'center');
+    }
+
+    if (S.playerTeam) {
+      fr(VW / 2 - 20, 68, 40, 18, '#002200');
+      fr(VW / 2 - 20, 68, 40,  4, S.playerTeam.kitA);
+      tx(S.playerTeam.id, VW / 2, 75, '#FFFFFF', 5, 'center');
+    }
+
+    tx('HIT: main menu', VW / 2, VH - 7, '#335533', 4, 'center');
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     DRAW — TOURNAMENT WIN
+  ══════════════════════════════════════════════════════════ */
+  function drawTourWin() {
+    fr(0, 0, VW, VH, C.menuBg);
+    // Trophy pixel art
+    fr(54, 18, 20, 3,  C.yellow);
+    fr(58, 21, 12, 16, C.yellow);
+    fr(50, 24,  8, 10, C.yellow);
+    fr(70, 24,  8, 10, C.yellow);
+    fr(50, 37, 28,  4, C.yellow);
+    fr(56, 41, 16,  3, C.yellow);
+    fr(53, 44, 22,  3, C.yellow);
+    // shine
+    fr(62, 22, 2, 6, '#FFFFAA');
+
+    tx('CHAMPION!', VW / 2, 54, '#00FF44', 8, 'center');
+    if (S.playerTeam) {
+      fr(VW / 2 - 18, 66, 36, 16, S.playerTeam.kitA);
+      fr(VW / 2 - 18, 66, 36,  4, S.playerTeam.kitB);
+      tx(S.playerTeam.id, VW / 2, 73, '#FFFFFF', 6, 'center');
+    }
+    tx('won the Tournament', VW / 2, 86, C.white, 4, 'center');
+    tx('HIT: play again', VW / 2, VH - 7, '#335533', 4, 'center');
+  }
+
+  /* ══════════════════════════════════════════════════════════
      MAIN DRAW DISPATCH
   ══════════════════════════════════════════════════════════ */
   function draw() {
     octx.clearRect(0, 0, VW, VH);
     switch (S.screen) {
-      case 'menu':    drawMenu();      break;
-      case 'help':    drawHelp();      break;
-      case 'toss':    drawToss();      break;
-      case 'batting': drawBatView();   break;
-      case 'fielding':drawFieldView(); break;
-      case 'break':   drawBreak();     break;
-      case 'result':  drawResult();    break;
+      case 'menu':        drawMenu();         break;
+      case 'help':        drawHelp();         break;
+      case 'toss':        drawToss();         break;
+      case 'batting':     drawBatView();      break;
+      case 'fielding':    drawFieldView();    break;
+      case 'break':       drawBreak();        break;
+      case 'result':      drawResult();       break;
+      case 'teamsel':     drawTeamSel();      break;
+      case 'tourBracket': drawTourBracket();  break;
+      case 'tourAdvance': drawTourAdvance();  break;
+      case 'tourElim':    drawTourElim();     break;
+      case 'tourWin':     drawTourWin();      break;
     }
 
     // Blit to main canvas (scaled, pixelated)
@@ -918,7 +1153,22 @@
         S.matchResult = 'lose'; SFX.lose(); // opp surpassed
       }
     }
-    S.screen = 'result';
+    // Tournament branching
+    if (S.tourMode) {
+      if (S.matchResult === 'win' || S.matchResult === 'tie') {
+        S.tourStep++;
+        if (S.tourStep >= 3) {
+          S.screen = 'tourWin'; SFX.win();
+        } else {
+          S.oppTeam = S.tourOpps[S.tourStep];
+          S.screen  = 'tourAdvance';
+        }
+      } else {
+        S.screen = 'tourElim';
+      }
+    } else {
+      S.screen = 'result';
+    }
   }
 
   function continueFromBreak() {
@@ -1094,9 +1344,34 @@
 
     if (S.screen === 'menu') {
       if (!down) return;
-      if (k === 'ArrowUp')                { S.menuSel = (S.menuSel + 1) % 2; SFX.menu(); }
-      if (k === 'ArrowDown')              { S.menuSel = (S.menuSel + 1) % 2; SFX.menu(); }
+      if (k === 'ArrowUp')                { S.menuSel = (S.menuSel + 2) % 3; SFX.menu(); }
+      if (k === 'ArrowDown')              { S.menuSel = (S.menuSel + 1) % 3; SFX.menu(); }
       if (k === 'Space' || k === 'Enter') { SFX.init(); menuSelect(); }
+      return;
+    }
+    if (S.screen === 'teamsel') {
+      if (!down) return;
+      if (k === 'ArrowLeft'  || k === 'ArrowUp')   { S.teamSel = (S.teamSel + 7) % 8; SFX.menu(); }
+      if (k === 'ArrowRight' || k === 'ArrowDown')  { S.teamSel = (S.teamSel + 1) % 8; SFX.menu(); }
+      if (k === 'Space' || k === 'Enter')           { SFX.init(); confirmTeamSel(); }
+      return;
+    }
+    if (S.screen === 'tourBracket') {
+      if (!down) return;
+      if (k === 'Space' || k === 'Enter') { SFX.init(); startTourMatch(); }
+      return;
+    }
+    if (S.screen === 'tourAdvance') {
+      if (!down) return;
+      if (k === 'Space' || k === 'Enter') { S.screen = 'tourBracket'; SFX.select(); }
+      return;
+    }
+    if (S.screen === 'tourElim' || S.screen === 'tourWin') {
+      if (!down) return;
+      if (k === 'Space' || k === 'Enter') {
+        S.screen = 'menu'; S.menuSel = 0;
+        S.tourMode = false; S.playerTeam = null; S.oppTeam = null;
+      }
       return;
     }
     if (S.screen === 'help') {
@@ -1138,16 +1413,40 @@
   function menuSelect() {
     if (S.menuSel === 0) {
       // Quick match → toss
+      S.tourMode = false; S.playerTeam = null; S.oppTeam = null;
       S.screen     = 'toss';
       S.tossPhase  = 'flip';
-      S.tossTimer  = 0;
-      S.tossWinner = null;
-      S.tossSel    = 0;
+      S.tossTimer  = 0; S.tossWinner = null; S.tossSel = 0;
+      SFX.select();
+    } else if (S.menuSel === 1) {
+      // Tournament → team selection
+      S.tourMode = true; S.tourStep = 0; S.teamSel = 0;
+      S.screen   = 'teamsel';
       SFX.select();
     } else {
       S.screen = 'help';
       SFX.select();
     }
+  }
+
+  function confirmTeamSel() {
+    S.playerTeam = TEAMS[S.teamSel];
+    // Shuffle remaining 7 teams as opponents
+    var pool = TEAMS.filter(function (t) { return t.id !== S.playerTeam.id; });
+    for (var i = pool.length - 1; i > 0; i--) {
+      var j = ri(i + 1), tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+    }
+    S.tourOpps = pool;              // use [0],[1],[2] for QF,SF,Final
+    S.oppTeam  = S.tourOpps[0];
+    S.screen   = 'tourBracket';
+    SFX.select();
+  }
+
+  function startTourMatch() {
+    S.screen    = 'toss';
+    S.tossPhase = 'flip';
+    S.tossTimer = 0; S.tossWinner = null; S.tossSel = 0;
+    SFX.select();
   }
 
   function tossConfirm() {
@@ -1165,24 +1464,34 @@
   function mobileAction() {
     SFX.init();
     switch (S.screen) {
-      case 'menu':    menuSelect(); break;
-      case 'help':    S.screen = 'menu'; SFX.select(); break;
-      case 'toss':    tossConfirm(); break;
-      case 'batting': playerSwing(); break;
-      case 'break':   continueFromBreak(); break;
-      case 'result':  S.screen = 'menu'; S.menuSel = 0; break;
+      case 'menu':        menuSelect(); break;
+      case 'help':        S.screen = 'menu'; SFX.select(); break;
+      case 'toss':        tossConfirm(); break;
+      case 'batting':     playerSwing(); break;
+      case 'break':       continueFromBreak(); break;
+      case 'result':      S.screen = 'menu'; S.menuSel = 0; break;
+      case 'teamsel':     confirmTeamSel(); break;
+      case 'tourBracket': startTourMatch(); break;
+      case 'tourAdvance': S.screen = 'tourBracket'; SFX.select(); break;
+      case 'tourElim':
+      case 'tourWin':
+        S.screen = 'menu'; S.menuSel = 0;
+        S.tourMode = false; S.playerTeam = null; S.oppTeam = null;
+        break;
     }
   }
   function mobileUp(down) {
     switch (S.screen) {
-      case 'menu':    if (down) { S.menuSel = (S.menuSel + 1) % 2; SFX.menu(); } break;
+      case 'menu':    if (down) { S.menuSel = (S.menuSel + 2) % 3; SFX.menu(); } break;
+      case 'teamsel': if (down) { S.teamSel = (S.teamSel + 7) % 8; SFX.menu(); } break;
       case 'toss':    if (down && S.tossPhase === 'choice') { S.tossSel = 0; SFX.menu(); } break;
       case 'batting': S.inputUp = down; break;
     }
   }
   function mobileDown(down) {
     switch (S.screen) {
-      case 'menu':    if (down) { S.menuSel = (S.menuSel + 1) % 2; SFX.menu(); } break;
+      case 'menu':    if (down) { S.menuSel = (S.menuSel + 1) % 3; SFX.menu(); } break;
+      case 'teamsel': if (down) { S.teamSel = (S.teamSel + 1) % 8; SFX.menu(); } break;
       case 'toss':    if (down && S.tossPhase === 'choice') { S.tossSel = 1; SFX.menu(); } break;
       case 'batting': if (down) S.inputUp = false; break;
     }
@@ -1192,12 +1501,14 @@
       if (down) S.inputDir = -1;
       else if (S.inputDir === -1) S.inputDir = 0;
     }
+    if (S.screen === 'teamsel' && down) { S.teamSel = (S.teamSel + 7) % 8; SFX.menu(); }
   }
   function mobileRight(down) {
     if (S.screen === 'batting') {
       if (down) S.inputDir = 1;
       else if (S.inputDir === 1) S.inputDir = 0;
     }
+    if (S.screen === 'teamsel' && down) { S.teamSel = (S.teamSel + 1) % 8; SFX.menu(); }
   }
 
   /* ══════════════════════════════════════════════════════════
