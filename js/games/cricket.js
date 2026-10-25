@@ -393,6 +393,33 @@
     roundRect(VW / 2 - 80, VH - 60, 160, 44, 8, P.btnActive, P.uiAccent); text("GOT IT", VW / 2, VH - 38, 18, "#fff", "center"); G.hitboxes = [{ x: VW / 2 - 80, y: VH - 60, w: 160, h: 44, action: "back" }];
   }
 
+  function drawTourBracket() {
+    drawMenuBackground();
+    var t = G.tour, m = G.match;
+    var labels = ["QUARTER-FINAL", "SEMI-FINAL", "FINAL"];
+    text("TOURNAMENT", VW / 2, 58, 44, P.uiAccent, "center");
+    text(labels[t.round - 1] + "  ✓  WON!", VW / 2, 115, 22, P.perfect, "center");
+    // bracket strip
+    for (var i = 0; i < 3; i++) {
+      var bx = VW / 2 - 310 + i * 220, by = 155;
+      var done = i < t.round, curr = i === t.round;
+      roundRect(bx, by, 190, 54, 8, done ? "#0a3a0a" : (curr ? P.btnActive : P.panelBg), done ? P.perfect : (curr ? P.uiAccent : P.panelBorder));
+      text(labels[i], bx + 95, by + 18, 13, done ? P.perfect : (curr ? P.uiAccent : P.uiDim), "center");
+      text(done ? "✓ WON" : (curr ? "UP NEXT" : ""), bx + 95, by + 38, 12, done ? P.perfect : P.uiAccent, "center");
+    }
+    // next opponent card
+    text("YOUR NEXT OPPONENT", VW / 2, 272, 14, P.uiDim, "center");
+    var opp = m.oppTeam, cx = VW / 2, cardW = 260, cardX = cx - cardW / 2;
+    roundRect(cardX, 292, cardW, 100, 10, P.panelBg, P.panelBorder);
+    ctx.fillStyle = opp.kitA; ctx.fillRect(cardX, 292, cardW, 36);
+    ctx.fillStyle = opp.kitB; ctx.fillRect(cardX, 328, cardW, 4);
+    text(opp.id, cx, 316, 26, "#fff", "center");
+    text(opp.name.toUpperCase(), cx, 362, 16, P.uiText, "center");
+    roundRect(cx - 110, VH - 96, 220, 54, 10, P.btnActive, P.uiAccent);
+    text("NEXT MATCH  ►", cx, VH - 69, 20, "#fff", "center");
+    G.hitboxes = [{ x: cx - 110, y: VH - 96, w: 220, h: 54, action: "tourNext" }];
+  }
+
   function drawPause() {
     ctx.fillStyle = "rgba(0,0,0,0.75)"; ctx.fillRect(0, 0, VW, VH); text("PAUSED", VW / 2, 150, 56, P.uiAccent, "center"); var items = ["RESUME", "RESTART", "MAIN MENU"]; G.hitboxes = [];
     for (var i = 0; i < 3; i++) { var y = 240 + i * 60; var on = i === G.menuSel; roundRect(VW / 2 - 150, y, 300, 48, 8, on ? P.btnActive : P.panelBg, on ? P.uiAccent : P.panelBorder); text(items[i], VW / 2, y + 24, 20, on ? "#fff" : P.uiText, "center"); G.hitboxes.push({ x: VW / 2 - 150, y: y, w: 300, h: 48, action: "pause" + i }); }
@@ -564,7 +591,7 @@
 
   function handleMenu(a) {
     if (a === "up") { G.menuSel = (G.menuSel + 6) % 7; SFX.click(); } if (a === "down") { G.menuSel = (G.menuSel + 1) % 7; SFX.click(); }
-    if (a === "hit") { SFX.select(); if (G.menuSel === 6) setState("settings"); else if (G.menuSel === 5) setState("howto"); else { var modes = ["quick", "tour", "super", "endless", "practice", "career"]; if (modes[G.menuSel]) { G.mode = modes[G.menuSel]; setState("teamSelect"); } } }
+    if (a === "hit") { SFX.select(); if (G.menuSel === 6) setState("settings"); else { var modes = ["quick", "tour", "super", "endless", "practice", "career"]; if (modes[G.menuSel]) { G.mode = modes[G.menuSel]; setState("teamSelect"); } } }
   }
 
   function handleTeamSelect(a) {
@@ -642,7 +669,7 @@
       case "menu": drawMainMenu(); break; case "teamSelect": drawTeamSelect(); break; case "toss": drawTossScreen(); break;
       case "innings": drawInningsView(); break; case "break": drawInningsBreak(); break; case "result": drawResultScreen(); break;
       case "settings": drawSettings(); break; case "howto": drawHowTo(); break; case "pause": drawInningsView(); drawPause(); break;
-      case "tourBracket": drawInningsBreak(); break;
+      case "tourBracket": drawTourBracket(); break;
     }
     if (G.flash > 0) { ctx.fillStyle = "rgba(255,255,255," + G.flash + ")"; ctx.fillRect(0, 0, VW, VH); }
     if (G.settings.scanlines) { ctx.fillStyle = P.scan; for (var y = 0; y < VH; y += 3) ctx.fillRect(0, y, VW, 1); }
@@ -695,7 +722,12 @@
   }
 
   function handleHitboxAction(a) {
-    if (!a) return; if (a === "startMatch") return startMatch(); if (a === "back") return setState("menu"); if (a === "continue") return continueAfterBreak(); if (a === "restart") return startMatch(); if (a === "menu") return setState("menu");
+    if (!a) return; if (a === "startMatch") return startMatch(); if (a === "back") return setState("menu");
+    if (a === "continue") { if (G.screen === "toss") return startAfterToss(); if (G.screen === "tourBracket") return openToss(); return continueAfterBreak(); }
+    if (a === "tourNext") { openToss(); return; }
+    if (a === "restart") return startMatch(); if (a === "menu") return setState("menu");
+    var _mL = ["quick","tour","super","endless","practice","career"]; if (_mL.indexOf(a) >= 0) { G.mode = a; setState("teamSelect"); SFX.select(); return; }
+    if (a === "settings") { setState("settings"); SFX.select(); return; }
     if (a.startsWith("call")) { G.toss.sel = parseInt(a[4], 10); G.toss.phase = "flip"; G.toss.timer = 0; G.toss.resolved = false; SFX.select(); return; }
     if (a.startsWith("choose")) { G.toss.sel = parseInt(a[6], 10); startAfterToss(); return; }
     if (a === "prevTeam") { G.teams.player = (G.teams.player + 11) % 12; if (G.teams.player === G.teams.opp) G.teams.opp = (G.teams.opp + 1) % 12; return; }
