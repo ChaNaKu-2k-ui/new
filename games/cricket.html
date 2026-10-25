@@ -7,12 +7,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cricket Legends: Nokia-style browser cricket | ChaNaKu</title>
-<meta name="description" content="Cricket Legends — Nokia-style cricket game in your browser. Classic pixel-art batting with timing, fielding, and match scoring.">
+<meta name="description" content="Cricket Legends — Nokia-style pixel cricket. Bat and bowl, win the toss, pick your field, and chase the target in your browser. Five modes, four difficulty levels, full scorecards.">
 <link rel="canonical" href="https://chanaku.pages.dev/games/cricket">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ChaNaKu">
 <meta property="og:title" content="Cricket Legends: Nokia-style browser cricket | ChaNaKu">
-<meta property="og:description" content="Classic Nokia-style cricket in your browser. Bat, hit fours and sixes, chase a target.">
+<meta property="og:description" content="Classic Nokia-style cricket in your browser. Bat, bowl, hit fours and sixes, chase a target.">
 <meta property="og:url" content="https://chanaku.pages.dev/games/cricket">
 <meta property="og:image" content="https://chanaku.pages.dev/assets/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -24,6 +24,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800&display=swap">
 <link rel="stylesheet" href="../css/site.css">
 <link rel="stylesheet" href="../css/cricket.css">
+<link rel="stylesheet" href="../css/cricket-v2.css">
 <script src="../js/theme.js"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Cricket Legends","url":"https://chanaku.pages.dev/games/cricket","genre":"Sports","gamePlatform":"Web browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
 </head>
@@ -45,7 +46,7 @@
     <h1>Cricket Legends</h1>
   </div>
   <span class="catchip">Games</span>
-  <p class="lede">Nokia-style pixel cricket. Face the bowler, time your shot, hit fours and sixes to beat the target.</p>
+  <p class="lede">Nokia-style pixel cricket. Win the toss, then bat <em>and</em> bowl — time your shots, pick your gaps, and defend or chase the target.</p>
 </div>
 
 <div class="panel ck-game" id="game" data-pad="off">
@@ -56,13 +57,14 @@
       <div class="stat"><b id="ck-best-disp">—</b><span>last match</span></div>
     </div>
     <button class="btn ck-sound-top" type="button" id="ck-sound" aria-label="Toggle sound" title="Mute (M)">&#128266; Sound on</button>
+    <button class="btn ck-pause" type="button" id="ck-pause" aria-label="Pause game" title="Pause (P)">&#10074;&#10074;</button>
     <button class="btn ck-fs" type="button" id="ck-fs" aria-label="Full screen" title="Full screen">
       <svg class="ico-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
       <svg class="ico-shrink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
     </button>
   </div>
 
-  <!-- Game canvas — all rendering happens here (Nokia pixel art, scaled from 128×128) -->
+  <!-- Game canvas — all rendering happens here (Nokia pixel art, 150×150 buffer scaled exactly 4×) -->
   <div class="ck-screen" id="ck-screen">
     <canvas id="ck-board" width="600" height="600" aria-label="Cricket Legends game"></canvas>
   </div>
@@ -70,20 +72,20 @@
   <nav class="ck-pad" aria-label="Cricket controls">
     <div class="ck-dpad">
       <div class="ck-dpad-up">
-        <button class="btn" type="button" id="ck-up" aria-label="Up / loft">&#9650;</button>
+        <button class="btn" type="button" id="ck-up" aria-label="Up / loft / length">&#9650;</button>
       </div>
       <div class="ck-dpad-mid">
-        <button class="btn" type="button" id="ck-left"  aria-label="Off side">&#9664;</button>
-        <button class="btn" type="button" id="ck-down"  aria-label="Down">&#9660;</button>
-        <button class="btn" type="button" id="ck-right" aria-label="On side">&#9654;</button>
+        <button class="btn" type="button" id="ck-left"  aria-label="Aim left">&#9664;</button>
+        <button class="btn" type="button" id="ck-down"  aria-label="Down / ground / length">&#9660;</button>
+        <button class="btn" type="button" id="ck-right" aria-label="Aim right">&#9654;</button>
       </div>
     </div>
-    <button class="btn primary" type="button" id="ck-hit" aria-label="Swing / confirm">&#127953;<br>HIT</button>
+    <button class="btn primary" type="button" id="ck-hit" aria-label="Swing / bowl / confirm">&#127953;<br>HIT</button>
   </nav>
 
 </div>
 
-<p class="note prose">Keyboard: arrow keys aim, Space/Enter swings. <kbd>M</kbd> mutes. On phones use the on-screen D-pad. Win the toss, choose to bat, then hit the ball to beat the target score.</p>
+<p class="note prose">Keyboard: arrows aim and set line/length, <kbd>Space</kbd>/<kbd>Enter</kbd> swings or bowls, <kbd>P</kbd> pauses, <kbd>M</kbd> mutes. On phones use the on-screen pad or tap the pitch. Win the toss, then bat <strong>or</strong> bowl — both innings are yours to play.</p>
 
 <section id="related" class="related"></section>
 </main>
