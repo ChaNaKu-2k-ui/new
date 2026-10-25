@@ -7,12 +7,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cricket Legends: Nokia-style browser cricket | ChaNaKu</title>
-<meta name="description" content="Cricket Legends — Nokia-style cricket game in your browser. Choose your team, bat, bowl, run tournaments. All in your browser.">
+<meta name="description" content="Cricket Legends — Nokia-style cricket game in your browser. Classic pixel-art batting with timing, fielding, and match scoring.">
 <link rel="canonical" href="https://chanaku.pages.dev/games/cricket">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ChaNaKu">
 <meta property="og:title" content="Cricket Legends: Nokia-style browser cricket | ChaNaKu">
-<meta property="og:description" content="Cricket Legends — Nokia-style cricket in your browser. Choose your team, bat, bowl, run tournaments.">
+<meta property="og:description" content="Classic Nokia-style cricket in your browser. Bat, hit fours and sixes, chase a target.">
 <meta property="og:url" content="https://chanaku.pages.dev/games/cricket">
 <meta property="og:image" content="https://chanaku.pages.dev/assets/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -45,7 +45,7 @@
     <h1>Cricket Legends</h1>
   </div>
   <span class="catchip">Games</span>
-  <p class="lede">Nokia-style cricket. Pick your team, bat or bowl, compete in quick matches or a full 8-team tournament.</p>
+  <p class="lede">Nokia-style pixel cricket. Face the bowler, time your shot, hit fours and sixes to beat the target.</p>
 </div>
 
 <div class="panel ck-game" id="game" data-pad="off">
@@ -62,134 +62,28 @@
     </button>
   </div>
 
-  <!-- ── game canvas + all overlays ── -->
+  <!-- Game canvas — all rendering happens here (Nokia pixel art, scaled from 128×128) -->
   <div class="ck-screen" id="ck-screen">
-    <canvas id="ck-board" width="600" height="600" aria-label="Cricket Legends game field"></canvas>
-
-    <!-- HUD (shown during match) -->
-    <div id="hud-top" class="cg-hud hidden">
-      <div class="cg-hud-box">
-        <div class="cg-hud-team" id="hud-team">TEAM</div>
-        <div class="cg-hud-score" id="hud-score">0/0</div>
-        <div class="cg-hud-overs" id="hud-overs">0.0</div>
-      </div>
-      <div class="cg-hud-box cg-hud-right">
-        <div class="cg-hud-comm" id="hud-comm">—</div>
-        <div class="cg-hud-target" id="hud-target"></div>
-      </div>
-    </div>
-
-    <!-- Timing bar (shown when batting) -->
-    <div id="timing-wrap" class="cg-timing hidden">
-      <div class="cg-timing-label">TIMING</div>
-      <div class="cg-timing-track">
-        <div class="cg-tz-edge"></div>
-        <div class="cg-tz-ok"></div>
-        <div class="cg-tz-perfect"></div>
-        <div class="cg-tz-ok"></div>
-        <div class="cg-tz-edge"></div>
-        <div class="cg-tm" id="tm"></div>
-      </div>
-      <div class="cg-dir-hint" id="dir-hint">← ↑ → shot direction · SPACE swing</div>
-    </div>
-
-    <!-- Controls hint -->
-    <div id="controls" class="cg-controls hidden">
-      <span>↑↓←→ move / aim</span>
-      <span>SPACE action</span>
-      <span>ENTER select</span>
-    </div>
-
-    <!-- Screens -->
-    <div id="screen-menu" class="cg-lscreen">
-      <div class="cg-logo">CRICKET<br>LEGENDS</div>
-      <div class="cg-menu-list" id="menu-list">
-        <div class="cg-menu-item selected" data-action="quick">QUICK MATCH</div>
-        <div class="cg-menu-item" data-action="tournament">TOURNAMENT</div>
-        <div class="cg-menu-item" data-action="help">HOW TO PLAY</div>
-      </div>
-    </div>
-
-    <div id="screen-help" class="cg-lscreen hidden">
-      <div class="cg-panel">
-        <div class="cg-panel-title">HOW TO PLAY</div>
-        <div class="cg-help-body">
-          <p><b>BATTING</b> — TIMING bar marker that moves back and forth: press SPACE (or HIT) when it's in the green zone. Use arrow keys to choose shot direction before swinging.</p>
-          <p><b>BOWLING</b> — Use ←→↑↓ to aim the cursor on the pitch. Press SPACE or HIT to bowl.</p>
-          <p><b>MENU</b> — ↑↓ navigate · ENTER / SPACE select · ESC back.</p>
-        </div>
-        <div class="cg-panel-foot">SPACE / ENTER to go back</div>
-      </div>
-    </div>
-
-    <div id="screen-teams" class="cg-lscreen hidden">
-      <div class="cg-panel cg-panel-wide">
-        <div class="cg-panel-title" id="teams-title">CHOOSE YOUR TEAM</div>
-        <div class="cg-team-grid" id="team-grid"></div>
-        <div class="cg-panel-foot" id="teams-foot">↑↓←→ move · ENTER select</div>
-      </div>
-    </div>
-
-    <div id="screen-toss" class="cg-lscreen hidden">
-      <div class="cg-panel">
-        <div class="cg-panel-title">TOSS</div>
-        <div class="cg-toss-result" id="toss-result">—</div>
-        <div class="cg-toss-choices hidden" id="toss-choices">
-          <div class="cg-menu-item selected" data-choice="bat">BAT FIRST</div>
-          <div class="cg-menu-item" data-choice="bowl">BOWL FIRST</div>
-        </div>
-        <div class="cg-panel-foot" id="toss-foot">↑↓ choose · ENTER confirm</div>
-      </div>
-    </div>
-
-    <div id="screen-break" class="cg-lscreen hidden">
-      <div class="cg-panel">
-        <div class="cg-panel-title">INNINGS BREAK</div>
-        <div class="cg-break-score" id="break-score">—</div>
-        <div class="cg-break-detail" id="break-detail">—</div>
-        <div class="cg-break-target" id="break-target">—</div>
-        <div class="cg-panel-foot">SPACE / ENTER continue</div>
-      </div>
-    </div>
-
-    <div id="screen-result" class="cg-lscreen hidden">
-      <div class="cg-panel">
-        <div class="cg-panel-title" id="result-title">RESULT</div>
-        <div class="cg-break-score" id="result-score">—</div>
-        <div class="cg-break-detail" id="result-detail">—</div>
-        <div class="cg-panel-foot" id="result-foot">SPACE / ENTER continue</div>
-      </div>
-    </div>
-
-    <div id="screen-bracket" class="cg-lscreen hidden">
-      <div class="cg-panel cg-panel-wide">
-        <div class="cg-panel-title">TOURNAMENT</div>
-        <div class="cg-bracket" id="bracket"></div>
-        <div class="cg-panel-foot" id="bracket-foot">SPACE / ENTER play next match</div>
-      </div>
-    </div>
-
-    <div id="toast" class="cg-toast"></div>
+    <canvas id="ck-board" width="600" height="600" aria-label="Cricket Legends game"></canvas>
   </div>
-  <!-- end .ck-screen -->
 
   <nav class="ck-pad" aria-label="Cricket controls">
     <div class="ck-dpad">
       <div class="ck-dpad-up">
-        <button class="btn" type="button" id="ck-up" aria-label="Up / lofted shot">&#9650;</button>
+        <button class="btn" type="button" id="ck-up" aria-label="Up / loft">&#9650;</button>
       </div>
       <div class="ck-dpad-mid">
-        <button class="btn" type="button" id="ck-left"  aria-label="Left / off-side">&#9664;</button>
+        <button class="btn" type="button" id="ck-left"  aria-label="Off side">&#9664;</button>
         <button class="btn" type="button" id="ck-down"  aria-label="Down">&#9660;</button>
-        <button class="btn" type="button" id="ck-right" aria-label="Right / on-side">&#9654;</button>
+        <button class="btn" type="button" id="ck-right" aria-label="On side">&#9654;</button>
       </div>
     </div>
-    <button class="btn primary" type="button" id="ck-hit" aria-label="Swing / select / bowl">&#127953;<br>HIT</button>
+    <button class="btn primary" type="button" id="ck-hit" aria-label="Swing / confirm">&#127953;<br>HIT</button>
   </nav>
 
 </div>
 
-<p class="note prose">Arrow keys move bat / aim. Space or Enter swings. On phones use the on-screen buttons. Tournament mode: 8 teams, quarter-finals → semis → final. Nothing is uploaded — all data stays in your browser.</p>
+<p class="note prose">Keyboard: arrow keys aim, Space/Enter swings. <kbd>M</kbd> mutes. On phones use the on-screen D-pad. Win the toss, choose to bat, then hit the ball to beat the target score.</p>
 
 <section id="related" class="related"></section>
 </main>
