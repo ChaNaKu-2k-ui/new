@@ -1,0 +1,39 @@
+/* Cricket Legends v2 — additive layer.
+   Loads AFTER cricket.css, so nothing here can break the existing shell.
+   Only adds the pause button and small responsive guardrails. */
+
+.ck-pause {
+  flex: none;
+  width: 44px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 1px;
+}
+
+.ck-pause[aria-pressed="true"] {
+  background: var(--accent, #2d552d);
+  color: #fff;
+}
+
+/* Slightly larger hit target for the primary action on touch */
+.ck-pad .btn.primary {
+  min-width: 96px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* Keep the board square even if site.css changes aspect ratios */
+.ck-screen canvas {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 420px) {
+  .ck-sound-top { font-size: 0; padding: 0 10px; }
+  .ck-sound-top::before { content: "🔊"; font-size: 15px; }
+  .ck-pause { width: 40px; }
+}
