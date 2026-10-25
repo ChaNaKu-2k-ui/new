@@ -1,40 +1,32 @@
-/* Cricket page init: touch pad, fullscreen wiring, HTML stat mirroring.
-   Runs after shell.js and cricket.js (all deferred, so order holds). */
+/* Cricket page init — touch pad, fullscreen, HTML stat mirroring. */
 (function () {
   "use strict";
 
   var panel  = document.getElementById("game");
   var fsBtn  = document.getElementById("ck-fs");
-  var fsBtn2 = document.getElementById("ck-fs2");
 
   if (typeof CNKGame === "undefined") return;
 
-  /* Show the mobile pad on any touch-capable screen. */
+  /* Show touch pad on any coarse-pointer device */
   if (CNKGame.touch && panel) panel.setAttribute("data-pad", "on");
 
-  /* Full screen — both buttons do the same thing. */
+  /* Fullscreen */
   if (fsBtn) CNKGame.fullscreen(panel, fsBtn);
-  if (fsBtn2 && fsBtn) {
-    fsBtn2.addEventListener("click", function () { fsBtn.click(); });
-  }
 
-  /* Mirror the last match + best into the HTML cells.
-     The canvas HUD is authoritative; these cells are for screen readers
-     and for anyone who scrolls past the game. */
+  /* Mirror best + last to the HTML cells above the canvas */
+  var bestEl = document.getElementById("ck-best-disp");
   var scoreEl = document.getElementById("ck-score-disp");
-  var bestEl  = document.getElementById("ck-best-disp");
 
   function sync() {
-    var best = 0, last = null;
+    var best = 0;
+    var last = null;
     try {
       best = parseInt(localStorage.getItem("cnk-cricket-best"), 10) || 0;
       last = JSON.parse(localStorage.getItem("cnk-cricket-last") || "null");
-    } catch (e) { /* storage blocked — leave the dashes */ }
+    } catch (e) {}
 
     if (bestEl) bestEl.textContent = best ? String(best) : "—";
-    if (scoreEl) {
-      scoreEl.textContent = (last && last.line) ? String(last.line) : "—";
-    }
+    if (scoreEl && last && last.line) scoreEl.textContent = String(last.line);
   }
 
   sync();
