@@ -5,13 +5,38 @@
   var panel  = document.getElementById("game");
   var fsBtn  = document.getElementById("ck-fs");
 
-  if (typeof CNKGame === "undefined") return;
-
   /* Show touch pad on any coarse-pointer device */
-  if (CNKGame.touch && panel) panel.setAttribute("data-pad", "on");
+  if (panel && ('ontouchstart' in window || navigator.maxTouchPoints > 0)) {
+    panel.setAttribute("data-pad", "on");
+  }
 
-  /* Fullscreen */
-  if (fsBtn) CNKGame.fullscreen(panel, fsBtn);
+  /* Standard Fullscreen API implementation */
+  if (fsBtn && panel) {
+    var expandIco = fsBtn.querySelector(".ico-expand");
+    var shrinkIco = fsBtn.querySelector(".ico-shrink");
+
+    fsBtn.addEventListener("click", function () {
+      if (!document.fullscreenElement) {
+        if (panel.requestFullscreen) {
+          panel.requestFullscreen().catch(function(){});
+        } else if (panel.webkitRequestFullscreen) {
+          panel.webkitRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+      }
+    });
+
+    document.addEventListener("fullscreenchange", function () {
+      var isFs = !!document.fullscreenElement;
+      if (expandIco) expandIco.hidden = isFs;
+      if (shrinkIco) shrinkIco.hidden = !isFs;
+    });
+  }
 
   /* Mirror best + last to the HTML cells above the canvas */
   var bestEl = document.getElementById("ck-best-disp");
