@@ -651,7 +651,7 @@
   function toggleSound() { G.settings.sound = !G.settings.sound; muted = !G.settings.sound; saveSettings(); syncSoundButton(); if (!muted) SFX.tick(); }
   function syncSoundButton() { var b = document.getElementById("ck-sound"); if (b) { b.setAttribute("aria-pressed", G.settings.sound ? "false" : "true"); b.textContent = G.settings.sound ? "ðŸ”Š" : "ðŸ”‡"; } }
 
-  function setState(name) { G.screen = name; G.stateT = 0; G.hitboxes = []; G.menuSel = 0; if (name === "teamSelect" && G.mode === "career") { var c = loadCareer(); G.settings.difficulty = DIFF_KEYS[Math.min(4, Math.floor((c.level - 1) / 2))]; } }
+  function setState(name) { G.screen = name; G.stateT = 0; G.hitboxes = []; G.menuSel = 0; if (name === "teamSelect" && G.mode === "career") { var c = loadCareer(); G.settings.difficulty = DIFF_KEYS[Math.min(4, Math.floor((c.level - 1) / 2))]; } var _p = document.getElementById("game"); if (_p && (("ontouchstart" in window) || navigator.maxTouchPoints > 0)) { _p.setAttribute("data-pad", name === "innings" ? "on" : "off"); } }
 
   function update(dt) {
     G.time += dt; G.shake = Math.max(0, G.shake - dt * 20); G.flash = Math.max(0, G.flash - dt * 1.6); updateParticles(dt); camBlend = lerp(camBlend, camTarget, clamp(dt * 5, 0, 1));
@@ -742,7 +742,8 @@
     bindInput(); setState("menu"); var last = performance.now();
     function frame(t) { var dt = Math.min(0.05, (t - last) / 1000); last = t; update(dt); draw(); requestAnimationFrame(frame); }
     requestAnimationFrame(frame);
-    window.CNKGame = window.CNKCricket = { G: G, state: function () { return G.screen; } };
+    window.CNKCricket = { G: G, state: function () { return G.screen; } };
+    window.CNKGame = Object.assign({}, window.CNKGame || {}, window.CNKCricket);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
