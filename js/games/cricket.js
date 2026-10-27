@@ -649,7 +649,7 @@
   function continueAfterBreak() { var m = G.match; beginInnings(m.nextBats, m.target); }
 
   function toggleSound() { G.settings.sound = !G.settings.sound; muted = !G.settings.sound; saveSettings(); syncSoundButton(); if (!muted) SFX.tick(); }
-  function syncSoundButton() { var b = document.getElementById(“ck-sound”); if (b) { b.setAttribute(“aria-pressed”, G.settings.sound ? “false” : “true”); b.textContent = G.settings.sound ? “🔊” : “🔇”; } }
+  function syncSoundButton() { var b = document.getElementById("ck-sound"); if (b) { b.setAttribute("aria-pressed", G.settings.sound ? "false" : "true"); b.innerHTML = G.settings.sound ? "&#x1F50A;" : "&#x1F507;"; } }
 
   function setState(name) { G.screen = name; G.stateT = 0; G.hitboxes = []; G.menuSel = 0; if (name === "teamSelect" && G.mode === "career") { var c = loadCareer(); G.settings.difficulty = DIFF_KEYS[Math.min(4, Math.floor((c.level - 1) / 2))]; } var _p = document.getElementById("game"); if (_p && (("ontouchstart" in window) || navigator.maxTouchPoints > 0)) { var _padOn = { innings: 1, toss: 1, break: 1, result: 1, tourBracket: 1 }; _p.setAttribute("data-pad", _padOn[name] ? "on" : "off"); } }
 
