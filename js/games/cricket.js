@@ -349,6 +349,7 @@
 
   function drawTossScreen() {
     drawMenuBackground(); var T = G.toss; text("THE TOSS", VW / 2, 60, 44, P.uiAccent, "center");
+    if (!T) return;
     if (T.phase === "call") {
       text("CALL IT", VW / 2, 130, 20, P.uiText, "center"); var coins = ["HEADS", "TAILS"];
       for (var i = 0; i < 2; i++) { var x = VW / 2 - 220 + i * 240; var on = i === T.sel; roundRect(x, 200, 200, 80, 12, on ? P.btnActive : P.panelBg, on ? P.uiAccent : P.panelBorder); text(coins[i], x + 100, 240, 28, on ? "#fff" : P.uiText, "center"); G.hitboxes.push({ x: x, y: 200, w: 200, h: 80, action: "call" + i }); }
@@ -442,7 +443,7 @@
     var mode = MODES[G.mode], pt = TEAMS[G.teams.player], ot = TEAMS[G.teams.opp]; G.diff = DIFFS[G.settings.difficulty];
     if (G.mode === "tour") { var others = shuffle(TEAMS.filter(function (t, i) { return i !== G.teams.player; })); G.tour = { round: 0, player: pt, opponents: others.slice(0, 3), won: [] }; } else G.tour = null;
     G.match = { mode: G.mode, modeDef: mode, overs: mode.overs, wkts: mode.wkts, solo: mode.solo, playerTeam: pt, oppTeam: ot, innings: 1, first: null, second: null, playerScore: null, oppScore: null, target: 0, result: null, margin: "", playerBatsFirst: false };
-    G.commentary = []; setState("toss");
+    G.commentary = []; openToss();
   }
 
   function openToss() { G.toss = { phase: "call", sel: 0, timer: 0, resolved: false, result: null, won: false, aiChoice: null }; G.menuSel = 0; setState("toss"); }
@@ -603,7 +604,7 @@
   }
 
   function handleToss(a) {
-    var T = G.toss; if (T.phase === "call") {
+    var T = G.toss; if (!T) return; if (T.phase === "call") {
       if (a === "left" || a === "right") { T.sel = 1 - T.sel; SFX.tick(); }
       if (a === "hit") { T.phase = "flip"; T.timer = 0; T.resolved = false; SFX.select(); }
     } else if (T.phase === "choice") {
