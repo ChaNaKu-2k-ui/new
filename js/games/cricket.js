@@ -169,9 +169,12 @@
   var ctx = cv ? cv.getContext("2d") : null;
 
   function project(x, y, z) {
-    if (z <= 0.05) return null;
-    var focal = 520;
-    return { x: VW / 2 + (x * focal) / z, y: VH * 0.62 - (y * focal) / z, s: focal / z };
+    var camZ = 3;
+    var camY = 1.4;
+    var adjZ = z + camZ;
+    if (adjZ < 0.1) return null;
+    var focal = 420;
+    return { x: VW / 2 + (x * focal) / adjZ, y: VH * 0.62 - ((y - camY) * focal) / adjZ, s: focal / adjZ };
   }
 
   var camTarget = 0, camBlend = 0;
