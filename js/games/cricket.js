@@ -1,7 +1,5 @@
 /* ============================================================================
-   CRICKET LEGENDS — ENGINE v5.2 (Final)
-   - True 3D Physics, Magnus Effect, and Dynamic Cameras.
-   - Fully integrates with the existing ChaNaKu HTML/CSS.
+   CRICKET LEGENDS — ENGINE v5.3 (Menu Restored + 3D Camera Fixed)
    ========================================================================== */
 (function () {
     "use strict";
@@ -18,16 +16,17 @@
     const scoreDisp = document.getElementById('ck-score-disp');
     const bestDisp = document.getElementById('ck-best-disp');
 
+    // Set actual canvas resolution (16:9 ratio)
     canvas.width = 900;
     canvas.height = 600;
 
-    // Enable mobile pad
+    // Show mobile D-pad
     const gameContainer = document.getElementById('game');
     if (gameContainer && (("ontouchstart" in window) || navigator.maxTouchPoints > 0)) {
         gameContainer.setAttribute('data-pad', 'on');
     }
 
-    // --- 3D Math (Fixed Projection) ---
+    // --- 3D Math ---
     class Vec3 {
         constructor(x = 0, y = 0, z = 0) { this.x = x; this.y = y; this.z = z; }
         add(v) { return new Vec3(this.x + v.x, this.y + v.y, this.z + v.z); }
@@ -44,7 +43,6 @@
     function project(pos, camPos, camTarget, fov, width, height) {
         const forward = camTarget.sub(camPos).norm();
         let right, up;
-        // Prevent cross product zero error when looking straight down
         if (Math.abs(forward.y) > 0.99) {
             right = new Vec3(1, 0, 0);
             up = new Vec3(0, 0, -1).mul(forward.y > 0 ? 1 : -1);
@@ -56,7 +54,8 @@
         const cx = d.dot(right), cy = d.dot(up), cz = d.dot(forward);
         if (cz <= 0.1) return null;
         const scale = (height / 2) / Math.tan((fov * Math.PI / 180) / 2);
-        return { x: (width / 2) + (cx / cz) * scale, y: (height / 2) - (cy / cz) * scale, depth: cz, scale: scale / cz };
+        // Adjust scale factor to fit the field nicely
+        return { x: (width / 2) + (cx / cz) * scale, y: (height / 2) - (cy / cz) * scale, depth: cz, scale: (scale / cz) * 0.6 };
     }
 
     // --- Physics & Entities ---
@@ -64,53 +63,35 @@
         constructor() {
             this.pos = new Vec3(0, 0, -10);
             this.vel = new Vec3(0, 0, 0);
-            this.spin = new Vec3(0, 0, 0);
             this.radius = 0.04;
             this.active = false;
-            this.state = 'idle'; // idle, bowled, hit
+            this.state = 'idle';
             this.gravity = -9.81;
-            this.dragCoeff = 0.0015;
-            this.magnusCoeff = 0.0008;
             this.restitution = 0.55;
         }
         reset() {
-            this.pos = new Vec3(0, 0, -10); this.vel = new Vec3(0, 0, 0); this.spin = new Vec3(0, 0, 0);
+            this.pos = new Vec3(0, 0, -10); this.vel = new Vec3(0, 0, 0);
             this.active = false; this.state = 'idle';
         }
-        bowl(speedKmh, line, length, spinType) {
+        bowl(line, length) {
             this.pos = new Vec3(line, 2.0, -10);
-            const targetZ = -10 + length * 6 + 2; 
+            // Length: 0 (full) to 2 (short)
+            const targetZ = -10 + length * 8 + 2; 
             const dz = targetZ - this.pos.z;
-            const speedMs = speedKmh / 3.6;
+            const speedMs = 130 / 3.6;
             const timeToPitch = Math.abs(dz) / speedMs;
             
             this.vel.z = dz / timeToPitch;
             this.vel.y = (0.5 * 9.81 * timeToPitch * timeToPitch - 2.0) / timeToPitch;
             
-            if (spinType === 'swing') this.vel.x = line * 0.5;
             this.active = true; 
             this.state = 'bowled';
         }
         update(dt) {
             if (!this.active) return;
             this.vel.y += this.gravity * dt;
-            
-            // Magnus Effect
-            if (this.spin.len() > 0) {
-                const magnus = this.spin.cross(this.vel).mul(this.magnusCoeff);
-                this.vel = this.vel.add(magnus.mul(dt));
-            }
-            
-            // Drag
-            const speed = this.vel.len();
-            if (speed > 0) {
-                const drag = this.vel.norm().mul(-this.dragCoeff * speed * speed);
-                this.vel = this.vel.add(drag.mul(dt));
-            }
-            
             this.pos = this.pos.add(this.vel.mul(dt));
             
-            // Bounce
             if (this.pos.y <= 0 && this.vel.y < 0 && this.pos.z >= -10 && this.pos.z <= 10) {
                 this.pos.y = 0; 
                 this.vel.y = -this.vel.y * this.restitution;
@@ -119,24 +100,23 @@
                 if (this.state === 'bowled') this.state = 'bounced';
             }
         }
-        hitBat(dx, dy, dz) {
+        hitBat() {
             this.state = 'hit';
-            this.vel = new Vec3(dx, dy, dz);
-            this.spin = new Vec3(0, 0, 0);
+            this.vel = new Vec3((Math.random() - 0.5) * 30, 15 + Math.random() * 15, 20 + Math.random() * 20);
         }
     }
 
     class Camera {
         constructor() {
-            this.pos = new Vec3(0, 5, -12); 
+            this.pos = new Vec3(0, 12, -25); 
             this.target = new Vec3(0, 0, 0);
-            this.desPos = new Vec3(0, 5, -12); 
+            this.desPos = new Vec3(0, 12, -25); 
             this.desTarget = new Vec3(0, 0, 0);
             this.presets = {
-                BOWLER: { pos: new Vec3(0, 3, -12), target: new Vec3(0, 1, 10) },
-                BATSMAN: { pos: new Vec3(0, 3, 12), target: new Vec3(0, 1, -10) },
-                BROADCAST: { pos: new Vec3(30, 20, 0), target: new Vec3(0, 0, 0) },
-                SPIDER: { pos: new Vec3(0, 35, -0.1), target: new Vec3(0, 0, 0) } // -0.1 to avoid gimbal lock
+                BOWLER: { pos: new Vec3(0, 8, -20), target: new Vec3(0, 1, 10) },
+                BATSMAN: { pos: new Vec3(0, 8, 20), target: new Vec3(0, 1, -10) },
+                BROADCAST: { pos: new Vec3(35, 25, 0), target: new Vec3(0, 0, 0) },
+                SPIDER: { pos: new Vec3(0, 40, -0.1), target: new Vec3(0, 0, 0) }
             };
         }
         setMode(mode, targetPos = null) {
@@ -157,14 +137,14 @@
             ctx.fillStyle = grad; ctx.fillRect(0, 0, canvas.width, canvas.height);
         },
         drawField(camPos, camTarget) {
-            // Grass
             const center = project(new Vec3(0, 0, 0), camPos, camTarget, 60, canvas.width, canvas.height);
-            const edge = project(new Vec3(70, 0, 0), camPos, camTarget, 60, canvas.width, canvas.height);
+            const edge = project(new Vec3(60, 0, 0), camPos, camTarget, 60, canvas.width, canvas.height);
             if (center && edge) {
                 const radius = Math.abs(edge.x - center.x);
                 ctx.fillStyle = '#2c5e1a';
                 ctx.beginPath(); ctx.ellipse(center.x, center.y, radius, radius * 0.4, 0, 0, Math.PI * 2); ctx.fill();
             }
+            
             // Pitch
             const p1 = project(new Vec3(-1.5, 0, -10), camPos, camTarget, 60, canvas.width, canvas.height);
             const p2 = project(new Vec3(1.5, 0, -10), camPos, camTarget, 60, canvas.width, canvas.height);
@@ -180,18 +160,19 @@
             const bot = project(pos, camera.pos, camera.target, 60, canvas.width, canvas.height);
             const top = project(pos.add(new Vec3(0, 1.8, 0)), camera.pos, camera.target, 60, canvas.width, canvas.height);
             if (bot && top) {
+                const s = bot.scale;
                 ctx.fillStyle = 'rgba(0,0,0,0.3)';
-                ctx.beginPath(); ctx.ellipse(bot.x, bot.y, 15 * bot.scale, 5 * bot.scale, 0, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath(); ctx.ellipse(bot.x, bot.y, 15 * s, 5 * s, 0, 0, Math.PI * 2); ctx.fill();
                 ctx.fillStyle = color;
-                ctx.beginPath(); ctx.moveTo(bot.x - 10 * bot.scale, bot.y); ctx.lineTo(bot.x + 10 * bot.scale, bot.y);
-                ctx.lineTo(top.x + 8 * top.scale, top.y); ctx.lineTo(top.x - 8 * top.scale, top.y); ctx.fill();
-                ctx.beginPath(); ctx.arc(top.x, top.y - 5 * top.scale, 6 * top.scale, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath(); ctx.moveTo(bot.x - 10 * s, bot.y); ctx.lineTo(bot.x + 10 * s, bot.y);
+                ctx.lineTo(top.x + 8 * s, top.y); ctx.lineTo(top.x - 8 * s, top.y); ctx.fill();
+                ctx.beginPath(); ctx.arc(top.x, top.y - 5 * s, 6 * s, 0, Math.PI * 2); ctx.fill();
             }
         },
         drawBall(ball) {
             const sp = project(ball.pos, camera.pos, camera.target, 60, canvas.width, canvas.height);
             if (sp) {
-                const r = Math.max(2, ball.radius * sp.scale);
+                const r = Math.max(2, ball.radius * sp.scale * 2);
                 const sh = project(new Vec3(ball.pos.x, 0, ball.pos.z), camera.pos, camera.target, 60, canvas.width, canvas.height);
                 if (sh) { ctx.fillStyle = 'rgba(0,0,0,0.4)'; ctx.beginPath(); ctx.ellipse(sh.x, sh.y, r * 2, r, 0, 0, Math.PI * 2); ctx.fill(); }
                 ctx.fillStyle = '#b00000';
@@ -203,21 +184,81 @@
     // --- Game State ---
     const camera = new Camera();
     const ball = new Ball();
-    let gameState = 'PLAY';
+    
+    let gameState = 'MENU'; // MENU, TOSS, PLAY
     let currentTeam = 1;
     let score = { team1: { runs: 0, wkts: 0, balls: 0 }, team2: { runs: 0, wkts: 0, balls: 0 } };
-    
-    // Controls
     let aimX = 0;
     let aimY = 0;
-    let bowlingPhase = 'aim'; // aim, release, flight
+    let bowlingPhase = 'aim';
     let accPos = 0;
     let accDir = 1;
 
     const fielders = [
-        { pos: new Vec3(20, 0, -30) }, { pos: new Vec3(-30, 0, 20) },
-        { pos: new Vec3(40, 0, 10) }, { pos: new Vec3(-15, 0, -40) }, { pos: new Vec3(10, 0, 45) }
+        { pos: new Vec3(25, 0, -25) }, { pos: new Vec3(-25, 0, 25) },
+        { pos: new Vec3(35, 0, 15) }, { pos: new Vec3(-10, 0, -35) }, { pos: new Vec3(15, 0, 35) }
     ];
+
+    // Menu Hitboxes
+    const hitboxes = [];
+    
+    function drawMenu() {
+        renderer.clear();
+        ctx.fillStyle = 'rgba(0,0,0,0.7)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.fillStyle = '#d4ff00';
+        ctx.font = 'bold 50px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('CRICKET LEGENDS', canvas.width / 2, 150);
+        
+        ctx.fillStyle = '#fff';
+        ctx.font = '24px sans-serif';
+        ctx.fillText('Click to Start Match', canvas.width / 2, 300);
+        
+        hitboxes.length = 0;
+        hitboxes.push({ x: 300, y: 250, w: 300, h: 60, action: 'start' });
+        
+        ctx.strokeStyle = '#d4ff00';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(300, 250, 300, 60);
+    }
+
+    function drawToss() {
+        renderer.clear();
+        ctx.fillStyle = 'rgba(0,0,0,0.7)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 40px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('YOU WON THE TOSS', canvas.width / 2, 200);
+        
+        ctx.font = '24px sans-serif';
+        ctx.fillText('Choose to:', canvas.width / 2, 260);
+        
+        hitboxes.length = 0;
+        hitboxes.push({ x: 250, y: 300, w: 150, h: 60, action: 'bat' });
+        hitboxes.push({ x: 500, y: 300, w: 150, h: 60, action: 'bowl' });
+        
+        ctx.strokeStyle = '#d4ff00';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(250, 300, 150, 60);
+        ctx.strokeRect(500, 300, 150, 60);
+        
+        ctx.fillStyle = '#d4ff00';
+        ctx.font = 'bold 20px sans-serif';
+        ctx.fillText('BAT', 325, 335);
+        ctx.fillText('BOWL', 575, 335);
+    }
+
+    function startMatch(batFirst) {
+        gameState = 'PLAY';
+        currentTeam = batFirst ? 1 : 2;
+        score = { team1: { runs: 0, wkts: 0, balls: 0 }, team2: { runs: 0, wkts: 0, balls: 0 } };
+        updateUI();
+        nextDelivery();
+    }
 
     function updateUI() {
         if (scoreDisp) scoreDisp.innerText = `${score[`team${currentTeam}`].runs}/${score[`team${currentTeam}`].wkts}`;
@@ -231,16 +272,13 @@
         ball.reset();
         camera.setMode(currentTeam === 1 ? 'BOWLER' : 'BATSMAN');
         bowlingPhase = 'aim';
+        aimX = 0; aimY = 0;
         
         setTimeout(() => {
             if (gameState !== 'PLAY') return;
             if (currentTeam === 1) {
-                // AI Bowls to Player
-                ball.bowl(120 + Math.random() * 25, (Math.random() - 0.5) * 1.5, Math.random() * 2 + 1, 'none');
+                ball.bowl((Math.random() - 0.5) * 1.5, Math.random() * 2 + 1);
                 bowlingPhase = 'flight';
-            } else {
-                // Player Bowls to AI
-                bowlingPhase = 'aim';
             }
         }, 1500);
     }
@@ -251,26 +289,21 @@
             accPos = 0; accDir = 1;
         } else if (bowlingPhase === 'release') {
             bowlingPhase = 'flight';
-            ball.bowl(130, (Math.random() - 0.5) * 1.5, Math.random() * 2 + 1, 'none');
+            ball.bowl((Math.random() - 0.5) * 1.5, Math.random() * 2 + 1);
+            
             // AI Batsman
             setTimeout(() => {
                 if (ball.state === 'bowled' || ball.state === 'bounced') {
-                    ball.hitBat((Math.random() - 0.5) * 30, 10 + Math.random() * 20, -15 - Math.random() * 20);
+                    ball.hitBat();
                     camera.setMode('BALL', ball.pos);
                 }
-            }, 600);
+            }, 500);
         }
     }
 
     function swingBat() {
         if (bowlingPhase !== 'flight' || !ball.active || (ball.state !== 'bowled' && ball.state !== 'bounced')) return;
-        
-        // Calculate shot direction based on aimX and aimY
-        const dx = aimX * 30 + (Math.random() - 0.5) * 10;
-        const dy = aimY * 20 + 10 + Math.random() * 5;
-        const dz = -15 + (Math.random() - 0.5) * 10; // Towards boundary
-
-        ball.hitBat(dx, dy, dz);
+        ball.hitBat();
         camera.setMode('BALL', ball.pos);
     }
 
@@ -284,11 +317,11 @@
         
         setTimeout(() => {
             if (score[`team${currentTeam}`].wkts >= 10 || score[`team${currentTeam}`].balls >= 120) {
-                if (currentTeam === 1) { currentTeam = 2; nextDelivery(); } else { gameState = 'END'; }
+                if (currentTeam === 1) { currentTeam = 2; nextDelivery(); } else { gameState = 'MENU'; }
             } else {
                 nextDelivery();
             }
-        }, 3000);
+        }, 2500);
     }
 
     function handleRuns(runs, type) {
@@ -303,32 +336,56 @@
         
         setTimeout(() => {
             if (score[`team${currentTeam}`].balls >= 120) {
-                if (currentTeam === 1) { currentTeam = 2; nextDelivery(); } else { gameState = 'END'; }
+                if (currentTeam === 1) { currentTeam = 2; nextDelivery(); } else { gameState = 'MENU'; }
             } else {
                 nextDelivery();
             }
-        }, 3000);
+        }, 2500);
     }
 
     // --- Input Handlers ---
-    if (btnUp) btnUp.addEventListener('click', () => aimY = 1);
-    if (btnDown) btnDown.addEventListener('click', () => aimY = -1);
-    if (btnLeft) btnLeft.addEventListener('click', () => aimX = -1);
-    if (btnRight) btnRight.addEventListener('click', () => aimX = 1);
+    if (btnUp) btnUp.addEventListener('pointerdown', () => aimY = 1);
+    if (btnDown) btnDown.addEventListener('pointerdown', () => aimY = -1);
+    if (btnLeft) btnLeft.addEventListener('pointerdown', () => aimX = -1);
+    if (btnRight) btnRight.addEventListener('pointerdown', () => aimX = 1);
 
-    window.addEventListener('keydown', e => {
-        if (e.code === 'Space') {
+    canvas.addEventListener('pointerdown', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
+
+        for (let b of hitboxes) {
+            if (x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h) {
+                if (b.action === 'start') { gameState = 'TOSS'; }
+                else if (b.action === 'bat') { startMatch(true); }
+                else if (b.action === 'bowl') { startMatch(false); }
+                return;
+            }
+        }
+
+        if (gameState === 'PLAY') {
             if (currentTeam === 1 && bowlingPhase === 'flight') swingBat();
             else if (currentTeam === 2) startBowl();
         }
     });
-    
+
     if (hitBtn) {
-        hitBtn.addEventListener('click', () => {
-            if (currentTeam === 1 && bowlingPhase === 'flight') swingBat();
-            else if (currentTeam === 2) startBowl();
+        hitBtn.addEventListener('pointerdown', () => {
+            if (gameState === 'PLAY') {
+                if (currentTeam === 1 && bowlingPhase === 'flight') swingBat();
+                else if (currentTeam === 2) startBowl();
+            }
         });
     }
+
+    window.addEventListener('keydown', e => {
+        if (e.code === 'Space' && gameState === 'PLAY') {
+            if (currentTeam === 1 && bowlingPhase === 'flight') swingBat();
+            else if (currentTeam === 2) startBowl();
+        }
+    });
 
     // --- Engine Loop ---
     let lastTime = performance.now();
@@ -336,22 +393,23 @@
         const dt = Math.min((time - lastTime) / 1000, 0.1);
         lastTime = time;
 
-        if (gameState === 'PLAY') {
+        if (gameState === 'MENU') {
+            drawMenu();
+        } else if (gameState === 'TOSS') {
+            drawToss();
+        } else if (gameState === 'PLAY') {
             ball.update(dt);
             
-            // Bowling Release Meter
             if (bowlingPhase === 'release') {
                 accPos += accDir * dt * 1.5;
                 if (accPos >= 1) { accPos = 1; accDir = -1; }
                 if (accPos <= 0) { accPos = 0; accDir = 1; }
             }
 
-            // Bowled Check
             if (ball.active && (ball.state === 'bowled' || ball.state === 'bounced') && ball.pos.z > 10 && ball.pos.y < 1.5 && Math.abs(ball.pos.x) < 1.5) {
                 handleWicket('bowled');
             }
             
-            // Catch Check
             if (ball.active && ball.state === 'hit') {
                 for (let f of fielders) {
                     if (ball.pos.dist(f.pos) < 3.0 && ball.pos.y < 2 && ball.vel.y < 0) {
@@ -361,37 +419,39 @@
                 }
             }
             
-            // Boundary Check
             if (ball.active && ball.state === 'hit') {
                 const dist = Math.sqrt(ball.pos.x ** 2 + ball.pos.z ** 2);
                 if (dist > 60) handleRuns(ball.pos.y > 2 ? 6 : 4, ball.pos.y > 2 ? '6' : '4');
                 else if (ball.pos.y < 0.5 && ball.vel.len() < 2) handleRuns(1, '1');
             }
-        }
+            
+            // Handle bowling progression if user is bowling
+            if (currentTeam === 2 && bowlingPhase === 'aim' && !ball.active) {
+                 // waiting for player to press HIT to start release
+            }
 
-        camera.update(dt);
-        renderer.clear();
-        renderer.drawField(camera.pos, camera.target);
-        
-        fielders.forEach(f => renderer.drawPlayer(f.pos, '#1a4fa0'));
-        renderer.drawPlayer(new Vec3(0, 0, -10), '#1a4fa0');
-        renderer.drawPlayer(new Vec3(0, 0, 10), '#0039a6');
-        
-        if (ball.active) renderer.drawBall(ball);
+            camera.update(dt);
+            renderer.clear();
+            renderer.drawField(camera.pos, camera.target);
+            
+            fielders.forEach(f => renderer.drawPlayer(f.pos, '#1a4fa0'));
+            renderer.drawPlayer(new Vec3(0, 0, -10), '#1a4fa0');
+            renderer.drawPlayer(new Vec3(0, 0, 10), '#0039a6');
+            
+            if (ball.active) renderer.drawBall(ball);
 
-        // Draw Release Meter
-        if (bowlingPhase === 'release') {
-            ctx.fillStyle = 'rgba(0,0,0,0.5)';
-            ctx.fillRect(300, 500, 300, 30);
-            ctx.fillStyle = '#d4ff00';
-            ctx.fillRect(300, 500, 300 * accPos, 30);
-            ctx.strokeStyle = '#fff';
-            ctx.strokeRect(300, 500, 300, 30);
+            if (bowlingPhase === 'release') {
+                ctx.fillStyle = 'rgba(0,0,0,0.5)';
+                ctx.fillRect(300, 500, 300, 30);
+                ctx.fillStyle = '#d4ff00';
+                ctx.fillRect(300, 500, 300 * accPos, 30);
+                ctx.strokeStyle = '#fff';
+                ctx.strokeRect(300, 500, 300, 30);
+            }
         }
 
         requestAnimationFrame(gameLoop);
     }
 
-    nextDelivery();
     requestAnimationFrame(gameLoop);
 })();
