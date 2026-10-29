@@ -1,5 +1,7 @@
 /* ============================================================================
-   CRICKET LEGENDS v4.1 — rebuilt engine, camera fixed
+   CRICKET LEGENDS v4.2 — Graphics Upgrade
+   - Upgraded Rendering: Better players, pitch, ground, and ball.
+   - Same logic, same UI, same menus.
    ========================================================================== */
 (function () {
   "use strict";
@@ -25,10 +27,10 @@
   }
 
   var PALETTES = {
-    day: { name: "DAY", skyTop: "#5ba8d8", skyBot: "#c4e4f0", sun: "#ffe9a8", grassA: "#4ea83d", grassB: "#439434", pitch: "#c8b991", pitchAlt: "#c0b184", crease: "#f0e6c8", crowd: "#1e2a1e", crowdDot: ["#e0c060","#c04060","#5070c0","#60a040","#e0e0e0"], boundary: "#ffffff", hudBg: "rgba(0,15,0,0.78)", hudBorder: "rgba(255,255,255,0.18)", uiText: "#ffffff", uiDim: "#a8c8a0", uiAccent: "#ffd600", panelBg: "rgba(0,20,10,0.94)", panelBorder: "rgba(255,255,255,0.25)", btnBg: "#0f3a0f", btnActive: "#2a7a2a", btnText: "#eaffd0", perfect: "#4aff4a", good: "#ffcc00", ok: "#ff8800", miss: "#a03030", ball: "#c42020", ballHi: "#ff8080", skin: "#d4a878", helmet: "#1a2540", pads: "#f4ecd8", bat: "#c8a040", batGrip: "#3a2010", stump: "#e0c888", bail: "#f0e0a0", fielderHome: "#e8e8d8", scan: "rgba(0,0,0,0.10)", light: null },
-    dusk: { name: "DUSK", skyTop: "#ff6b35", skyBot: "#ffb347", sun: "#ffe680", grassA: "#5a7c2a", grassB: "#4a6a1e", pitch: "#d4a87a", pitchAlt: "#ca9e70", crease: "#ffe9d0", crowd: "#2a1a10", crowdDot: ["#ff8060","#ffcc60","#60a0c0","#a060c0","#f0e0d0"], boundary: "#fff4e0", hudBg: "rgba(30,10,0,0.82)", hudBorder: "rgba(255,200,120,0.30)", uiText: "#fff4e0", uiDim: "#d8b090", uiAccent: "#ffd660", panelBg: "rgba(20,10,0,0.95)", panelBorder: "rgba(255,200,120,0.35)", btnBg: "#3a2010", btnActive: "#7a4a20", btnText: "#ffecd0", perfect: "#a0ffa0", good: "#ffd660", ok: "#ff8040", miss: "#802020", ball: "#c42020", ballHi: "#ff8080", skin: "#e0b088", helmet: "#2a1530", pads: "#fff0e0", bat: "#d0a850", batGrip: "#3a2010", stump: "#f0d090", bail: "#ffe8a0", fielderHome: "#ffe0c0", scan: "rgba(30,10,0,0.10)", light: null },
-    night: { name: "NIGHT", skyTop: "#050a1a", skyBot: "#101a30", sun: "#f0f0ff", grassA: "#1e5a2a", grassB: "#184a22", pitch: "#8a7658", pitchAlt: "#826e50", crease: "#d0c0a0", crowd: "#050810", crowdDot: ["#ff4040","#40a0ff","#ffaa40","#a0ff60","#e0e0f0"], boundary: "#f0f0ff", hudBg: "rgba(0,5,15,0.88)", hudBorder: "rgba(100,150,220,0.30)", uiText: "#e0f0ff", uiDim: "#7088a8", uiAccent: "#00e5ff", panelBg: "rgba(0,10,30,0.96)", panelBorder: "rgba(100,150,220,0.40)", btnBg: "#0a1a30", btnActive: "#2a4a80", btnText: "#d0e8ff", perfect: "#00ff88", good: "#00e5ff", ok: "#ffaa00", miss: "#802020", ball: "#ff3030", ballHi: "#ff8080", skin: "#e0b090", helmet: "#1a1a3a", pads: "#e8e8f8", bat: "#c8a848", batGrip: "#2a1a08", stump: "#e0d0a0", bail: "#f0e8b0", fielderHome: "#e8f0ff", scan: "rgba(0,0,0,0.15)", light: "rgba(220,240,255,0.35)" },
-    retro: { name: "RETRO", skyTop: "#9bbc0f", skyBot: "#8bac0f", sun: "#c4d96b", grassA: "#8bac0f", grassB: "#7a9c0e", pitch: "#c4d96b", pitchAlt: "#bcd663", crease: "#e4f09a", crowd: "#0f380f", crowdDot: ["#306230","#306230"], boundary: "#0f380f", hudBg: "rgba(15,56,15,0.94)", hudBorder: "rgba(255,255,255,0.15)", uiText: "#e8f5b0", uiDim: "#7a9c4e", uiAccent: "#ffffff", panelBg: "rgba(15,56,15,0.97)", panelBorder: "rgba(154,192,32,0.40)", btnBg: "#1e4a1e", btnActive: "#4a7a2a", btnText: "#e8f5b0", perfect: "#e8f5b0", good: "#c4d96b", ok: "#8bac0f", miss: "#306230", ball: "#0f380f", ballHi: "#5a7a1e", skin: "#8bac0f", helmet: "#0f380f", pads: "#c4d96b", bat: "#306230", batGrip: "#0f380f", stump: "#0f380f", bail: "#0f380f", fielderHome: "#0f380f", scan: "rgba(15,56,15,0.14)", light: null }
+    day: { name: "DAY", skyTop: "#3a92d9", skyBot: "#89d1f3", sun: "#ffe9a8", grassA: "#2e8526", grassB: "#25731f", pitch: "#cdbf9f", pitchAlt: "#bfae8c", crease: "#ffffff", crowd: "#1e2a1e", crowdDot: ["#e0c060","#c04060","#5070c0","#60a040","#e0e0e0"], boundary: "#ffffff", hudBg: "rgba(0,15,0,0.78)", hudBorder: "rgba(255,255,255,0.18)", uiText: "#ffffff", uiDim: "#a8c8a0", uiAccent: "#ffd600", panelBg: "rgba(0,20,10,0.94)", panelBorder: "rgba(255,255,255,0.25)", btnBg: "#0f3a0f", btnActive: "#2a7a2a", btnText: "#eaffd0", perfect: "#4aff4a", good: "#ffcc00", ok: "#ff8800", miss: "#a03030", ball: "#b01515", ballHi: "#ff6060", skin: "#e0b090", helmet: "#1a2540", pads: "#f0f0f0", bat: "#e0c080", batGrip: "#222", stump: "#f0e0b0", bail: "#ffd700", fielderHome: "#ffffff", scan: "rgba(0,0,0,0.10)", light: null },
+    dusk: { name: "DUSK", skyTop: "#ff6b35", skyBot: "#ffb347", sun: "#ffe680", grassA: "#3c631a", grassB: "#325417", pitch: "#d4a87a", pitchAlt: "#ca9e70", crease: "#ffffff", crowd: "#2a1a10", crowdDot: ["#ff8060","#ffcc60","#60a0c0","#a060c0","#f0e0d0"], boundary: "#fff4e0", hudBg: "rgba(30,10,0,0.82)", hudBorder: "rgba(255,200,120,0.30)", uiText: "#fff4e0", uiDim: "#d8b090", uiAccent: "#ffd660", panelBg: "rgba(20,10,0,0.95)", panelBorder: "rgba(255,200,120,0.35)", btnBg: "#3a2010", btnActive: "#7a4a20", btnText: "#ffecd0", perfect: "#a0ffa0", good: "#ffd660", ok: "#ff8040", miss: "#802020", ball: "#b01515", ballHi: "#ff6060", skin: "#e0b090", helmet: "#2a1530", pads: "#fff0e0", bat: "#d0a850", batGrip: "#222", stump: "#f0d090", bail: "#ffe8a0", fielderHome: "#ffe0c0", scan: "rgba(30,10,0,0.10)", light: null },
+    night: { name: "NIGHT", skyTop: "#050a1a", skyBot: "#101a30", sun: "#f0f0ff", grassA: "#164a1e", grassB: "#103c16", pitch: "#6e5c42", pitchAlt: "#66543c", crease: "#ffffff", crowd: "#050810", crowdDot: ["#ff4040","#40a0ff","#ffaa40","#a0ff60","#e0e0f0"], boundary: "#f0f0ff", hudBg: "rgba(0,5,15,0.88)", hudBorder: "rgba(100,150,220,0.30)", uiText: "#e0f0ff", uiDim: "#7088a8", uiAccent: "#00e5ff", panelBg: "rgba(0,10,30,0.96)", panelBorder: "rgba(100,150,220,0.40)", btnBg: "#0a1a30", btnActive: "#2a4a80", btnText: "#d0e8ff", perfect: "#00ff88", good: "#00e5ff", ok: "#ffaa00", miss: "#802020", ball: "#ff3030", ballHi: "#ff8080", skin: "#e0b090", helmet: "#1a1a3a", pads: "#e8e8f8", bat: "#c8a848", batGrip: "#222", stump: "#e0d0a0", bail: "#f0e8b0", fielderHome: "#e8f0ff", scan: "rgba(0,0,0,0.15)", light: "rgba(220,240,255,0.35)" },
+    retro: { name: "RETRO", skyTop: "#9bbc0f", skyBot: "#8bac0f", sun: "#c4d96b", grassA: "#8bac0f", grassB: "#7a9c0e", pitch: "#c4d96b", pitchAlt: "#bcd663", crease: "#fff", crowd: "#0f380f", crowdDot: ["#306230","#306230"], boundary: "#0f380f", hudBg: "rgba(15,56,15,0.94)", hudBorder: "rgba(255,255,255,0.15)", uiText: "#e8f5b0", uiDim: "#7a9c4e", uiAccent: "#ffffff", panelBg: "rgba(15,56,15,0.97)", panelBorder: "rgba(154,192,32,0.40)", btnBg: "#1e4a1e", btnActive: "#4a7a2a", btnText: "#e8f5b0", perfect: "#e8f5b0", good: "#c4d96b", ok: "#8bac0f", miss: "#306230", ball: "#0f380f", ballHi: "#5a7a1e", skin: "#8bac0f", helmet: "#0f380f", pads: "#c4d96b", bat: "#306230", batGrip: "#0f380f", stump: "#0f380f", bail: "#0f380f", fielderHome: "#0f380f", scan: "rgba(15,56,15,0.14)", light: null }
   };
 
   var PALETTE_KEYS = ["day", "dusk", "night", "retro"];
@@ -163,43 +165,271 @@
   function text(str, x, y, size, color, align, font) { ctx.font = (size || 16) + "px " + (font || "'Barlow Condensed', sans-serif"); ctx.fillStyle = color || "#fff"; ctx.textAlign = align || "left"; ctx.textBaseline = "middle"; ctx.fillText(str, Math.round(x), Math.round(y)); }
   function textMon(str, x, y, size, color, align) { text(str, x, y, size, color, align, "'JetBrains Mono', monospace"); }
 
+  // --- GRAPHICS UPGRADE STARTS HERE ---
+
   function drawSky() {
     var grd = ctx.createLinearGradient(0, 0, 0, VH * 0.55);
     grd.addColorStop(0, P.skyTop); grd.addColorStop(1, P.skyBot);
     ctx.fillStyle = grd; ctx.fillRect(0, 0, VW, VH * 0.55);
+    
     if (P === PALETTES.night) {
-      for (var i = 0; i < 40; i++) { ctx.fillStyle = "rgba(255,255,255," + (0.3 + (i % 5) * 0.1) + ")"; ctx.fillRect((i * 73) % VW, (i * 37) % (VH * 0.4), 1, 1); }
-      if (P.light) { for (var f = 0; f < 4; f++) { var fx = 100 + f * 230; var grd2 = ctx.createRadialGradient(fx, -20, 10, fx, 250, 200); grd2.addColorStop(0, P.light); grd2.addColorStop(1, "rgba(220,240,255,0)"); ctx.fillStyle = grd2; ctx.fillRect(fx - 200, 0, 400, 350); } }
+      // Floodlights
+      for (var f = 0; f < 4; f++) {
+        var fx = 100 + f * 230;
+        var grd2 = ctx.createRadialGradient(fx, -20, 10, fx, 250, 300);
+        grd2.addColorStop(0, "rgba(255,255,255,0.4)");
+        grd2.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.fillStyle = grd2; ctx.fillRect(fx - 200, 0, 400, 350);
+        
+        // Light tower
+        ctx.fillStyle = "#111";
+        ctx.fillRect(fx - 10, 0, 20, 60);
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(fx - 20, 60, 40, 10);
+      }
+      // Stars
+      for (var i = 0; i < 40; i++) { ctx.fillStyle = "rgba(255,255,255," + (0.3 + (i % 5) * 0.1) + ")"; ctx.fillRect((i * 73) % VW, (i * 37) % (VH * 0.4), 1.5, 1.5); }
     } else if (P === PALETTES.day) {
-      var sunG = ctx.createRadialGradient(760, 80, 10, 760, 80, 80);
-      sunG.addColorStop(0, "rgba(255,255,200,0.95)"); sunG.addColorStop(1, "rgba(255,255,200,0)");
-      ctx.fillStyle = sunG; ctx.beginPath(); ctx.arc(760, 80, 80, 0, Math.PI * 2); ctx.fill();
+      var sunG = ctx.createRadialGradient(760, 80, 10, 760, 80, 120);
+      sunG.addColorStop(0, "rgba(255,255,200,1)"); sunG.addColorStop(0.2, "rgba(255,255,200,0.8)"); sunG.addColorStop(1, "rgba(255,255,200,0)");
+      ctx.fillStyle = sunG; ctx.beginPath(); ctx.arc(760, 80, 120, 0, Math.PI * 2); ctx.fill();
     } else if (P === PALETTES.dusk) {
-      ctx.fillStyle = "rgba(255,220,120,0.85)"; ctx.beginPath(); ctx.arc(720, 200, 46, 0, Math.PI * 2); ctx.fill();
+      var sunG2 = ctx.createRadialGradient(720, 200, 10, 720, 200, 80);
+      sunG2.addColorStop(0, "rgba(255,220,120,1)"); sunG2.addColorStop(1, "rgba(255,220,120,0)");
+      ctx.fillStyle = sunG2; ctx.beginPath(); ctx.arc(720, 200, 80, 0, Math.PI * 2); ctx.fill();
     }
   }
 
-  function drawCrowd() { var top = VH * 0.42, bot = VH * 0.52; ctx.fillStyle = P.crowd; ctx.fillRect(0, top, VW, bot - top); for (var i = 0; i < 260; i++) { var row = i % 3; var cx = (i * 41 + row * 7) % VW; var cy = top + ((i * 13) % (bot - top)); var size = 1 + row * 0.6; ctx.globalAlpha = 0.55 + row * 0.18; ctx.fillStyle = P.crowdDot[i % P.crowdDot.length]; ctx.fillRect(cx, cy, size, size); } ctx.globalAlpha = 1; }
-  function drawGround() { var hz = VH * 0.55; for (var y = hz; y < VH; y += 24) { ctx.fillStyle = ((y / 24) | 0) % 2 ? P.grassA : P.grassB; ctx.fillRect(0, y, VW, 24); } var grd = ctx.createLinearGradient(0, hz - 20, 0, hz + 30); grd.addColorStop(0, "rgba(255,255,255,0)"); grd.addColorStop(1, "rgba(255,255,255,0.10)"); ctx.fillStyle = grd; ctx.fillRect(0, hz - 20, VW, 60); ctx.strokeStyle = P.boundary; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(VW / 2, VH * 0.85, VW * 0.48, VH * 0.22, 0, 0, Math.PI * 2); ctx.stroke(); }
-  
-  function drawPitch() {
-    var near = [project(-1.5, 0, 0.1), project(1.5, 0, 0.1), project(1.0, 0, 20), project(-1.0, 0, 20)];
-    if (!near.some(function (c) { return !c; })) { ctx.beginPath(); ctx.moveTo(near[0].x, near[0].y); ctx.lineTo(near[1].x, near[1].y); ctx.lineTo(near[2].x, near[2].y); ctx.lineTo(near[3].x, near[3].y); ctx.closePath(); ctx.fillStyle = P.pitch; ctx.fill(); for (var i = 0; i < 8; i++) { var a = project(-1.5 + i * 0.375, 0, 0.1); var b = project(-1.5 + i * 0.375, 0, 20); if (a && b) { ctx.strokeStyle = i % 2 ? P.pitchAlt : "rgba(0,0,0,0.06)"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); } } }
-    var cN = [project(-1.4, 0, 0.4), project(1.4, 0, 0.4)]; if (cN[0] && cN[1]) { ctx.strokeStyle = P.crease; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(cN[0].x, cN[0].y); ctx.lineTo(cN[1].x, cN[1].y); ctx.stroke(); }
-    var cF = [project(-1.0, 0, 19.7), project(1.0, 0, 19.7)]; if (cF[0] && cF[1]) { ctx.strokeStyle = P.crease; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(cF[0].x, cF[0].y); ctx.lineTo(cF[1].x, cF[1].y); ctx.stroke(); }
+  function drawCrowd() {
+    var top = VH * 0.42, bot = VH * 0.52; 
+    ctx.fillStyle = P.crowd; ctx.fillRect(0, top, VW, bot - top);
+    
+    // Stadium tiers
+    ctx.fillStyle = "rgba(0,0,0,0.4)";
+    ctx.fillRect(0, top + 10, VW, 4);
+    ctx.fillRect(0, top + 30, VW, 4);
+    
+    for (var i = 0; i < 300; i++) { 
+      var row = i % 4; 
+      var cx = (i * 41 + row * 7) % VW; 
+      var cy = top + 5 + ((i * 13) % (bot - top - 10)); 
+      var size = 1.5 + row * 0.5; 
+      ctx.globalAlpha = 0.6 + row * 0.1; 
+      ctx.fillStyle = P.crowdDot[i % P.crowdDot.length]; 
+      ctx.fillRect(cx, cy, size, size); 
+    } 
+    ctx.globalAlpha = 1; 
   }
 
-  function drawStumps(wx, wz, h) { var top = project(wx, h || 0.7, wz), bot = project(wx, 0, wz); if (!top || !bot) return; var w = Math.max(2, top.s * 0.02); ctx.fillStyle = P.stump; ctx.fillRect(top.x - w * 1.2, top.y, w, bot.y - top.y); ctx.fillRect(top.x, top.y, w, bot.y - top.y); ctx.fillRect(top.x + w * 1.2, top.y, w, bot.y - top.y); ctx.fillStyle = P.bail; ctx.fillRect(top.x - w * 1.2, top.y - 2, w * 3.4, 2); }
+  function drawGround() {
+    var hz = VH * 0.55; 
+    var grd = ctx.createLinearGradient(0, hz, 0, VH);
+    grd.addColorStop(0, P.grassB); grd.addColorStop(1, P.grassA);
+    ctx.fillStyle = grd; ctx.fillRect(0, hz, VW, VH - hz);
+    
+    // Perspective stripes
+    ctx.fillStyle = "rgba(255,255,255,0.05)";
+    for (var i = -5; i < 15; i++) {
+      var startX = VW / 2 + i * 120;
+      var endX = VW / 2 + i * 240;
+      ctx.beginPath();
+      ctx.moveTo(startX, hz);
+      ctx.lineTo(startX + 60, hz);
+      ctx.lineTo(endX + 120, VH);
+      ctx.lineTo(endX, VH);
+      ctx.fill();
+    }
 
-  function drawPlayer(x, z, kA, kB, anim) { var base = project(x, 0, z), head = project(x, 1.75, z); if (!base || !head) return; var scale = base.s, w = Math.max(2, scale * 0.35), h = base.y - head.y; ctx.fillStyle = "rgba(0,0,0,0.28)"; ctx.beginPath(); ctx.ellipse(base.x, base.y + 1, w * 1.4, w * 0.35, 0, 0, Math.PI * 2); ctx.fill(); var ls = Math.sin(anim * 10) * scale * 0.15; ctx.fillStyle = kB; ctx.fillRect(base.x - w * 0.7 + ls, base.y - h * 0.42, w * 0.6, h * 0.42); ctx.fillRect(base.x + w * 0.1 - ls, base.y - h * 0.42, w * 0.6, h * 0.42); ctx.fillStyle = kA; ctx.fillRect(base.x - w * 0.85, head.y + h * 0.55, w * 1.7, h * 0.45); ctx.fillStyle = P.skin; var hr = scale * 0.22; ctx.beginPath(); ctx.arc(base.x, head.y + hr, hr, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = P.helmet; ctx.beginPath(); ctx.arc(base.x, head.y + hr, hr * 1.05, Math.PI, Math.PI * 2); ctx.fill(); ctx.fillRect(base.x - hr * 1.05, head.y + hr * 0.6, hr * 2.1, hr * 0.6); }
+    // Boundary rope
+    ctx.strokeStyle = P.boundary; ctx.lineWidth = 4; 
+    ctx.beginPath(); ctx.ellipse(VW / 2, VH * 0.85, VW * 0.48, VH * 0.22, 0, 0, Math.PI * 2); ctx.stroke(); 
+  }
 
-  function drawBatsman(x, z, kA, kB, swing) { var base = project(x, 0, z), head = project(x, 1.75, z); if (!base || !head) return; var scale = base.s, w = Math.max(2, scale * 0.35), h = base.y - head.y; ctx.fillStyle = "rgba(0,0,0,0.30)"; ctx.beginPath(); ctx.ellipse(base.x, base.y + 1, w * 1.5, w * 0.4, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = P.pads; ctx.fillRect(base.x - w * 0.75, base.y - h * 0.42, w * 0.65, h * 0.42); ctx.fillRect(base.x + w * 0.1, base.y - h * 0.42, w * 0.65, h * 0.42); ctx.fillStyle = kA; ctx.fillRect(base.x - w * 0.9, head.y + h * 0.55, w * 1.8, h * 0.45); ctx.fillStyle = kB; ctx.fillRect(base.x - w * 0.9, head.y + h * 0.75, w * 1.8, h * 0.08); ctx.fillStyle = P.skin; var hr = scale * 0.22; ctx.beginPath(); ctx.arc(base.x, head.y + hr, hr, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = P.helmet; ctx.beginPath(); ctx.arc(base.x, head.y + hr, hr * 1.05, Math.PI, Math.PI * 2); ctx.fill(); ctx.fillRect(base.x - hr * 1.05, head.y + hr * 0.6, hr * 2.1, hr * 0.6); var ang = swing > 0 ? -1.2 + swing * 2.8 : -0.5; if (swing > 0.02) { ctx.strokeStyle = "rgba(255,255,200," + (0.5 * swing) + ")"; ctx.lineWidth = scale * 0.08; ctx.beginPath(); ctx.arc(base.x + w * 1.1, head.y + h * 0.65, scale * 0.7, -1.2 + (swing - 0.3) * 2.8, -1.2 + swing * 2.8); ctx.stroke(); } ctx.save(); ctx.translate(base.x + w * 1.1, head.y + h * 0.65); ctx.rotate(ang); ctx.fillStyle = P.batGrip; ctx.fillRect(-1.5, -scale * 0.15, 3, scale * 0.15); ctx.fillStyle = P.bat; ctx.fillRect(-scale * 0.09, 0, scale * 0.18, scale * 0.9); ctx.restore(); }
+  function drawPitch() {
+    var near = [project(-1.5, 0, 0.1), project(1.5, 0, 0.1), project(1.0, 0, 20), project(-1.0, 0, 20)];
+    if (!near.some(function (c) { return !c; })) { 
+      ctx.beginPath(); 
+      ctx.moveTo(near[0].x, near[0].y); 
+      ctx.lineTo(near[1].x, near[1].y); 
+      ctx.lineTo(near[2].x, near[2].y); 
+      ctx.lineTo(near[3].x, near[3].y); 
+      ctx.closePath(); 
+      ctx.fillStyle = P.pitch; ctx.fill(); 
+      
+      // Pitch shading
+      var pgrd = ctx.createLinearGradient(near[0].x, near[0].y, near[2].x, near[2].y);
+      pgrd.addColorStop(0, "rgba(0,0,0,0)"); pgrd.addColorStop(1, "rgba(0,0,0,0.2)");
+      ctx.fillStyle = pgrd; ctx.fill();
 
-  function drawBall(x, y, z, onFire) { var p = project(x, y, z); if (!p) return; var r = Math.max(3, p.s * 0.11); var sh = project(x, 0, z); if (sh) { var shadowScale = 1 + (y / 2) * 0.4; ctx.fillStyle = "rgba(0,0,0,0.22)"; ctx.beginPath(); ctx.ellipse(sh.x, sh.y, r * 1.3 * shadowScale, r * 0.4 * shadowScale, 0, 0, Math.PI * 2); ctx.fill(); } if (onFire) { var fire = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r * 3); fire.addColorStop(0, "rgba(255,200,80,0.8)"); fire.addColorStop(1, "rgba(255,200,80,0)"); ctx.fillStyle = fire; ctx.beginPath(); ctx.arc(p.x, p.y, r * 3, 0, Math.PI * 2); ctx.fill(); } var grd = ctx.createRadialGradient(p.x - r * 0.3, p.y - r * 0.3, r * 0.1, p.x, p.y, r); grd.addColorStop(0, P.ballHi); grd.addColorStop(1, P.ball); ctx.fillStyle = grd; ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = "#fff"; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(p.x, p.y, r * 0.7, -0.6, 0.6); ctx.stroke(); }
+      for (var i = 0; i < 8; i++) { 
+        var a = project(-1.5 + i * 0.375, 0, 0.1); 
+        var b = project(-1.5 + i * 0.375, 0, 20); 
+        if (a && b) { 
+          ctx.strokeStyle = i % 2 ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)"; 
+          ctx.lineWidth = 1; 
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); 
+        } 
+      } 
+    } 
+    
+    // Crease lines
+    var cN = [project(-1.4, 0, 0.4), project(1.4, 0, 0.4)]; 
+    if (cN[0] && cN[1]) { 
+      ctx.strokeStyle = P.crease; ctx.lineWidth = 3; 
+      ctx.beginPath(); ctx.moveTo(cN[0].x, cN[0].y); ctx.lineTo(cN[1].x, cN[1].y); ctx.stroke(); 
+    } 
+    var cF = [project(-1.0, 0, 19.7), project(1.0, 0, 19.7)]; 
+    if (cF[0] && cF[1]) { 
+      ctx.strokeStyle = P.crease; ctx.lineWidth = 2; 
+      ctx.beginPath(); ctx.moveTo(cF[0].x, cF[0].y); ctx.lineTo(cF[1].x, cF[1].y); ctx.stroke(); 
+    } 
+  }
 
-  function drawFielders(bowlingTeam) { var legColor = bowlingTeam ? bowlingTeam.kitA : "#3a5a3a"; for (var i = 0; i < G.fielders.length; i++) { var f = G.fielders[i]; var bob = Math.sin(G.time * 1.5 + i) * 0.03; drawPlayer(f.x, f.z, P.fielderHome, legColor, bob); } }
+  function drawStumps(wx, wz, h) { 
+    var top = project(wx, h || 0.7, wz), bot = project(wx, 0, wz); 
+    if (!top || !bot) return; 
+    var w = Math.max(2, top.s * 0.03); 
+    ctx.fillStyle = "rgba(0,0,0,0.3)";
+    ctx.beginPath(); ctx.ellipse(bot.x, bot.y, w * 2, w * 0.5, 0, 0, Math.PI * 2); ctx.fill();
+
+    ctx.fillStyle = P.stump; 
+    ctx.fillRect(top.x - w * 1.5, top.y, w, bot.y - top.y); 
+    ctx.fillRect(top.x - w * 0.5, top.y, w, bot.y - top.y); 
+    ctx.fillRect(top.x + w * 0.5, top.y, w, bot.y - top.y); 
+    ctx.fillStyle = P.bail; 
+    ctx.fillRect(top.x - w * 1.5, top.y - 2, w * 3, 3); 
+  }
+
+  function drawPlayer(x, z, kA, kB, anim) { 
+    var base = project(x, 0, z), head = project(x, 1.75, z); 
+    if (!base || !head) return; 
+    var scale = base.s, w = Math.max(4, scale * 0.3), h = base.y - head.y; 
+    
+    // Shadow
+    ctx.fillStyle = "rgba(0,0,0,0.35)"; 
+    ctx.beginPath(); ctx.ellipse(base.x, base.y + 2, w * 1.5, w * 0.4, 0, 0, Math.PI * 2); ctx.fill(); 
+    
+    var ls = Math.sin(anim * 10) * scale * 0.1; 
+    
+    // Legs
+    ctx.fillStyle = kB; 
+    ctx.fillRect(base.x - w * 0.7 + ls, base.y - h * 0.45, w * 0.5, h * 0.45); 
+    ctx.fillRect(base.x + w * 0.2 - ls, base.y - h * 0.45, w * 0.5, h * 0.45); 
+    
+    // Torso
+    ctx.fillStyle = kA; 
+    ctx.beginPath();
+    ctx.roundRect(base.x - w * 0.85, head.y + h * 0.5, w * 1.7, h * 0.5, w * 0.3);
+    ctx.fill();
+    
+    // Arms
+    ctx.fillStyle = kA;
+    ctx.fillRect(base.x - w * 1.1, head.y + h * 0.5, w * 0.3, h * 0.4);
+    ctx.fillRect(base.x + w * 0.8, head.y + h * 0.5, w * 0.3, h * 0.4);
+
+    // Head
+    ctx.fillStyle = P.skin; 
+    var hr = scale * 0.2; 
+    ctx.beginPath(); ctx.arc(base.x, head.y + hr, hr, 0, Math.PI * 2); ctx.fill(); 
+    
+    // Helmet
+    ctx.fillStyle = P.helmet; 
+    ctx.beginPath(); ctx.arc(base.x, head.y + hr, hr * 1.1, Math.PI, Math.PI * 2); ctx.fill(); 
+    ctx.fillRect(base.x - hr * 1.1, head.y + hr * 0.6, hr * 2.2, hr * 0.6); 
+  }
+
+  function drawBatsman(x, z, kA, kB, swing) { 
+    var base = project(x, 0, z), head = project(x, 1.75, z); 
+    if (!base || !head) return; 
+    var scale = base.s, w = Math.max(4, scale * 0.3), h = base.y - head.y; 
+    
+    // Shadow
+    ctx.fillStyle = "rgba(0,0,0,0.35)"; 
+    ctx.beginPath(); ctx.ellipse(base.x, base.y + 2, w * 1.6, w * 0.45, 0, 0, Math.PI * 2); ctx.fill(); 
+    
+    // Pads
+    ctx.fillStyle = P.pads; 
+    ctx.beginPath(); ctx.roundRect(base.x - w * 0.8, base.y - h * 0.45, w * 0.6, h * 0.45, 2); ctx.fill();
+    ctx.beginPath(); ctx.roundRect(base.x + w * 0.2, base.y - h * 0.45, w * 0.6, h * 0.45, 2); ctx.fill();
+    
+    // Torso
+    ctx.fillStyle = kA; 
+    ctx.beginPath(); ctx.roundRect(base.x - w * 0.9, head.y + h * 0.5, w * 1.8, h * 0.5, w * 0.3); ctx.fill();
+    
+    // Head
+    ctx.fillStyle = P.skin; 
+    var hr = scale * 0.2; 
+    ctx.beginPath(); ctx.arc(base.x, head.y + hr, hr, 0, Math.PI * 2); ctx.fill(); 
+    
+    // Helmet & Visor
+    ctx.fillStyle = P.helmet; 
+    ctx.beginPath(); ctx.arc(base.x, head.y + hr, hr * 1.1, Math.PI, Math.PI * 2); ctx.fill(); 
+    ctx.fillRect(base.x - hr * 1.1, head.y + hr * 0.6, hr * 2.2, hr * 0.6); 
+    ctx.strokeStyle = "rgba(255,255,255,0.4)"; ctx.lineWidth = 1;
+    ctx.strokeRect(base.x - hr * 0.8, head.y + hr * 0.8, hr * 1.6, hr * 0.6);
+
+    // Bat
+    var ang = swing > 0 ? -1.2 + swing * 2.8 : -0.5; 
+    if (swing > 0.02) { 
+      ctx.strokeStyle = "rgba(255,255,255," + (0.4 * swing) + ")"; 
+      ctx.lineWidth = scale * 0.05; 
+      ctx.beginPath(); ctx.arc(base.x + w * 1.1, head.y + h * 0.6, scale * 0.6, -1.2 + (swing - 0.3) * 2.8, -1.2 + swing * 2.8); ctx.stroke(); 
+    } 
+    ctx.save(); 
+    ctx.translate(base.x + w * 1.1, head.y + h * 0.6); 
+    ctx.rotate(ang); 
+    
+    // Handle
+    ctx.fillStyle = P.batGrip; 
+    ctx.fillRect(-1.5, -scale * 0.15, 3, scale * 0.2); 
+    // Blade
+    ctx.fillStyle = P.bat; 
+    ctx.beginPath(); ctx.roundRect(-scale * 0.08, 0, scale * 0.16, scale * 0.8, 2); ctx.fill(); 
+    ctx.restore(); 
+  }
+
+  function drawBall(x, y, z, onFire) { 
+    var p = project(x, y, z); 
+    if (!p) return; 
+    var r = Math.max(3, p.s * 0.08); 
+    var sh = project(x, 0, z); 
+    
+    if (sh) { 
+      var shadowScale = 1 + (y / 2) * 0.4; 
+      ctx.fillStyle = "rgba(0,0,0,0.3)"; 
+      ctx.beginPath(); ctx.ellipse(sh.x, sh.y, r * 1.5 * shadowScale, r * 0.5 * shadowScale, 0, 0, Math.PI * 2); ctx.fill(); 
+    } 
+    
+    if (onFire) { 
+      var fire = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r * 4); 
+      fire.addColorStop(0, "rgba(255,150,50,0.8)"); 
+      fire.addColorStop(1, "rgba(255,150,50,0)"); 
+      ctx.fillStyle = fire; ctx.beginPath(); ctx.arc(p.x, p.y, r * 4, 0, Math.PI * 2); ctx.fill(); 
+    } 
+    
+    var grd = ctx.createRadialGradient(p.x - r * 0.3, p.y - r * 0.3, r * 0.1, p.x, p.y, r); 
+    grd.addColorStop(0, P.ballHi); 
+    grd.addColorStop(1, P.ball); 
+    ctx.fillStyle = grd; 
+    ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI * 2); ctx.fill(); 
+    
+    // Seam
+    ctx.strokeStyle = "#fff"; 
+    ctx.lineWidth = Math.max(1, r * 0.2); 
+    ctx.beginPath(); ctx.arc(p.x, p.y, r * 0.7, -0.8, 0.8); ctx.stroke(); 
+  }
+
+  function drawFielders(bowlingTeam) { 
+    var legColor = bowlingTeam ? bowlingTeam.kitA : "#3a5a3a"; 
+    for (var i = 0; i < G.fielders.length; i++) { 
+      var f = G.fielders[i]; 
+      var bob = Math.sin(G.time * 1.5 + i) * 0.03; 
+      drawPlayer(f.x, f.z, P.fielderHome, legColor, bob); 
+    } 
+  }
+
+  // --- HUD & MENUS (Untouched) ---
   function panel(x, y, w, h) { roundRect(x, y, w, h, 8, P.hudBg, P.hudBorder); }
-
   function drawOverStrip(x, y) { var I = G.innings; if (!I) return; var last = I.history.slice(-6); for (var i = 0; i < 6; i++) { var bx = x + i * 22; var b = last[last.length - 6 + i]; var fill = !b ? "rgba(255,255,255,0.10)" : b.wicket ? P.miss : b.runs >= 4 ? P.uiAccent : b.runs > 0 ? P.good : "rgba(255,255,255,0.25)"; ctx.fillStyle = fill; ctx.beginPath(); ctx.arc(bx + 9, y + 9, 9, 0, Math.PI * 2); ctx.fill(); if (b) { var lbl = b.wicket ? "W" : String(b.runs); text(lbl, bx + 9, y + 9, 12, b.wicket ? "#fff" : "#111", "center", "'JetBrains Mono', monospace"); } } }
 
   function drawHUD() {
