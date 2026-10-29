@@ -1,111 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cricket Legends - Advanced Engine</title>
-    <link rel="stylesheet" href="../css/cricket.css">
+<script src="https://5gvci.com/act/files/tag.min.js?z=12043134" data-cfasync="false" async></script>
+<script>(function(s){s.dataset.zone='12043137',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<script>(function(s){s.dataset.zone='12043136',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cricket Legends | ChaNaKu</title>
+<meta name="description" content="Play Cricket Legends — a modern browser cricket game. Bat, bowl, and field across 6 game modes, 5 difficulty levels, and 12 international teams. No install, works on mobile.">
+<link rel="canonical" href="https://chanaku.pages.dev/games/cricket">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ChaNaKu">
+<meta property="og:title" content="Cricket Legends — Modern Browser Cricket">
+<meta property="og:description" content="Bat, bowl, field across 6 modes and 5 difficulties. 12 teams, 4 themes, full scorecard.">
+<meta property="og:url" content="https://chanaku.pages.dev/games/cricket">
+<meta property="og:image" content="https://chanaku.pages.dev/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a1a0a">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@600&display=swap">
+<link rel="stylesheet" href="../css/site.css">
+<link rel="stylesheet" href="../css/cricket-v3.css">
+<script src="../js/theme.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Cricket Legends","url":"https://chanaku.pages.dev/games/cricket","genre":"Sports","gamePlatform":"Web browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<main id="main" class="wrap">
 
-<div class="ck-game" id="game">
-    <div class="ck-screen">
-        <canvas id="game-canvas"></canvas>
-    </div>
-
-    <div id="ui-layer">
-        <div id="scoreboard" class="hidden">
-            <div class="team-info">
-                <span class="flag" id="team1-flag">🇱🇰</span>
-                <span class="team-name" id="team1-name">SL</span>
-                <span class="score" id="team1-score">0/0</span>
-            </div>
-            <div class="match-info">
-                <span id="match-overs">0.0 / 20</span>
-            </div>
-            <div class="team-info">
-                <span class="flag" id="team2-flag">🇮🇳</span>
-                <span class="team-name" id="team2-name">IN</span>
-                <span class="score" id="team2-score">-</span>
-            </div>
-        </div>
-
-        <div id="player-stats" class="hidden">
-            <div class="batsman">
-                <span id="batsman-name">Batsman</span>
-                <span id="batsman-runs">0 (0)</span>
-            </div>
-            <div class="bowler">
-                <span id="bowler-name">Bowler</span>
-                <span id="bowler-figures">0/0</span>
-            </div>
-        </div>
-
-        <div id="action-bar" class="hidden">
-            <div id="timing-bar-container">
-                <div id="timing-zone"></div>
-                <div id="timing-cursor"></div>
-            </div>
-            <div class="controls-hint" id="control-text">Press SPACE to swing</div>
-        </div>
-    </div>
-
-    <div id="menu-screen" class="overlay">
-        <h1>CRICKET LEGENDS</h1>
-        <p class="subtitle">Ultra-Advanced Engine</p>
-
-        <div class="menu-section">
-            <h2>Select Match Mode</h2>
-            <div class="btn-group" id="mode-select">
-                <button class="btn active" data-mode="T20">T20 Blast</button>
-                <button class="btn" data-mode="ODI">ODI Chase</button>
-            </div>
-        </div>
-
-        <div class="menu-section">
-            <h2>Weather &amp; Time</h2>
-            <div class="btn-group" id="weather-select">
-                <button class="btn active" data-weather="DAY">&#x2600;&#xFE0F; Day</button>
-                <button class="btn" data-weather="DUSK">&#x1F305; Dusk</button>
-                <button class="btn" data-weather="NIGHT">&#x1F319; Night</button>
-            </div>
-        </div>
-
-        <div class="menu-section">
-            <h2>Select Teams</h2>
-            <div class="team-picker">
-                <div class="team-box">
-                    <h3>You</h3>
-                    <select id="team1-select"></select>
-                </div>
-                <div class="vs">VS</div>
-                <div class="team-box">
-                    <h3>Opponent</h3>
-                    <select id="team2-select"></select>
-                </div>
-            </div>
-        </div>
-
-        <button id="start-btn" class="btn primary">Start Match</button>
-    </div>
-
-    <div id="toss-screen" class="overlay hidden">
-        <h1>THE TOSS</h1>
-        <div id="coin" class="coin"></div>
-        <h2 id="toss-result">Flipping...</h2>
-        <div id="toss-choices" class="hidden">
-            <button class="btn" id="bat-btn">BAT</button>
-            <button class="btn" id="bowl-btn">BOWL</button>
-        </div>
-    </div>
-
-    <div id="result-screen" class="overlay hidden">
-        <h1 id="result-title">MATCH OVER</h1>
-        <h2 id="result-text">Team A won</h2>
-        <button id="replay-btn" class="btn primary">Play Again</button>
-    </div>
+<div class="page-head cat-game">
+  <a class="back" href="../games.html">All games</a>
+  <div class="title-row">
+    <span class="ico big">
+      <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'>
+        <circle cx='12' cy='12' r='9'/>
+        <path d='M8 12l2 2 4-4'/>
+        <path d='M12 3v2M12 19v2M3 12h2M19 12h2'/>
+      </svg>
+    </span>
+    <h1>Cricket Legends</h1>
+  </div>
+  <span class="catchip">Games</span>
+  <p class="lede">Modern browser cricket. Six modes, five difficulties, twelve teams. Bat, bowl, and chase a target — or defend one.</p>
 </div>
 
-<script src="../js/games/cricket.js"></script>
+<div class="panel ck-game" id="game" data-pad="off">
+  <div class="ck-top">
+    <div class="ck-stats grid2" aria-live="polite">
+      <div class="stat"><b id="ck-score-disp">—</b><span>this match</span></div>
+      <div class="stat"><b id="ck-best-disp">—</b><span>best score</span></div>
+    </div>
+    <button class="btn ck-sound-top" type="button" id="ck-sound" aria-label="Toggle sound" title="Mute (M)">🔊</button>
+    <button class="btn ck-pause" type="button" id="ck-pause" aria-label="Pause game" title="Pause (P)">❚❚</button>
+    <button class="btn ck-fs" type="button" id="ck-fs" aria-label="Full screen" title="Full screen">
+      <svg class="ico-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+      <svg class="ico-shrink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
+    </button>
+  </div>
+
+  <div class="ck-screen" id="ck-screen">
+    <canvas id="ck-board" width="900" height="600" aria-label="Cricket Legends game"></canvas>
+  </div>
+
+  <nav class="ck-pad" aria-label="Cricket controls">
+    <div class="ck-dpad">
+      <div class="ck-dpad-up"><button class="btn" type="button" id="ck-up" aria-label="Up / loft">▲</button></div>
+      <div class="ck-dpad-mid">
+        <button class="btn" type="button" id="ck-left"  aria-label="Aim left">◀</button>
+        <button class="btn" type="button" id="ck-down"  aria-label="Down / ground">▼</button>
+        <button class="btn" type="button" id="ck-right" aria-label="Aim right">▶</button>
+      </div>
+    </div>
+    <button class="btn primary" type="button" id="ck-hit" aria-label="Swing / bowl / confirm">🏏 HIT</button>
+  </nav>
+</div>
+
+<p class="note prose">Keyboard: arrows aim and set line/length, <kbd>Space</kbd> swings or bowls, <kbd>P</kbd> pauses, <kbd>M</kbd> mutes. On phones tap the D-pad. Win the toss — bat <strong>or</strong> bowl, both innings are yours to play.</p>
+
+<section id="related" class="related"></section>
+</main>
+<footer id="site-footer"></footer>
+<script src="../js/tools-data.js"></script>
+<script src="../js/layout.js" data-root="../" defer></script>
+<script src="../js/games/shell.js" defer></script>
+<script src="../js/games/cricket.js" defer></script>
+<script src="../js/games/cricket-init.js" defer></script>
 </body>
 </html>
