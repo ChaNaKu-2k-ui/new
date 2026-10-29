@@ -1,3 +1,4 @@
+
 /* One list drives the Games page and the game count on the home page.
    To add a game: add a line here, create games/<slug>.html and js/games/<slug>.js. */
 window.GAMES = [
@@ -5,5 +6,6 @@ window.GAMES = [
   { slug: "memory-match", icon: "<rect x='5' y='3' width='14' height='18' rx='2.5'/><path d='M10 9a2 2 0 1 1 2.6 1.9c-.4.2-.6.6-.6 1V13'/><path d='M12 16.5h.01'/>", name: "Memory match", tag: "Puzzle", desc: "Flip the cards and find every pair in as few moves as you can." },
   { slug: "2048", icon: "<rect x='3' y='3' width='8' height='8' rx='2'/><rect x='13' y='3' width='8' height='8' rx='2'/><rect x='3' y='13' width='8' height='8' rx='2'/><rect x='13' y='13' width='8' height='8' rx='2'/>", name: "2048", tag: "Puzzle", desc: "Slide and merge number tiles until you reach 2048." },
   { slug: "tic-tac-toe", icon: "<path d='M9 3v18M15 3v18M3 9h18M3 15h18'/>", name: "Tic-tac-toe", tag: "Board", desc: "Play against the computer, on easy or hard." },
-  { slug: "cricket", icon: "<circle cx='12' cy='12' r='9'/><path d='M8 12l2 2 4-4'/><path d='M12 3v2M12 19v2M3 12h2M19 12h2'/>", name: "Cricket game", tag: "Sports", desc: "Nokia-style cricket. Move your bat, time the swing, and score runs in 5 overs." }
+  { slug: "cricket", icon: "<circle cx='12' cy='12' r='9'/><path d='M8 12l2 2 4-4'/><path d='M12 3v2M12 19v2M3 12h2M19 12h2'/>", name: "Cricket game", tag: "Sports", desc: "Modern browser cricket. 9 modes, 5 difficulties, 12 teams. Bat, bowl and field with real ball physics." }
 ];
+
